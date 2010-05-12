@@ -12,4 +12,10 @@ class TestOhmContrib < Test::Unit::TestCase
       Ohm::Timestamping
     end
   end
+
+  test "autoloading of to_hash" do
+    assert_nothing_raised NameError, LoadError do
+      Ohm::ToHash
+    end
+  end
 end
