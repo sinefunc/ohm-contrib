@@ -1,4 +1,6 @@
 module Ohm
+  VERSION = '0.0.1'
+
   autoload :Boundaries,        "ohm/contrib/boundaries"
   autoload :Timestamping,      "ohm/contrib/timestamping"
   autoload :ToHash,            "ohm/contrib/to_hash"
