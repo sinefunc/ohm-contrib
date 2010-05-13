@@ -19,6 +19,26 @@ Example usage
       include Ohm::Timestamping
       include Ohm::ToHash
       include Ohm::Boundaries
+      include Ohm::WebValidations
+      include Ohm::NumberValidations
+        
+      attribute :amount
+      attribute :url
+      attribute :poster_email
+      attribute :slug
+
+      def validate
+        # from NumberValidations
+        assert_decimal :amount
+
+        # or if you want it to be optional
+        assert_decimal :amount unless amount.to_s.empty?
+
+        # from WebValidations
+        assert_slug  :slug
+        assert_url   :url
+        assert_email :poster_email
+      end
     end
 
     Post.first
@@ -27,6 +47,10 @@ Example usage
     Post.create.to_hash
     Post.create.created_at
     Post.create.updated_at
+
+Credits
+-------
+Thanks to github user gnrfan for the web validations.
 
 Note on Patches/Pull Requests
 -----------------------------
