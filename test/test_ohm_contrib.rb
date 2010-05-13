@@ -13,9 +13,22 @@ class TestOhmContrib < Test::Unit::TestCase
     end
   end
 
-  test "autoloading of to_hash" do
+  test "autoloading of ToHash" do
     assert_nothing_raised NameError, LoadError do
       Ohm::ToHash
     end
   end
+
+  test "autoloading of WebValidations" do
+    assert_nothing_raised NameError, LoadError do
+      Ohm::WebValidations
+    end
+  end
+
+  test "autoloading of NumberValidations" do
+    assert_nothing_raised NameError, LoadError do
+      Ohm::NumberValidations
+    end
+  end
+
 end
