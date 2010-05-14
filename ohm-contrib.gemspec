@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{ohm-contrib}
-  s.version = "0.0.2"
+  s.version = "0.0.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Cyril David"]
@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
      "lib/ohm/contrib/number_validations.rb",
      "lib/ohm/contrib/timestamping.rb",
      "lib/ohm/contrib/to_hash.rb",
+     "lib/ohm/contrib/typecast.rb",
      "lib/ohm/contrib/web_validations.rb",
      "ohm-contrib.gemspec",
      "test/helper.rb",
@@ -36,6 +37,7 @@ Gem::Specification.new do |s|
      "test/test_ohm_number_validations.rb",
      "test/test_ohm_timestamping.rb",
      "test/test_ohm_to_hash.rb",
+     "test/test_ohm_typecast.rb",
      "test/test_ohm_web_validations.rb"
   ]
   s.homepage = %q{http://github.com/sinefunc/ohm-contrib}
@@ -50,6 +52,7 @@ Gem::Specification.new do |s|
      "test/test_ohm_number_validations.rb",
      "test/test_ohm_timestamping.rb",
      "test/test_ohm_to_hash.rb",
+     "test/test_ohm_typecast.rb",
      "test/test_ohm_web_validations.rb"
   ]
 
