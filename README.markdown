@@ -48,6 +48,17 @@ Example usage
     Post.create.created_at
     Post.create.updated_at
 
+    # Casting example
+    class Product
+      include Ohm::Typecast
+
+      attribute :price, :decimal
+      attribute :start_of_sale, :time
+      attribute :end_of_sale, :time
+      attribute :priority, :integer
+      attribute :rating, :float
+    end
+
 Credits
 -------
 Thanks to github user gnrfan for the web validations.

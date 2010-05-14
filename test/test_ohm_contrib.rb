@@ -30,5 +30,10 @@ class TestOhmContrib < Test::Unit::TestCase
       Ohm::NumberValidations
     end
   end
-
+  
+  test "autoloading of Typecast" do
+    assert_nothing_raised NameError, LoadError do
+      Ohm::Typecast
+    end
+  end
 end
