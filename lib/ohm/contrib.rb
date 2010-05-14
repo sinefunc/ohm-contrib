@@ -1,5 +1,7 @@
 module Ohm
-  VERSION = '0.0.1'
+  module Contrib
+    VERSION = '0.0.1'
+  end
 
   autoload :Boundaries,        "ohm/contrib/boundaries"
   autoload :Timestamping,      "ohm/contrib/timestamping"
