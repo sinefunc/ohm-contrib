@@ -51,12 +51,12 @@ Example usage
     # Casting example
     class Product
       include Ohm::Typecast
-
-      attribute :price, :decimal
-      attribute :start_of_sale, :time
-      attribute :end_of_sale, :time
-      attribute :priority, :integer
-      attribute :rating, :float
+      
+      attribute :price, Decimal
+      attribute :start_of_sale, Time
+      attribute :end_of_sale, Time
+      attribute :priority, Integer
+      attribute :rating, Float
     end
 
 Credits
