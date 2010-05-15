@@ -156,4 +156,25 @@ class TestOhmTypecast < Test::Unit::TestCase
       assert_equal 0.12, Product.new(:vat => ".12").vat
     end
   end
+
+  context "trying to validate numericality of a decimal" do
+    class Item < Ohm::Model
+      include Ohm::Typecast
+
+      attribute :price, Decimal
+
+      def validate
+        assert_numeric :price
+      end
+    end
+
+    setup do
+      @item = Item.new(:price => "FooBar") 
+    end
+
+    test "invalidation of price" do
+      assert ! @item.valid? 
+      assert_equal [[:price, :not_numeric]], @item.errors
+    end
+  end
 end

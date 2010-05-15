@@ -30,10 +30,16 @@ module Ohm
     end
 
     class Decimal
+      CANONICAL = /^(\d+)?(\.\d+)?(E[+\-]\d+)?$/
+
       def self.[](value)
         return value if value.to_s.empty?
-
-        BigDecimal(value)
+        
+        if value.to_s =~ CANONICAL
+          BigDecimal(value)
+        else
+          value
+        end
       end
     end
 
