@@ -3,15 +3,72 @@ require 'time'
 require 'date'
 
 module Ohm
-  module Typecast
-    def self.included(base)
-      base.extend Macros 
+  module Types
+    class String < ::String
+      def self.[](value)
+        value
+      end
     end
 
+    class Time < ::Time
+      def self.[](value)
+        return value if value.to_s.empty?
+
+        ret = parse(value)
+        ret.to_s == value ? ret : value
+      end
+    end
+
+    class Date < ::Date
+      def self.[](value)
+        return value if value.to_s.empty?
+        
+        parse(value)
+      rescue ArgumentError
+        value
+      end
+    end
+
+    class Decimal
+      def self.[](value)
+        return value if value.to_s.empty?
+
+        BigDecimal(value)
+      end
+    end
+
+    class Float < ::Float
+      def self.[](value)
+        return value if value.to_s.empty?
+
+        Float(value)
+      rescue ArgumentError
+        value
+      end
+    end
+
+    class Integer < ::Integer
+      def self.[](value)
+        return value if value.to_s.empty?
+
+        Integer(value)
+      rescue ArgumentError
+        value
+      end
+    end
+  end
+
+  module Typecast
+    include Types
+
+    def self.included(base)
+      base.extend Macros
+    end
+    
     module Macros
-      def attribute(name, type = :string)
+      def attribute(name, type = String)
         define_method(name) do
-          typecast(read_local(name), type)
+          type[read_local(name)]
         end
 
         define_method(:"#{name}=") do |value|
@@ -20,29 +77,6 @@ module Ohm
 
         attributes << name unless attributes.include?(name)
       end
-    end
-
-  protected
-    def typecast(val, type)
-      return val if val.to_s.empty?
-
-      case type
-      when :integer then Integer(val)
-      when :float   then Float(val)
-      when :decimal then BigDecimal(val)
-      when :time    
-        ret = Time.parse(val)
-        ret.to_s == val ? ret : val
-
-      when :date    then Date.parse(val)
-      when :string  then val
-      end
-  
-    # All of the casting methods used above raises an ArgumentError
-    # if it fails to parse the value properly. If this happens,
-    # the least surprising behavior is to return the original value
-    rescue ArgumentError
-      val
     end
   end
 end

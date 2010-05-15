@@ -5,7 +5,7 @@ class TestOhmTypecast < Test::Unit::TestCase
     class Product < Ohm::Model
       include Ohm::Typecast
 
-      attribute :price, :decimal
+      attribute :price, Decimal
     end
 
     should "properly preserve the right precision" do
@@ -22,7 +22,7 @@ class TestOhmTypecast < Test::Unit::TestCase
     class Product < Ohm::Model
       include Ohm::Typecast
 
-      attribute :start_of_sale, :time
+      attribute :start_of_sale, Time
     end
 
     test "read / write" do
@@ -37,8 +37,8 @@ class TestOhmTypecast < Test::Unit::TestCase
       @time = Time.now.utc
       product = Product.create(:start_of_sale => @time)
       product = Product[product.id]
-      
-      assert_instance_of Time, product.start_of_sale
+       
+      assert_kind_of Time, product.start_of_sale
     end
 
     test "an invalid string" do
@@ -63,7 +63,7 @@ class TestOhmTypecast < Test::Unit::TestCase
     class Product < Ohm::Model
       include Ohm::Typecast
 
-      attribute :date_bought, :date
+      attribute :date_bought, Date
     end
 
     test "read / write" do
@@ -79,7 +79,7 @@ class TestOhmTypecast < Test::Unit::TestCase
       product = Product.create(:date_bought => @date)
       product = Product[product.id]
       
-      assert_instance_of Date, product.date_bought
+      assert_kind_of Date, product.date_bought
     end
 
     test "assigning a string which is not a valid date before persisting" do
@@ -101,7 +101,7 @@ class TestOhmTypecast < Test::Unit::TestCase
     class Product < Ohm::Model
       include Ohm::Typecast
 
-      attribute :stock_count, :integer
+      attribute :stock_count, Integer
     end
 
     test "when nil" do
@@ -129,7 +129,7 @@ class TestOhmTypecast < Test::Unit::TestCase
     class Product < Ohm::Model
       include Ohm::Typecast
 
-      attribute :vat, :float
+      attribute :vat, Float
     end
 
     test "when nil" do
