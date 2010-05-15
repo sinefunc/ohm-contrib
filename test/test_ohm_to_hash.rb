@@ -18,7 +18,7 @@ class TestOhmToHash < Test::Unit::TestCase
       @person = Person.create(:name => 'matz', :skills => 10)
       @person = Person[@person.id]
     end
-    
+
     should "have a to_hash of { id: 1, name: 'matz', age: nil, skills: 10 }" do
       assert_equal(
         { :id => '1', :name => "matz", :age => nil, :skills => '10' },
@@ -26,7 +26,7 @@ class TestOhmToHash < Test::Unit::TestCase
       )
     end
   end
-  
+
   context "when a Post has a votes counter" do
     class Post < Ohm::Model
       include Ohm::ToHash
@@ -48,7 +48,7 @@ class TestOhmToHash < Test::Unit::TestCase
 
   context "when a comment has a reference to a person" do
     Person = Class.new(Ohm::Model)
-    
+
     class Comment < Ohm::Model
       include Ohm::ToHash
 

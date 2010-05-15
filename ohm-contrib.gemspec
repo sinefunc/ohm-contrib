@@ -78,4 +78,3 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<timecop>, [">= 0"])
   end
 end
-

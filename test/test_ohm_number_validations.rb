@@ -12,7 +12,7 @@ class TestOhmNumberValidations < Test::Unit::TestCase
       assert_decimal :optional_price unless optional_price.to_s.empty?
     end
   end
-  
+
   context "given no price" do
     should "still validate as :not_decimal" do
       product = Product.new(:price => nil)
@@ -29,7 +29,7 @@ class TestOhmNumberValidations < Test::Unit::TestCase
       assert product.valid?
     end
   end
-  
+
   context "given 1 as a value" do
     should "validate as a decimal" do
       product = Product.new(:price => 1)

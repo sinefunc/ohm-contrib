@@ -29,7 +29,7 @@ class TestOhmTypecast < Test::Unit::TestCase
       @time = Time.now.utc
       product = Product.create(:start_of_sale => @time)
       product = Product[product.id]
-      
+
       assert_equal @time, product.start_of_sale
     end
 
@@ -37,7 +37,7 @@ class TestOhmTypecast < Test::Unit::TestCase
       @time = Time.now.utc
       product = Product.create(:start_of_sale => @time)
       product = Product[product.id]
-       
+
       assert_kind_of Time, product.start_of_sale
     end
 
@@ -78,16 +78,16 @@ class TestOhmTypecast < Test::Unit::TestCase
       @date = Date.today
       product = Product.create(:date_bought => @date)
       product = Product[product.id]
-      
+
       assert_kind_of Date, product.date_bought
     end
 
     test "assigning a string which is not a valid date before persisting" do
       product = Product.create(:date_bought => "Bla Bla")
-      
+
       assert_equal "Bla Bla", product.date_bought
     end
-  
+
     test "when nil" do
       assert_nil Product.new.date_bought
     end
@@ -169,11 +169,11 @@ class TestOhmTypecast < Test::Unit::TestCase
     end
 
     setup do
-      @item = Item.new(:price => "FooBar") 
+      @item = Item.new(:price => "FooBar")
     end
 
     test "invalidation of price" do
-      assert ! @item.valid? 
+      assert ! @item.valid?
       assert_equal [[:price, :not_numeric]], @item.errors
     end
   end

@@ -22,7 +22,7 @@ module Ohm
     class Date < ::Date
       def self.[](value)
         return value if value.to_s.empty?
-        
+
         parse(value)
       rescue ArgumentError
         value
@@ -34,7 +34,7 @@ module Ohm
 
       def self.[](value)
         return value if value.to_s.empty?
-        
+
         if value.to_s =~ CANONICAL
           BigDecimal(value)
         else
@@ -70,7 +70,7 @@ module Ohm
     def self.included(base)
       base.extend Macros
     end
-    
+
     module Macros
       def attribute(name, type = String)
         define_method(name) do

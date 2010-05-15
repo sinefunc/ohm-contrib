@@ -26,7 +26,7 @@ class TestOhmWebValidations < Test::Unit::TestCase
       assert_email :email
     end
   end
-  
+
   context "The slug should be valid" do
     def setup
       @blog_post_01 = BlogPost.new
@@ -36,7 +36,7 @@ class TestOhmWebValidations < Test::Unit::TestCase
     should "fail if the slug is not valid" do
       @blog_post_01.slug = "This is a title, not a SLUG"
       @blog_post_01.create
-      
+
       assert @blog_post_01.new?
       assert_equal [[:slug, :not_slug]], @blog_post_01.errors
     end
@@ -108,6 +108,6 @@ class TestOhmWebValidations < Test::Unit::TestCase
       assert @comment.new?
       assert @comment.errors.include? [:homepage, :not_url]
     end
-    
+
   end
 end

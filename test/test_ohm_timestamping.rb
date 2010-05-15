@@ -11,11 +11,11 @@ class TestOhmTimestamping < Test::Unit::TestCase
 
   context "a new? record" do
     should "have no created_at" do
-      assert_nil Person.new.created_at 
+      assert_nil Person.new.created_at
     end
 
     should "have no updated_at" do
-      assert_nil Person.new.updated_at 
+      assert_nil Person.new.updated_at
     end
   end
 
@@ -26,8 +26,8 @@ class TestOhmTimestamping < Test::Unit::TestCase
       @person = Person.create
       @person = Person[@person.id]
     end
-    
-    
+
+
     should "set the created_at equal to the current time" do
       assert_equal @now.to_s, @person.created_at
     end
@@ -48,11 +48,11 @@ class TestOhmTimestamping < Test::Unit::TestCase
       @person.save
       @person = Person[@person.id]
     end
-    
+
     should "leave created_at unchanged" do
       assert_equal @old_created_at, @person.created_at
     end
-    
+
     should "set updated_at to the current Time" do
       assert_equal @now.to_s, @person.updated_at
     end
