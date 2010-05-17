@@ -126,9 +126,11 @@ module Ohm
 
       self.class.types.each do |field, type|
         value = send(field)
+        assertion = 'assert_type_%s' % type.name.split('::').last.downcase
         
         unless value.kind_of?(type)
-          raise MissingValidation, "#{field} expected to be #{type}, but was #{value.class}"
+          raise MissingValidation, 
+            "#{ assertion } :#{ field} is required in your #validate method"
         end
       end
     end

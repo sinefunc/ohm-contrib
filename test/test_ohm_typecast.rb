@@ -26,8 +26,12 @@ class TestOhmTypecast < Test::Unit::TestCase
       should "raise a MissingValidation error during validation" do
         product = Product.new(:price => "FooBar")
 
-        assert_raise Ohm::Typecast::MissingValidation do
+        begin
           product.valid?
+        rescue Ohm::Typecast::MissingValidation => ex
+          assert_match(/assert_type_decimal :price is required in your #validate method/, ex.message)
+        else
+          flunk "Should have raised MissingValidation"
         end
       end
     end
@@ -78,8 +82,12 @@ class TestOhmTypecast < Test::Unit::TestCase
     end
 
     test "an invalid string" do
-      assert_raise Ohm::Typecast::MissingValidation do
-        product = Product.create(:start_of_sale => "invalid time")
+      begin
+        Product.create(:start_of_sale => "invalid time")
+      rescue Ohm::Typecast::MissingValidation => ex
+        assert_match(/assert_type_time :start_of_sale is required in your #validate method/, ex.message)
+      else
+        flunk "Should have raised MissingValidation"
       end
     end
 
@@ -138,8 +146,12 @@ class TestOhmTypecast < Test::Unit::TestCase
     end
 
     test "assigning a string which is not a valid date" do
-      assert_raise Ohm::Typecast::MissingValidation do
-        product = Product.create(:date_bought => "Bla Bla")
+      begin
+        Product.create(:date_bought => "Bla Bla")
+      rescue Ohm::Typecast::MissingValidation => ex
+        assert_match(/assert_type_date :date_bought is required in your #validate method/, ex.message)
+      else
+        flunk "Should have raised MissingValidation"
       end
     end
 
