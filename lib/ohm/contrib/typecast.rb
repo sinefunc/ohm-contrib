@@ -89,7 +89,25 @@ module Ohm
   end
 
   module Typecast
-    MissingValidation = Class.new(StandardError)
+    class MissingValidation < StandardError
+      MESSAGE = "%s :%s is required in your #validate method"
+
+      attr :type
+      attr :field
+
+      def initialize(type, field)
+        @type, @field = type, field
+      end
+
+      def message
+        MESSAGE % [assertion, field]
+      end
+
+    protected
+      def assertion
+        'assert_type_%s' % type.name.split('::').last.downcase
+      end
+    end
 
     include Types
     include TypeAssertions
@@ -126,11 +144,9 @@ module Ohm
 
       self.class.types.each do |field, type|
         value = send(field)
-        assertion = 'assert_type_%s' % type.name.split('::').last.downcase
         
         unless value.kind_of?(type)
-          raise MissingValidation, 
-            "#{ assertion } :#{ field} is required in your #validate method"
+          raise MissingValidation.new(type, field)
         end
       end
     end
