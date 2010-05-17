@@ -6,6 +6,10 @@ class TestOhmTypecast < Test::Unit::TestCase
       include Ohm::Typecast
 
       attribute :price, Decimal
+
+      # override validate and purposely forget super
+      def validate
+      end
     end
 
     should "properly preserve the right precision" do
@@ -41,12 +45,6 @@ class TestOhmTypecast < Test::Unit::TestCase
         include Ohm::Typecast
 
         attribute :price, Decimal
-
-        def validate
-          super
-
-          assert_type_decimal :price
-        end
       end
 
       should "be invalid and have an error on the field" do
@@ -63,6 +61,10 @@ class TestOhmTypecast < Test::Unit::TestCase
       include Ohm::Typecast
 
       attribute :start_of_sale, Time
+  
+      # we override validate and purposely forget to call super
+      def validate
+      end
     end
 
     test "read / write" do
@@ -107,12 +109,6 @@ class TestOhmTypecast < Test::Unit::TestCase
       include Ohm::Typecast
 
       attribute :start_of_sale, Time
-
-      def validate
-        super
-
-        assert_type_time :start_of_sale
-      end
     end
 
     should "be valid given invalid time value" do
@@ -127,6 +123,10 @@ class TestOhmTypecast < Test::Unit::TestCase
       include Ohm::Typecast
 
       attribute :date_bought, Date
+
+      # override validate and purposely forget super
+      def validate
+      end
     end
 
     test "read / write" do

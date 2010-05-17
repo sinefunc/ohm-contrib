@@ -11,6 +11,8 @@ module Ohm
     end
 
     class Time < ::Time
+      ASSERTION = :assert_type_time
+
       def self.[](value)
         return value if value.to_s.empty?
 
@@ -20,6 +22,8 @@ module Ohm
     end
 
     class Date < ::Date
+      ASSERTION = :assert_type_date
+
       def self.[](value)
         return value if value.to_s.empty?
 
@@ -30,6 +34,7 @@ module Ohm
     end
 
     class Decimal < BigDecimal
+      ASSERTION = :assert_type_decimal
       CANONICAL = /^(\d+)?(\.\d+)?(E[+\-]\d+)?$/
 
       def self.[](value)
@@ -44,6 +49,8 @@ module Ohm
     end
 
     class Float < ::Float
+      ASSERTION = :assert_type_float
+
       def self.[](value)
         return value if value.to_s.empty?
 
@@ -54,6 +61,8 @@ module Ohm
     end
 
     class Integer < ::Integer
+      ASSERTION = :assert_type_integer
+
       def self.[](value)
         return value if value.to_s.empty?
 
@@ -92,20 +101,15 @@ module Ohm
     class MissingValidation < StandardError
       MESSAGE = "%s :%s is required in your #validate method"
 
-      attr :type
       attr :field
+      attr :assertion
 
-      def initialize(type, field)
-        @type, @field = type, field
+      def initialize(field, assertion)
+        @field, @assertion = field, assertion
       end
 
       def message
         MESSAGE % [assertion, field]
-      end
-
-    protected
-      def assertion
-        'assert_type_%s' % type.name.split('::').last.downcase
       end
     end
 
@@ -117,7 +121,7 @@ module Ohm
     end
 
     module ClassMethods
-      def attribute(name, type = Ohm::Types::String)
+      def attribute(name, type = Ohm::Types::String, assertion = defined?(type::ASSERTION) ? type::ASSERTION : nil)
         define_method(name) do
           type[read_local(name)]
         end
@@ -131,7 +135,7 @@ module Ohm
         end
 
         attributes << name unless attributes.include?(name)
-        types[name] = type unless types.has_key?(name)
+        types[name] = [type, assertion] unless types.has_key?(name)
       end
       
       def types
@@ -142,12 +146,18 @@ module Ohm
     def valid?
       return unless super
 
-      self.class.types.each do |field, type|
+      self.class.types.each do |field, (type, assertion)|
         value = send(field)
         
         unless value.kind_of?(type)
-          raise MissingValidation.new(type, field)
+          raise MissingValidation.new(field, assertion)
         end
+      end
+    end
+
+    def validate
+      self.class.types.each do |field, (type, assertion)|
+        send assertion, field  if assertion
       end
     end
   end
