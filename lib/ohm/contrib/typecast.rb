@@ -6,7 +6,7 @@ module Ohm
   module Types
     class String < ::String
       def self.[](value)
-        value
+        new(value)
       end
     end
 
@@ -29,14 +29,14 @@ module Ohm
       end
     end
 
-    class Decimal
+    class Decimal < BigDecimal
       CANONICAL = /^(\d+)?(\.\d+)?(E[+\-]\d+)?$/
 
       def self.[](value)
         return value if value.to_s.empty?
 
         if value.to_s =~ CANONICAL
-          BigDecimal(value)
+          new(value)
         else
           value
         end
@@ -63,25 +63,73 @@ module Ohm
       end
     end
   end
+  
+  module TypeAssertions
 
-  module Typecast
-    include Types
-
-    def self.included(base)
-      base.extend Macros
+  protected
+    def assert_type_decimal(att, error = [att, :not_decimal])
+      assert send(att).is_a?(Ohm::Types::Decimal), error
     end
 
-    module Macros
-      def attribute(name, type = String)
+    def assert_type_time(att, error = [att, :not_time])
+      assert send(att).is_a?(Ohm::Types::Time), error 
+    end
+
+    def assert_type_date(att, error = [att, :not_date])
+      assert send(att).is_a?(Ohm::Types::Date), error 
+    end
+
+    def assert_type_integer(att, error = [att, :not_integer])
+      assert send(att).is_a?(Ohm::Types::Integer), error
+    end
+
+    def assert_type_float(att, error = [att, :not_float])
+      assert send(att).is_a?(Ohm::Types::Float), error
+    end
+  end
+
+  module Typecast
+    MissingValidation = Class.new(StandardError)
+
+    include Types
+    include TypeAssertions
+    
+    def self.included(base)
+      base.extend ClassMethods
+    end
+
+    module ClassMethods
+      def attribute(name, type = Ohm::Types::String)
         define_method(name) do
           type[read_local(name)]
         end
 
         define_method(:"#{name}=") do |value|
-          write_local(name, value && value.to_s)
+          if type.respond_to?(:dump)
+            write_local(name, type.dump(value))
+          else
+            write_local(name, value && value.to_s)
+          end
         end
 
         attributes << name unless attributes.include?(name)
+        types[name] = type unless types.has_key?(name)
+      end
+      
+      def types
+        @types ||= {}
+      end
+    end
+
+    def valid?
+      return unless super
+
+      self.class.types.each do |field, type|
+        value = send(field)
+        
+        unless value.kind_of?(type)
+          raise MissingValidation, "#{field} expected to be #{type}, but was #{value.class}"
+        end
       end
     end
   end
