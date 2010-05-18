@@ -21,6 +21,15 @@ class TestOhmTypecast < Test::Unit::TestCase
 
       assert_equal "foobar", post.content.downcase
     end
+
+    test "mutating methods like upcase!" do
+      post = Post.create(:content => "FooBar")
+      post = Post[post.id]
+      
+      post.content.upcase!
+
+      assert_equal "FOOBAR", post.content.to_s
+    end
   end
 
   context "when using a decimal" do
@@ -61,6 +70,14 @@ class TestOhmTypecast < Test::Unit::TestCase
       sum = 0
       1_000.times { sum += post.price }
       assert_equal 0.1, sum
+    end
+
+    test "using += with price" do
+      post = Post.create(:price => "0.0001")
+      post = Post[post.id]
+      
+      post.price += 1
+      assert_equal 1.0001, post.price.to_f
     end
   end
 
