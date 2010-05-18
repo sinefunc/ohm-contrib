@@ -14,6 +14,7 @@ begin
     gem.add_development_dependency "redis", ">= 0"
     gem.add_development_dependency "ohm", ">= 0"
     gem.add_development_dependency "timecop", ">= 0"
+    gem.add_development_dependency "mocha", ">= 0"
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError

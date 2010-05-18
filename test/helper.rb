@@ -4,6 +4,7 @@ require 'contest'
 require 'redis'
 require 'ohm'
 require 'timecop'
+require 'mocha'
 
 Ohm.connect :host => "localhost", :port => "6380"
 
