@@ -54,7 +54,7 @@ Example usage
     # Casting example
     class Product
       include Ohm::Typecast
-      
+
       attribute :price, Decimal
       attribute :start_of_sale, Time
       attribute :end_of_sale, Time
@@ -84,7 +84,7 @@ Typecasting explained
 
     post.stock / 10 == 10
     # => true
-  
+
 Credits
 -------
 Thanks to github user gnrfan for the web validations.

@@ -10,11 +10,15 @@ module Ohm
       end
 
       def to_s
-        @raw
+        @raw.to_s
       end
 
       def inspect
-        "#<Primitive raw=#{@raw}>"
+        object
+      end
+
+      def ==(other)
+        to_s == other.to_s
       end
 
     protected
@@ -31,6 +35,10 @@ module Ohm
     end
 
     class Decimal < Primitive
+      def inspect
+        object.to_s('F')
+      end
+
     protected
       def object
         ::Kernel::BigDecimal(@raw)
@@ -65,7 +73,7 @@ module Ohm
       end
     end
   end
-  
+
   module Typecast
     include Types
 

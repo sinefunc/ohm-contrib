@@ -81,4 +81,3 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<mocha>, [">= 0"])
   end
 end
-
