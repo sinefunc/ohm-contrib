@@ -8,6 +8,9 @@ List of modules
 * `Ohm::Boundaries`
 * `Ohm::Timestamping`
 * `Ohm::ToHash`
+* `Ohm::WebValidations`
+* `Ohm::NumberValidations`
+* `Ohm::Typecast`
 
 Example usage
 -------------
@@ -59,6 +62,29 @@ Example usage
       attribute :rating, Float
     end
 
+Typecasting explained
+---------------------
+    require 'ohm'
+    require 'ohm/contrib'
+
+    class Post < Ohm::Model
+      include Ohm::Typecast
+
+      attribute :price, Decimal
+      attribute :available_at, Time
+      attribute :stock, Integer
+    end
+
+    post = Post.create(:price => "10.20", :stock => "100")
+    post.price.to_s == "10.20"
+    # => true
+
+    post.price * 2 == 20.40
+    # => true
+
+    post.stock / 10 == 10
+    # => true
+  
 Credits
 -------
 Thanks to github user gnrfan for the web validations.
