@@ -1,7 +1,6 @@
 require 'bigdecimal'
 require 'time'
 require 'date'
-require 'forwardable'
 
 module Ohm
   module Types
