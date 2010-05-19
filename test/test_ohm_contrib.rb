@@ -36,4 +36,10 @@ class TestOhmContrib < Test::Unit::TestCase
       Ohm::Typecast
     end
   end
+
+  test "autoloading of Locking" do
+    assert_nothing_raised NameError, LoadError do
+      Ohm::Locking
+    end
+  end
 end
