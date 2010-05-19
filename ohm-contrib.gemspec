@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{ohm-contrib}
-  s.version = "0.0.11"
+  s.version = "0.0.12"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Cyril David"]
-  s.date = %q{2010-05-18}
+  s.date = %q{2010-05-19}
   s.description = %q{Highly decoupled drop-in functionality for Ohm models}
   s.email = %q{cyx.ucron@gmail.com}
   s.extra_rdoc_files = [
@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
      "VERSION",
      "lib/ohm/contrib.rb",
      "lib/ohm/contrib/boundaries.rb",
+     "lib/ohm/contrib/locking.rb",
      "lib/ohm/contrib/number_validations.rb",
      "lib/ohm/contrib/timestamping.rb",
      "lib/ohm/contrib/to_hash.rb",
