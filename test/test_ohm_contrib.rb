@@ -42,4 +42,10 @@ class TestOhmContrib < Test::Unit::TestCase
       Ohm::Locking
     end
   end
+
+  test "autoloading of ExtraValidations" do
+    assert_nothing_raised NameError, LoadError do
+      Ohm::ExtraValidations
+    end
+  end
 end

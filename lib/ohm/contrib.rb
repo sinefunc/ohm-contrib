@@ -1,6 +1,6 @@
 module Ohm
   module Contrib
-    VERSION = '0.0.12'
+    VERSION = '0.0.13'
   end
 
   autoload :Boundaries,        "ohm/contrib/boundaries"
@@ -8,6 +8,7 @@ module Ohm
   autoload :ToHash,            "ohm/contrib/to_hash"
   autoload :WebValidations,    "ohm/contrib/web_validations"
   autoload :NumberValidations, "ohm/contrib/number_validations"
+  autoload :ExtraValidations,  "ohm/contrib/extra_validations"
   autoload :Typecast,          "ohm/contrib/typecast"
   autoload :Locking,           "ohm/contrib/locking"
 end
