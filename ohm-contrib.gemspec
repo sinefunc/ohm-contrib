@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{ohm-contrib}
-  s.version = "0.0.14"
+  s.version = "0.0.15"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Cyril David"]
@@ -45,7 +45,7 @@ Gem::Specification.new do |s|
      "test/test_ohm_typecast.rb",
      "test/test_ohm_web_validations.rb"
   ]
-  s.homepage = %q{http://github.com/sinefunc/ohm-contrib}
+  s.homepage = %q{http://labs.sinefunc.com/ohm-contrib}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.6}
