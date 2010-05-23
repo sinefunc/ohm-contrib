@@ -67,9 +67,11 @@
   <div class="discussion">
     <p>
 This module is a straight extraction from Ohm. The only difference is that
-this allows for a custom sleep value. In addition, since future ohm
-versions might drop mutexes, I thought it might be a good idea to preseve
-this feature as a drop-in module.
+this allows for a custom sleep value.
+</p>
+<p>
+In addition, since future ohm versions might drop mutexes, I thought it
+might be a good idea to preseve this feature as a drop-in module.
 </p>
 
 
@@ -101,8 +103,8 @@ this feature as a drop-in module.
 
   
     <span class="summary_desc"><div class='inline'><p>
-Public: Lock the object before executing the block, and release it once the
-block is done.
+Lock the object before executing the block, and release it once the block
+is done.
 </p>
 </div></span>
   
@@ -128,40 +130,43 @@ block is done.
 </p><div class="docstring">
   <div class="discussion">
     <p>
-Public: Lock the object before executing the block, and release it once the
-block is done.
+Lock the object before executing the block, and release it once the block
+is done.
 </p>
-<p>
-Examples:
-</p>
-<pre class="code">
-  <span class='id post'>post</span> <span class='op'>=</span> <span class='const'>Order</span><span class='period'>.</span><span class='id create'>create</span><span class='lparen'>(</span><span class='symbol'>:customer</span> <span class='op'>=&gt;</span> <span class='const'>Customer</span><span class='period'>.</span><span class='id create'>create</span><span class='rparen'>)</span>
-  <span class='id post'>post</span><span class='period'>.</span><span class='id mutex'>mutex</span><span class='lparen'>(</span><span class='float'>0.01</span><span class='rparen'>)</span> <span class='kw'>do</span>
-    <span class='comment'># this block is in a mutex!
-</span>  <span class='kw'>end</span>
-</pre>
 
 
   </div>
 </div>
 <div class="tags">
   
+  <div class="examples">
+    <h3>Examples:</h3>
+    
+      <h4><div class='inline'></div></h4>
+      <pre class="example code">
+<span class='id post'>post</span> <span class='op'>=</span> <span class='const'>Order</span><span class='period'>.</span><span class='id create'>create</span><span class='lparen'>(</span><span class='symbol'>:customer</span> <span class='op'>=&gt;</span> <span class='const'>Customer</span><span class='period'>.</span><span class='id create'>create</span><span class='rparen'>)</span>
+<span class='id post'>post</span><span class='period'>.</span><span class='id mutex'>mutex</span><span class='lparen'>(</span><span class='float'>0.01</span><span class='rparen'>)</span> <span class='kw'>do</span>
+  <span class='comment'># this block is in a mutex!
+</span><span class='kw'>end</span></pre>
+    
+  </div>
+
 </div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-15
-16
 17
 18
 19
 20
-21</pre>
+21
+22
+23</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/locking.rb', line 15</span>
+      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/locking.rb', line 17</span>
 
 <span class='kw'>def</span> <span class='id mutex'>mutex</span><span class='lparen'>(</span><span class='id wait'>wait</span> <span class='op'>=</span> <span class='float'>0.1</span><span class='rparen'>)</span>
   <span class='id lock!'>lock!</span><span class='lparen'>(</span><span class='id wait'>wait</span><span class='rparen'>)</span>
@@ -180,7 +185,7 @@ Examples:
 </div>
     
     <div id="footer">
-  Generated on Sun May 23 13:20:38 2010 by 
+  Generated on Sun May 23 14:13:12 2010 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool">yard</a>
   0.5.4 (ruby-1.9.1).
 </div>

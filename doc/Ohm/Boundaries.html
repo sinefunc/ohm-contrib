@@ -63,7 +63,37 @@
 </dl>
 <div class="clear"></div>
 
-<h2>Defined Under Namespace</h2>
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>
+Dirt cheap ::first and ::last support.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <h3>Examples:</h3>
+    
+      <h4><div class='inline'></div></h4>
+      <pre class="example code">
+<span class='kw'>class</span> <span class='const'>Post</span> <span class='op'>&lt;</span> <span class='const'>Ohm</span><span class='op'>::</span><span class='const'>Model</span>
+  <span class='id include'>include</span> <span class='const'>Ohm</span><span class='op'>::</span><span class='const'>Boundaries</span>
+<span class='kw'>end</span>
+
+<span class='id post1'>post1</span> <span class='op'>=</span> <span class='const'>Post</span><span class='period'>.</span><span class='id create'>create</span>
+<span class='id post2'>post2</span> <span class='op'>=</span> <span class='const'>Post</span><span class='period'>.</span><span class='id create'>create</span>
+<span class='id post1'>post1</span> <span class='op'>==</span> <span class='const'>Post</span><span class='period'>.</span><span class='id first'>first</span>
+<span class='comment'># =&gt; true
+</span>
+<span class='id post2'>post2</span> <span class='op'>==</span> <span class='const'>Post</span><span class='period'>.</span><span class='id last'>last</span>
+<span class='comment'># =&gt; true</span></pre>
+    
+  </div>
+
+</div><h2>Defined Under Namespace</h2>
 <p class="children">
    
     
@@ -81,7 +111,7 @@
 </div>
     
     <div id="footer">
-  Generated on Sun May 23 13:20:38 2010 by 
+  Generated on Sun May 23 14:13:12 2010 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool">yard</a>
   0.5.4 (ruby-1.9.1).
 </div>

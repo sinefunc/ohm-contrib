@@ -63,7 +63,38 @@
 </dl>
 <div class="clear"></div>
 
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>
+Provides created_at / updated_at timestamps.
+</p>
 
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <h3>Examples:</h3>
+    
+      <h4><div class='inline'></div></h4>
+      <pre class="example code">
+<span class='kw'>class</span> <span class='const'>Post</span> <span class='op'>&lt;</span> <span class='const'>Ohm</span><span class='op'>::</span><span class='const'>Model</span>
+  <span class='id include'>include</span> <span class='const'>Ohm</span><span class='op'>::</span><span class='const'>Timestamping</span>
+<span class='kw'>end</span>
+
+<span class='id post'>post</span> <span class='op'>=</span> <span class='const'>Post</span><span class='period'>.</span><span class='id create'>create</span>
+<span class='id post'>post</span><span class='period'>.</span><span class='id created_at'>created_at</span><span class='period'>.</span><span class='id to_s'>to_s</span> <span class='op'>==</span> <span class='const'>Time</span><span class='period'>.</span><span class='id now'>now</span><span class='period'>.</span><span class='id utc'>utc</span><span class='period'>.</span><span class='id to_s'>to_s</span>
+<span class='comment'># =&gt; true
+</span>
+<span class='id post'>post</span> <span class='op'>=</span> <span class='const'>Post</span><span class='lbracket'>[</span><span class='id post'>post</span><span class='period'>.</span><span class='id id'>id</span><span class='rbracket'>]</span>
+<span class='id post'>post</span><span class='period'>.</span><span class='id save'>save</span>
+<span class='id post'>post</span><span class='period'>.</span><span class='id updated_at'>updated_at</span><span class='period'>.</span><span class='id to_s'>to_s</span> <span class='op'>==</span> <span class='const'>Time</span><span class='period'>.</span><span class='id now'>now</span><span class='period'>.</span><span class='id utc'>utc</span><span class='period'>.</span><span class='id to_s'>to_s</span>
+<span class='comment'># =&gt; true</span></pre>
+    
+  </div>
+
+</div>
 
 
   
@@ -113,14 +144,14 @@
       <pre class="lines">
 
 
-8
-9
-10
-11
-12</pre>
+24
+25
+26
+27
+28</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/timestamping.rb', line 8</span>
+      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/timestamping.rb', line 24</span>
 
 <span class='kw'>def</span> <span class='id create'>create</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id created_at'>created_at</span> <span class='op'>||=</span> <span class='const'>Time</span><span class='period'>.</span><span class='id now'>now</span><span class='period'>.</span><span class='id utc'>utc</span>
@@ -137,7 +168,7 @@
 </div>
     
     <div id="footer">
-  Generated on Sun May 23 13:20:39 2010 by 
+  Generated on Sun May 23 14:13:12 2010 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool">yard</a>
   0.5.4 (ruby-1.9.1).
 </div>
