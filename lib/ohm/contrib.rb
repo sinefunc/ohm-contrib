@@ -11,4 +11,5 @@ module Ohm
   autoload :ExtraValidations,  "ohm/contrib/extra_validations"
   autoload :Typecast,          "ohm/contrib/typecast"
   autoload :Locking,           "ohm/contrib/locking"
+  autoload :Callbacks,         "ohm/contrib/callbacks"
 end

@@ -19,4 +19,6 @@ rdoc
 pkg
 
 ## PROJECT::SPECIFIC
-.rvmrc
+/.rvmrc
+/.yardoc
+/doc
