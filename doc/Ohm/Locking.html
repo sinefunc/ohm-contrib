@@ -1,0 +1,189 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta name="Content-Type" content="text/html; charset=utf-8" />
+<title>Module: Ohm::Locking</title>
+<link rel="stylesheet" href="../css/style.css" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '..';
+  if (relpath != '') relpath += '/';
+</script>
+<script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../_index.html">Index (L)</a> &raquo; 
+    <span class='title'><a href="../Ohm.html" title="Ohm (module)">Ohm</a></span>
+     &raquo; 
+    <span class="title">Locking</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  <a id="class_list_link" href="#">Class List</a>
+  <a id="method_list_link" href="#">Method List</a>
+  <a id ="file_list_link" href="#">File List</a>
+</div>
+
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Module: Ohm::Locking 
+  
+  
+</h1>
+
+<dl class="box">
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r1 last">Defined in:</dt>
+    <dd class="r1 last">lib/ohm/contrib/locking.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>
+This module is a straight extraction from Ohm. The only difference is that
+this allows for a custom sleep value. In addition, since future ohm
+versions might drop mutexes, I thought it might be a good idea to preseve
+this feature as a drop-in module.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div>
+
+
+  
+    <h2>Instance Method Summary</h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#mutex-instance_method" title="#mutex (instance method)">- (Object) <strong>mutex</strong>(wait = 0.1) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Public: Lock the object before executing the block, and release it once the
+block is done.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="mutex-instance_method">
+  
+    - (<tt>Object</tt>) <strong>mutex</strong>(wait = 0.1) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Public: Lock the object before executing the block, and release it once the
+block is done.
+</p>
+<p>
+Examples:
+</p>
+<pre class="code">
+  <span class='id post'>post</span> <span class='op'>=</span> <span class='const'>Order</span><span class='period'>.</span><span class='id create'>create</span><span class='lparen'>(</span><span class='symbol'>:customer</span> <span class='op'>=&gt;</span> <span class='const'>Customer</span><span class='period'>.</span><span class='id create'>create</span><span class='rparen'>)</span>
+  <span class='id post'>post</span><span class='period'>.</span><span class='id mutex'>mutex</span><span class='lparen'>(</span><span class='float'>0.01</span><span class='rparen'>)</span> <span class='kw'>do</span>
+    <span class='comment'># this block is in a mutex!
+</span>  <span class='kw'>end</span>
+</pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+15
+16
+17
+18
+19
+20
+21</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/locking.rb', line 15</span>
+
+<span class='kw'>def</span> <span class='id mutex'>mutex</span><span class='lparen'>(</span><span class='id wait'>wait</span> <span class='op'>=</span> <span class='float'>0.1</span><span class='rparen'>)</span>
+  <span class='id lock!'>lock!</span><span class='lparen'>(</span><span class='id wait'>wait</span><span class='rparen'>)</span>
+  <span class='kw'>yield</span>
+  <span class='kw'>self</span>
+<span class='kw'>ensure</span>
+  <span class='id unlock!'>unlock!</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Sun May 23 13:20:38 2010 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool">yard</a>
+  0.5.4 (ruby-1.9.1).
+</div>
+
+  </body>
+</html>
