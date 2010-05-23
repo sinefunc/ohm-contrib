@@ -1,5 +1,5 @@
 module Ohm
-  # Minimalist callback support for Ohm::Model.
+  # Minimalistic callback support for Ohm::Model.
   #
   # @example
   #

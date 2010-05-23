@@ -1,4 +1,7 @@
 module Ohm
+  # This module will include all numeric validation needs.
+  # As of VERSION 0.0.15, Ohm::NumberValidations#assert_decimal
+  # is the only method provided.
   module NumberValidations
 
   protected

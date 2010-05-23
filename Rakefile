@@ -8,7 +8,7 @@ begin
     gem.summary = %Q{A collection of ohm related modules}
     gem.description = %Q{Highly decoupled drop-in functionality for Ohm models}
     gem.email = "cyx.ucron@gmail.com"
-    gem.homepage = "http://github.com/sinefunc/ohm-contrib"
+    gem.homepage = "http://labs.sinefunc.com/ohm-contrib"
     gem.authors = ["Cyril David"]
     gem.add_development_dependency "contest", ">= 0"
     gem.add_development_dependency "redis", ">= 0"

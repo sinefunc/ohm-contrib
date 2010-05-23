@@ -1,16 +1,20 @@
 ohm-contrib
 ===========
 
-A collection of drop-in modules for Ohm.
+A collection of drop-in modules for Ohm. Read the full documentation at
+[http://labs.sinefunc.com/ohm-contrib](http://labs.sinefunc.com/ohm-contrib).
 
 List of modules
 ---------------
-* `Ohm::Boundaries`
-* `Ohm::Timestamping`
-* `Ohm::ToHash`
-* `Ohm::WebValidations`
-* `Ohm::NumberValidations`
-* `Ohm::Typecast`
+1. [`Ohm::Boundaries`](http://labs.sinefunc.com/ohm-contrib/doc/Ohm/Boundaries.html)
+2. [`Ohm::Callbacks`](http://labs.sinefunc.com/ohm-contrib/doc/Ohm/Callbacks.html)
+3. [`Ohm::Timestamping`](http://labs.sinefunc.com/ohm-contrib/doc/Ohm/Timestamping.html)
+4. [`Ohm::ToHash`](http://labs.sinefunc.com/ohm-contrib/doc/Ohm/ToHash.html)
+5. [`Ohm::WebValidations`](http://labs.sinefunc.com/ohm-contrib/doc/Ohm/WebValidations.html)
+6. [`Ohm::NumberValidations`](http://labs.sinefunc.com/ohm-contrib/doc/Ohm/NumberValidations.html)
+7. [`Ohm::ExtraValidations`](http://labs.sinefunc.com/ohm-contrib/doc/Ohm/ExtraValidations.html)
+8. [`Ohm::Typecast`](http://labs.sinefunc.com/ohm-contrib/doc/Ohm/Typecast.html)
+9. [`Ohm::Locking`](http://labs.sinefunc.com/ohm-contrib/doc/Ohm/Locking.html)
 
 Example usage
 -------------

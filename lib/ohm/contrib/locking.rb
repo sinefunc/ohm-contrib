@@ -1,12 +1,14 @@
 module Ohm
   # This module is a straight extraction from Ohm. The only difference is
   # that this allows for a custom sleep value.
+  #
   # In addition, since future ohm versions might drop mutexes, I thought it
   # might be a good idea to preseve this feature as a drop-in module.
   module Locking
-    # Public: Lock the object before executing the block, and release it once the block is done.
+    # Lock the object before executing the block, and release it once the block 
+    # is done.
     # 
-    # Examples:
+    # @example
     #
     #   post = Order.create(:customer => Customer.create)
     #   post.mutex(0.01) do

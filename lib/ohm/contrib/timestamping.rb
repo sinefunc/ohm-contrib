@@ -1,4 +1,20 @@
 module Ohm
+  # Provides created_at / updated_at timestamps.
+  #
+  # @example
+  #
+  #   class Post < Ohm::Model
+  #     include Ohm::Timestamping
+  #   end
+  #
+  #   post = Post.create
+  #   post.created_at.to_s == Time.now.utc.to_s
+  #   # => true
+  #
+  #   post = Post[post.id]
+  #   post.save
+  #   post.updated_at.to_s == Time.now.utc.to_s
+  #   # => true
   module Timestamping
     def self.included(base)
       base.attribute :created_at
