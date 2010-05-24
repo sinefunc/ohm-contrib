@@ -100,7 +100,9 @@ module Ohm
       # @return [Array<callback>, nil] the callback in an array or nil if the
       #   callback exists
       def after(method, callback)
-        callbacks[:after][method] << callback
+        unless callbacks[:after][method].include? callback
+          callbacks[:after][method] << callback
+        end
       end
 
       # @private internally used to maintain the state of callbacks
