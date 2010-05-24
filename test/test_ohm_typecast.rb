@@ -212,7 +212,7 @@ class TestOhmTypecast < Test::Unit::TestCase
     
     test "still able to access top level Time" do
       post = Post.new
-      post.now.to_s == Time.now.to_s
+      assert_equal post.now.to_s, Time.now.to_s
     end
 
     test "responds to all ::Time class methods" do
