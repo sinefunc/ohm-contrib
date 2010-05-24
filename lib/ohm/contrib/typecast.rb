@@ -1,6 +1,7 @@
 require 'bigdecimal'
 require 'time'
 require 'date'
+require 'forwardable'
 
 module Ohm
   # Provides all the primitive types. The following are included:
@@ -68,6 +69,15 @@ module Ohm
     end
 
     class Time < Primitive
+      class << self
+        extend Forwardable
+        def_delegators :Time, 
+          :_load, :apply_offset, :at, :gm, :httpdate, :json_create, :local, 
+          :make_time, :mktime, :month_days, :now, :parse, :rfc2822, 
+          :strptime, :utc, :w3cdtf, :xmlschema, :yaml_new, :zone_offset, 
+          :zone_utc?
+      end
+
     protected
       def object
         ::Time.parse(@raw)
@@ -75,6 +85,15 @@ module Ohm
     end
 
     class Date < Primitive
+      class << self
+        extend Forwardable
+        def_delegators :Date, 
+          :_parse, :_strptime, :civil, :commercial, :gregorian_leap?, :jd, 
+          :json_create, :julian_leap?, :now, :nth_kday, :ordinal, :parse, :s3e, 
+          :strptime, :today, :valid_civil?, :valid_commercial?, :valid_jd?, 
+          :valid_ordinal?, :weeknum
+      end
+
     protected
       def object
         ::Date.parse(@raw)

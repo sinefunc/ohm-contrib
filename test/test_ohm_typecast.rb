@@ -200,6 +200,33 @@ class TestOhmTypecast < Test::Unit::TestCase
       include Ohm::Typecast
 
       attribute :created_at, Time
+
+      def now
+        Time.now
+      end
+
+      def time
+        Time
+      end
+    end
+    
+    test "still able to access top level Time" do
+      post = Post.new
+      post.now.to_s == Time.now.to_s
+    end
+
+    test "responds to all ::Time class methods" do
+      post = Post.new
+      methods = [
+        :_load, :apply_offset, :at, :gm, :httpdate, :json_create, :local,
+        :make_time, :mktime, :month_days, :new, :now, :parse, :rfc2822, 
+        :strptime, :utc, :w3cdtf, :xmlschema, :yaml_new, :zone_offset, 
+        :zone_utc?
+      ]
+      
+      methods.each do |m|
+        assert_respond_to post.time, m
+      end
     end
 
     test "handles nil case correctly" do
@@ -244,6 +271,32 @@ class TestOhmTypecast < Test::Unit::TestCase
 
       def today
         ::Date.today
+      end
+
+      def date
+        Date
+      end
+
+      def base_today
+        Date.today
+      end
+    end
+    
+    test "still able to get top level methods" do
+      assert_equal Date.today, Post.new.base_today
+    end
+
+    test "responds to all the class methods" do
+      post = Post.new
+
+      methods = [
+        :_parse, :_strptime, :civil, :commercial, :gregorian_leap?, :jd, 
+        :json_create, :julian_leap?, :now, :nth_kday, :ordinal, :parse, :s3e, 
+        :strptime, :today, :valid_civil?, :valid_commercial?, :valid_jd?, 
+        :valid_ordinal?, :weeknum
+      ]
+      methods.each do |m|
+        assert_respond_to post.date, m
       end
     end
 
