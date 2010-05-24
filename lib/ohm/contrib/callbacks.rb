@@ -36,7 +36,7 @@ module Ohm
   #     end
   #   end
   #
- 
+
   module Callbacks
     def self.included(base)
       base.extend Macros
@@ -66,7 +66,7 @@ module Ohm
       #
       # @param [Symbol] method the method type, `:validate`, `:create`, or `:save`
       # @param [Symbol] callback the name of the method to execute
-      # @return [Array<callback>, nil] the callback wrapped in an array or nil 
+      # @return [Array<callback>, nil] the callback wrapped in an array or nil
       #   if the callback exists
       def before(method, callback)
         unless callbacks[:before][method].include? callback
@@ -97,18 +97,18 @@ module Ohm
       #
       # @param [Symbol] method the method type, `:validate`, `:create`, or `:save`
       # @param [Symbol] callback the name of the method to execute
-      # @return [Array<callback>, nil] the callback in an array or nil if the 
+      # @return [Array<callback>, nil] the callback in an array or nil if the
       #   callback exists
       def after(method, callback)
         callbacks[:after][method] << callback
       end
-      
+
       # @private internally used to maintain the state of callbacks
       def callbacks
         @callbacks ||= Hash.new { |h, k| h[k] = Hash.new { |h, k| h[k] = [] }}
       end
     end
-  
+
     # Overrides the validate method of Ohm::Model. This is a bit tricky,
     # since typically you override this. Make sure you do something like:
     #
@@ -128,7 +128,7 @@ module Ohm
       super
       execute_callback(:after, :validate)
     end
-    
+
     # The overriden create of Ohm::Model. It checks if the
     # model is valid, and executes all before :create callbacks.
     #
@@ -141,7 +141,7 @@ module Ohm
         execute_callback(:after, :create)  if is_created
       end
     end
-  
+
     # The overridden save of Ohm::Model. It checks if the model
     # is valid, and executes all before :save callbacks.
     #

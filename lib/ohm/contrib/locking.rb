@@ -5,9 +5,9 @@ module Ohm
   # In addition, since future ohm versions might drop mutexes, I thought it
   # might be a good idea to preseve this feature as a drop-in module.
   module Locking
-    # Lock the object before executing the block, and release it once the block 
+    # Lock the object before executing the block, and release it once the block
     # is done.
-    # 
+    #
     # @example
     #
     #   post = Order.create(:customer => Customer.create)

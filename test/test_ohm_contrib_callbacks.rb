@@ -5,7 +5,7 @@ class OhmContribCallbacksTest < Test::Unit::TestCase
     include Ohm::Callbacks
 
     attribute :body
-    
+
     before :validate, :do_before_validate
     after  :validate, :do_after_validate
 
@@ -25,13 +25,25 @@ class OhmContribCallbacksTest < Test::Unit::TestCase
       instance_variable_get("@#{ action }")
     end
 
+    def count(action)
+      instance_variable_get("@#{ action }")
+    end
+
   protected
-    def do_before_validate() @do_before_validate = true  end
-    def do_after_validate()  @do_after_validate = true   end
-    def do_before_create()   @do_before_create = true    end
-    def do_after_create()    @do_after_create = true     end
-    def do_before_save()     @do_before_save = true      end
-    def do_after_save()      @do_after_save = true       end
+    def do_before_validate() incr(:do_before_validate) end
+    def do_after_validate()  incr(:do_after_validate)  end
+    def do_before_create()   incr(:do_before_create)   end
+    def do_after_create()    incr(:do_after_create)    end
+    def do_before_save()     incr(:do_before_save)     end
+    def do_after_save()      incr(:do_after_save)      end
+
+    def incr(action)
+      val = instance_variable_get("@#{ action }")
+      val ||= 0
+      val += 1
+
+      instance_variable_set("@#{ action }", val)
+    end
   end
 
   context "on save when invalid state" do
@@ -39,9 +51,9 @@ class OhmContribCallbacksTest < Test::Unit::TestCase
       @post = Post.new
       @post.save
     end
-    
+
     should "still call before / after validate" do
-      assert @post.did?(:do_before_validate)      
+      assert @post.did?(:do_before_validate)
       assert @post.did?(:do_after_validate)
     end
 
@@ -58,7 +70,7 @@ class OhmContribCallbacksTest < Test::Unit::TestCase
       @post = Post.new(:body => "The Body")
       @post.save
     end
-    
+
     should "call all callbacks" do
       assert @post.did?(:do_before_validate)
       assert @post.did?(:do_after_validate)
@@ -66,6 +78,13 @@ class OhmContribCallbacksTest < Test::Unit::TestCase
       assert @post.did?(:do_after_create)
       assert @post.did?(:do_before_save)
       assert @post.did?(:do_after_save)
+    end
+
+    should "call create / save callbacks only once" do
+      assert_equal 1, @post.count(:do_before_create)
+      assert_equal 1, @post.count(:do_after_create)
+      assert_equal 1, @post.count(:do_before_save)
+      assert_equal 1, @post.count(:do_after_create)
     end
   end
 
@@ -76,7 +95,7 @@ class OhmContribCallbacksTest < Test::Unit::TestCase
 
       @post.save
     end
-    
+
     should "not call create related callbacks" do
       assert ! @post.did?(:do_before_create)
       assert ! @post.did?(:do_after_create)
@@ -87,7 +106,12 @@ class OhmContribCallbacksTest < Test::Unit::TestCase
       assert @post.did?(:do_after_validate)
       assert @post.did?(:do_before_save)
       assert @post.did?(:do_after_save)
-    end    
+    end
+
+    should "call save callbacks only once" do
+      assert_equal 1, @post.count(:do_before_save)
+      assert_equal 1, @post.count(:do_after_save)
+    end
   end
 
   context "on save of an existing invalid object" do
@@ -103,7 +127,7 @@ class OhmContribCallbacksTest < Test::Unit::TestCase
       assert @post.did?(:do_before_validate)
       assert @post.did?(:do_after_validate)
     end
-   
+
     should "not call create related callbacks" do
       assert ! @post.did?(:do_before_create)
       assert ! @post.did?(:do_after_create)

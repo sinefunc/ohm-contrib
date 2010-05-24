@@ -23,7 +23,7 @@ module Ohm
       def first
         all.first
       end
-  
+
       # @todo Add support for passing in conditions
       def last
         self[db.get(key(:id))]

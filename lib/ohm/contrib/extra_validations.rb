@@ -5,7 +5,7 @@ module Ohm
   #
   #   class Post < Ohm::Model
   #     include Ohm::ExtraValidations
-  #     
+  #
   #     attribute :price
   #     attribute :state
   #     attribute :slug
@@ -36,6 +36,6 @@ module Ohm
   protected
     def assert_member(att, set, error = [att, :not_member])
       assert set.include?(send(att)), error
-    end    
+    end
   end
 end

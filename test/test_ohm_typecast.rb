@@ -209,7 +209,7 @@ class TestOhmTypecast < Test::Unit::TestCase
         Time
       end
     end
-    
+
     test "still able to access top level Time" do
       post = Post.new
       assert_equal post.now.to_s, Time.now.to_s
@@ -219,11 +219,11 @@ class TestOhmTypecast < Test::Unit::TestCase
       post = Post.new
       methods = [
         :_load, :apply_offset, :at, :gm, :httpdate, :json_create, :local,
-        :make_time, :mktime, :month_days, :new, :now, :parse, :rfc2822, 
-        :strptime, :utc, :w3cdtf, :xmlschema, :yaml_new, :zone_offset, 
+        :make_time, :mktime, :month_days, :new, :now, :parse, :rfc2822,
+        :strptime, :utc, :w3cdtf, :xmlschema, :yaml_new, :zone_offset,
         :zone_utc?
       ]
-      
+
       methods.each do |m|
         assert_respond_to post.time, m
       end
@@ -281,7 +281,7 @@ class TestOhmTypecast < Test::Unit::TestCase
         Date.today
       end
     end
-    
+
     test "still able to get top level methods" do
       assert_equal Date.today, Post.new.base_today
     end
@@ -290,9 +290,9 @@ class TestOhmTypecast < Test::Unit::TestCase
       post = Post.new
 
       methods = [
-        :_parse, :_strptime, :civil, :commercial, :gregorian_leap?, :jd, 
-        :json_create, :julian_leap?, :now, :nth_kday, :ordinal, :parse, :s3e, 
-        :strptime, :today, :valid_civil?, :valid_commercial?, :valid_jd?, 
+        :_parse, :_strptime, :civil, :commercial, :gregorian_leap?, :jd,
+        :json_create, :julian_leap?, :now, :nth_kday, :ordinal, :parse, :s3e,
+        :strptime, :today, :valid_civil?, :valid_commercial?, :valid_jd?,
         :valid_ordinal?, :weeknum
       ]
       methods.each do |m|

@@ -3,7 +3,7 @@ module Ohm
   # is that it chose the albeit better whitelisted approach.
   #
   # @example
-  #   
+  #
   #   # this is the core Ohm#to_hash implementation
   #   class Post < Ohm::Model
   #     attribute :body

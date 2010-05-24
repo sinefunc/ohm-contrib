@@ -71,10 +71,10 @@ module Ohm
     class Time < Primitive
       class << self
         extend Forwardable
-        def_delegators :Time, 
-          :_load, :apply_offset, :at, :gm, :httpdate, :json_create, :local, 
-          :make_time, :mktime, :month_days, :now, :parse, :rfc2822, 
-          :strptime, :utc, :w3cdtf, :xmlschema, :yaml_new, :zone_offset, 
+        def_delegators :Time,
+          :_load, :apply_offset, :at, :gm, :httpdate, :json_create, :local,
+          :make_time, :mktime, :month_days, :now, :parse, :rfc2822,
+          :strptime, :utc, :w3cdtf, :xmlschema, :yaml_new, :zone_offset,
           :zone_utc?
       end
 
@@ -87,10 +87,10 @@ module Ohm
     class Date < Primitive
       class << self
         extend Forwardable
-        def_delegators :Date, 
-          :_parse, :_strptime, :civil, :commercial, :gregorian_leap?, :jd, 
-          :json_create, :julian_leap?, :now, :nth_kday, :ordinal, :parse, :s3e, 
-          :strptime, :today, :valid_civil?, :valid_commercial?, :valid_jd?, 
+        def_delegators :Date,
+          :_parse, :_strptime, :civil, :commercial, :gregorian_leap?, :jd,
+          :json_create, :julian_leap?, :now, :nth_kday, :ordinal, :parse, :s3e,
+          :strptime, :today, :valid_civil?, :valid_commercial?, :valid_jd?,
           :valid_ordinal?, :weeknum
       end
 
@@ -100,14 +100,14 @@ module Ohm
       end
     end
   end
-  
-  # Provides unobtrusive, non-explosive typecasting.Instead of exploding on set 
-  # of an invalid value, this module takes the approach of just taking in 
-  # parameters and letting you do validation yourself. The only thing this 
+
+  # Provides unobtrusive, non-explosive typecasting.Instead of exploding on set
+  # of an invalid value, this module takes the approach of just taking in
+  # parameters and letting you do validation yourself. The only thing this
   # module does for you is the boilerplate casting you might need to do.
   #
   # @example
-  #   
+  #
   #   # without typecasting
   #   class Item < Ohm::Model
   #     attribute :price
@@ -122,7 +122,7 @@ module Ohm
   #   # => true
   #
   #   # you can opt to manually cast everytime, or do it in the model, i.e.
-  #   
+  #
   #   class Item
   #     def price
   #       BigDecimal(read_local(:price))
