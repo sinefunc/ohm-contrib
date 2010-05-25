@@ -66,7 +66,7 @@ module Ohm
       #
       # @param [Symbol] method the method type, `:validate`, `:create`, or `:save`
       # @param [Symbol] callback the name of the method to execute
-      # @return [Array<callback>] the callback in an array if added
+      # @return [Array] the callback in an array if added e.g. [:timestamp]
       # @return [nil] if the callback already exists
       def before(method, callback)
         unless callbacks[:before][method].include? callback
@@ -97,7 +97,7 @@ module Ohm
       #
       # @param [Symbol] method the method type, `:validate`, `:create`, or `:save`
       # @param [Symbol] callback the name of the method to execute
-      # @return [Array<callback>] the callback in an array if added
+      # @return [Array] the callback in an array if added e.g. [:timestamp]
       # @return [nil] if the callback already exists
       def after(method, callback)
         unless callbacks[:after][method].include? callback
