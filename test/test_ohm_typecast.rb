@@ -205,28 +205,17 @@ class TestOhmTypecast < Test::Unit::TestCase
         Time.now
       end
 
-      def time
-        Time
+      def new_time
+        Time.new
       end
     end
 
     test "still able to access top level Time" do
-      post = Post.new
-      assert_equal post.now.to_s, Time.now.to_s
+      assert_equal Post.new.now.to_s, Time.now.to_s
     end
 
-    test "responds to all ::Time class methods" do
-      post = Post.new
-      methods = [
-        :_load, :apply_offset, :at, :gm, :httpdate, :json_create, :local,
-        :make_time, :mktime, :month_days, :new, :now, :parse, :rfc2822,
-        :strptime, :utc, :w3cdtf, :xmlschema, :yaml_new, :zone_offset,
-        :zone_utc?
-      ]
-
-      methods.each do |m|
-        assert_respond_to post.time, m
-      end
+    test "should be able to use Time.new inside the class" do
+      assert_equal Post.new.new_time.to_s, Time.new.to_s
     end
 
     test "handles nil case correctly" do
@@ -277,6 +266,10 @@ class TestOhmTypecast < Test::Unit::TestCase
         Date
       end
 
+      def may_5
+        Date.new(2010, 05, 05)
+      end
+
       def base_today
         Date.today
       end
@@ -286,18 +279,8 @@ class TestOhmTypecast < Test::Unit::TestCase
       assert_equal Date.today, Post.new.base_today
     end
 
-    test "responds to all the class methods" do
-      post = Post.new
-
-      methods = [
-        :_parse, :_strptime, :civil, :commercial, :gregorian_leap?, :jd,
-        :json_create, :julian_leap?, :now, :nth_kday, :ordinal, :parse, :s3e,
-        :strptime, :today, :valid_civil?, :valid_commercial?, :valid_jd?,
-        :valid_ordinal?, :weeknum
-      ]
-      methods.each do |m|
-        assert_respond_to post.date, m
-      end
+    test "allows instantiation of dates" do
+      assert_equal Date.new(2010, 05, 05), Post.new.may_5
     end
 
     test "handles nil case correctly" do

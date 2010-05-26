@@ -1,7 +1,6 @@
 require 'bigdecimal'
 require 'time'
 require 'date'
-require 'forwardable'
 
 module Ohm
   # Provides all the primitive types. The following are included:
@@ -13,6 +12,15 @@ module Ohm
   # * Date
   # * Time
   module Types
+    def self.defined?(type)
+      @constants ||= constants.map(&:to_s)
+      @constants.include?(type.to_s)
+    end
+
+    def self.[](type)
+      const_get(type.to_s.split('::').last)
+    end
+
     class Primitive < BasicObject
       def initialize(value)
         @raw = value
@@ -69,15 +77,6 @@ module Ohm
     end
 
     class Time < Primitive
-      class << self
-        extend Forwardable
-        def_delegators :Time,
-          :_load, :apply_offset, :at, :gm, :httpdate, :json_create, :local,
-          :make_time, :mktime, :month_days, :now, :parse, :rfc2822,
-          :strptime, :utc, :w3cdtf, :xmlschema, :yaml_new, :zone_offset,
-          :zone_utc?
-      end
-
     protected
       def object
         ::Time.parse(@raw)
@@ -85,15 +84,6 @@ module Ohm
     end
 
     class Date < Primitive
-      class << self
-        extend Forwardable
-        def_delegators :Date,
-          :_parse, :_strptime, :civil, :commercial, :gregorian_leap?, :jd,
-          :json_create, :julian_leap?, :now, :nth_kday, :ordinal, :parse, :s3e,
-          :strptime, :today, :valid_civil?, :valid_commercial?, :valid_jd?,
-          :valid_ordinal?, :weeknum
-      end
-
     protected
       def object
         ::Date.parse(@raw)
@@ -153,17 +143,49 @@ module Ohm
   #   item.posted.strftime('%m/%d/%Y')
   #   # => works!!!
   module Typecast
-    include Types
-
     def self.included(base)
       base.extend ClassMethods
     end
 
     module ClassMethods
-      def attribute(name, type = Ohm::Types::String)
+      # Defines a typecasted attribute.
+      #
+      # @example
+      #   
+      #   class User < Ohm::Model
+      #     include Ohm::Typecast
+      #
+      #     attribute :birthday, Date
+      #     attribute :last_login, Time
+      #     attribute :age, Integer
+      #     attribute :spending, Decimal
+      #     attribute :score, Float
+      #   end
+      #
+      #   user = User.new(:birthday => "2000-01-01")
+      #   user.birthday.month == 1
+      #   # => true
+      #
+      #   user.birthday.year == 2000
+      #   # => true
+      #
+      #   user.birthday.day == 1
+      #   # => true
+      #
+      #   user = User.new(:age => 20)
+      #   user.age - 1 == 19
+      #   => true
+      # 
+      # @param [Symbol] name the name of the attribute to define.
+      # @param [Class] type (defaults to Ohm::Types::String) a class defined in 
+      #                Ohm::Types. You may define custom types in Ohm::Types if
+      #                you need to.
+      # @return [Array] the array of attributes already defined.
+      # @return [nil] if the attribute is already defined.
+      def attribute(name, type = Ohm::Types::String, klass = Ohm::Types[type])
         define_method(name) do
           value = read_local(name)
-          value && type.new(value)
+          value && klass.new(value)
         end
 
         define_method(:"#{name}=") do |value|
@@ -171,6 +193,15 @@ module Ohm
         end
 
         attributes << name unless attributes.include?(name)
+      end
+
+    private
+      def const_missing(name)
+        if Ohm::Types.defined?(name)
+          Ohm::Types[name]
+        else
+          super
+        end
       end
     end
   end
