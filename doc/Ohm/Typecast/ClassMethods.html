@@ -74,7 +74,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#attribute-instance_method" title="#attribute (instance method)">- (Object) <strong>attribute</strong>(name, type = Ohm::Types::String) </a>
+      <a href="#attribute-instance_method" title="#attribute (instance method)">- (Array<sup>?</sup>) <strong>attribute</strong>(name, type = Ohm::Types::String, klass = Ohm::Types[type]) </a>
     
 
     
@@ -86,7 +86,10 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'><p>
+Defines a typecasted attribute.
+</p>
+</div></span>
   
 </li>
 
@@ -103,36 +106,153 @@
       <div class="method_details first">
   <p class="signature first" id="attribute-instance_method">
   
-    - (<tt>Object</tt>) <strong>attribute</strong>(name, type = Ohm::Types::String) 
+    - (<tt>Array</tt><sup>?</sup>) <strong>attribute</strong>(name, type = Ohm::Types::String, klass = Ohm::Types[type]) 
   
 
   
-</p><table class="source_code">
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Defines a typecasted attribute.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <h3>Examples:</h3>
+    
+      <h4><div class='inline'></div></h4>
+      <pre class="example code">
+class User &lt; Ohm::Model
+  include Ohm::Typecast
+
+  attribute :birthday, Date
+  attribute :last_login, Time
+  attribute :age, Integer
+  attribute :spending, Decimal
+  attribute :score, Float
+end
+
+user = User.new(:birthday =&gt; &quot;2000-01-01&quot;)
+user.birthday.month == 1
+# =&gt; true
+
+user.birthday.year == 2000
+# =&gt; true
+
+user.birthday.day == 1
+# =&gt; true
+
+user = User.new(:age =&gt; 20)
+user.age - 1 == 19
+=&gt; true</pre>
+    
+  </div>
+<h3>Parameters:</h3>
+<ul class="param">
+  
+    <li>
+      
+        <span class='type'>(<tt>Symbol</tt>)</span>
+      
+      
+        <span class='name'>name</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>
+the name of the attribute to define.
+</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='type'>(<tt>Class</tt>)</span>
+      
+      
+        <span class='name'>type</span>
+      
+      
+        <em class="default">(defaults to: <tt>Ohm::Types::String</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>
+(defaults to Ohm::Types::String) a class defined in Ohm::Types. You may
+define custom types in Ohm::Types if you need to.
+</p>
+</div>
+      
+    </li>
+  
+</ul>
+<h3>Returns:</h3>
+<ul class="return">
+  
+    <li>
+      
+        <span class='type'>(<tt>Array</tt>)</span>
+      
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>
+the array of attributes already defined.
+</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='type'>(<tt>nil</tt>)</span>
+      
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>
+if the attribute is already defined.
+</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-163
-164
-165
-166
-167
-168
-169
-170
-171
-172
-173
-174</pre>
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/typecast.rb', line 163</span>
+      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/typecast.rb', line 185</span>
 
-<span class='kw'>def</span> <span class='id attribute'>attribute</span><span class='lparen'>(</span><span class='id name'>name</span><span class='comma'>,</span> <span class='id type'>type</span> <span class='op'>=</span> <span class='const'>Ohm</span><span class='op'>::</span><span class='const'>Types</span><span class='op'>::</span><span class='const'>String</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='id attribute'>attribute</span><span class='lparen'>(</span><span class='id name'>name</span><span class='comma'>,</span> <span class='id type'>type</span> <span class='op'>=</span> <span class='const'>Ohm</span><span class='op'>::</span><span class='const'>Types</span><span class='op'>::</span><span class='const'>String</span><span class='comma'>,</span> <span class='id klass'>klass</span> <span class='op'>=</span> <span class='const'>Ohm</span><span class='op'>::</span><span class='const'>Types</span><span class='lbracket'>[</span><span class='id type'>type</span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='id define_method'>define_method</span><span class='lparen'>(</span><span class='id name'>name</span><span class='rparen'>)</span> <span class='kw'>do</span>
     <span class='id value'>value</span> <span class='op'>=</span> <span class='id read_local'>read_local</span><span class='lparen'>(</span><span class='id name'>name</span><span class='rparen'>)</span>
-    <span class='id value'>value</span> <span class='op'>&amp;&amp;</span> <span class='id type'>type</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='id value'>value</span><span class='rparen'>)</span>
+    <span class='id value'>value</span> <span class='op'>&amp;&amp;</span> <span class='id klass'>klass</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='id value'>value</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
 
   <span class='id define_method'>define_method</span><span class='lparen'>(</span><span class='symbol'>:#{</span><span class='id name'>name</span><span class='rbrace'>}</span><span class='tstring_content'>=</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id value'>value</span><span class='op'>|</span>
@@ -151,7 +271,7 @@
 </div>
     
     <div id="footer">
-  Generated on Tue May 25 13:49:18 2010 by 
+  Generated on Wed May 26 15:18:05 2010 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool">yard</a>
   0.5.4 (ruby-1.9.1).
 </div>
