@@ -36,7 +36,6 @@ module Ohm
   #     end
   #   end
   #
-
   module Callbacks
     def self.included(base)
       base.extend Macros
@@ -154,6 +153,13 @@ module Ohm
 
       super.tap do |is_saved|
         execute_callback(:after, :save)  if is_saved
+      end
+    end
+
+    def delete
+      execute_callback(:before, :delete)
+      super.tap do |is_deleted|
+        execute_callback(:after, :delete)  if is_deleted
       end
     end
 

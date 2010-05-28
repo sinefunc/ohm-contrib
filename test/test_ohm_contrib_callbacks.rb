@@ -14,6 +14,9 @@ class OhmContribCallbacksTest < Test::Unit::TestCase
 
     before :save,     :do_before_save
     after  :save,     :do_after_save
+    
+    before :delete,   :do_before_delete
+    after  :delete,   :do_after_delete
 
     def validate
       super
@@ -36,6 +39,9 @@ class OhmContribCallbacksTest < Test::Unit::TestCase
     def do_after_create()    incr(:do_after_create)    end
     def do_before_save()     incr(:do_before_save)     end
     def do_after_save()      incr(:do_after_save)      end
+    def do_before_delete()   incr(:do_before_delete)   end
+    def do_after_delete()    incr(:do_after_delete)    end
+
 
     def incr(action)
       val = instance_variable_get("@#{ action }")
@@ -134,6 +140,29 @@ class OhmContribCallbacksTest < Test::Unit::TestCase
     end
 
     should "also not call save related callbacks" do
+      assert ! @post.did?(:do_before_save)
+      assert ! @post.did?(:do_after_save)
+    end
+  end
+
+  context "on delete" do
+    setup do
+      @post = Post.create(:body => "The Body")
+      @post = Post[@post.id]
+      @post.delete
+    end
+    
+    
+    should "call delete related callbacks once" do
+      assert_equal 1, @post.count(:do_before_delete)
+      assert_equal 1, @post.count(:do_after_delete)
+    end
+
+    should "not call all other callbacks" do
+      assert ! @post.did?(:do_before_validate)
+      assert ! @post.did?(:do_after_validate)
+      assert ! @post.did?(:do_before_create)
+      assert ! @post.did?(:do_after_create)
       assert ! @post.did?(:do_before_save)
       assert ! @post.did?(:do_after_save)
     end
