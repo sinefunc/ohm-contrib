@@ -68,6 +68,76 @@ Example usage
 
 Typecasting explained
 ---------------------
+
+I studied various typecasting behaviors implemented by a few ORMs in Ruby.
+
+### ActiveRecord
+
+    class Post < ActiveRecord::Base
+      # say we have an integer column in the DB named votes
+    end
+    Post.new(:votes => "FooBar").votes == 0
+    # => true
+
+### DataMapper
+    class Post
+      include DataMapper::Resource
+
+      property :id, Serial
+      property :votes, Integer
+    end
+    
+    post = Post.new(:votes => "FooBar")
+    post.votes == "FooBar"
+    # => true
+
+    post.save
+    post.reload
+
+    # Get ready!!!!
+    post.votes == 0
+    # => true
+
+### Ohm::Typecast approach.
+
+#### Mindset:
+
+1. Explosion everytime is too cumbersome.
+2. Mutation of data is less than ideal (Also similar to MySQL silently allowing you 
+   to store more than 255 chars in a VARCHAR and then truncating that data. Yes I know
+   you can configure it to be noisy but the defaults kill).
+3. We just want to operate on it like it should!
+
+#### Short Demo: 
+    class Post < Ohm::Model
+      include Ohm::Typecast
+      attribute :votes
+    end
+
+    post = Post.new(:votes => "FooBar")
+    post.votes == "FooBar"
+    # => true
+
+    post.save
+    post = Post[post.id]
+    post.votes == "FooBar"
+    # => true
+    
+    # Here comes the cool part...
+    post.votes * 1
+    # => ArgumentError: invalid value for Integer: "FooBar"
+    
+    post.votes = 50
+    post.votes * 2 == 100
+    # => true
+
+    post.votes.class == Ohm::Types::Integer
+    # => true
+    post.votes.inspect == "50"
+    # => true
+
+#### More examples just to show the normal case.
+
     require 'ohm'
     require 'ohm/contrib'
 
@@ -77,9 +147,14 @@ Typecasting explained
       attribute :price, Decimal
       attribute :available_at, Time
       attribute :stock, Integer
+      attribute :address, Hash
+      attribute :tags, Array
     end
 
-    post = Post.create(:price => "10.20", :stock => "100")
+    post = Post.create(:price => "10.20", :stock => "100", 
+                       :address => { "city" => "Boston", "country" => "US" }, 
+                       :tags => ["redis", "ohm", "typecast"])
+
     post.price.to_s == "10.20"
     # => true
 
@@ -88,6 +163,23 @@ Typecasting explained
 
     post.stock / 10 == 10
     # => true
+
+    post.address["city"] == "Boston"
+    post.tags.map { |tag| tag.upcase }
+
+    # of course mutation works for both cases
+    post.price += 5
+    post.stock -= 1
+    post.tags << "contrib"
+    post.address["state"] = "MA"
+    post.save
+    post = Post[post.id]
+
+    post.address["state"] == "MA"
+    # => true
+    post.tags.include?("contrib")
+    # => true
+
 
 Credits
 -------

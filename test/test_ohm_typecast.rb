@@ -520,6 +520,20 @@ class TestOhmTypecast < Test::Unit::TestCase
         post.addresses.push({"city" => "Hong Kong", "country" => "ZN"})
     end
 
+    test "looping! and other enumerablems" do
+      array = [1, 2, 3]
+      post = Post.create(:addresses => array)
+
+      total = 0
+      post.addresses.each { |e| total += e }
+      assert_equal 6, total
+
+      post = Post[post.id]
+      total = 0
+      post.addresses.each { |e| total += e }
+      assert_equal 6, total
+    end
+
     test "handles mutation" do
       post = Post.create(:addresses => [1, 2, 3])
       
