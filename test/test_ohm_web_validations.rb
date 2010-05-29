@@ -29,6 +29,7 @@ class TestOhmWebValidations < Test::Unit::TestCase
 
   context "The slug should be valid" do
     def setup
+      Ohm.flush
       @blog_post_01 = BlogPost.new
       @blog_post_02 = BlogPost.new
     end
@@ -41,11 +42,11 @@ class TestOhmWebValidations < Test::Unit::TestCase
       assert_equal [[:slug, :not_slug]], @blog_post_01.errors
     end
 
-    #should "succeed if the slug is valid" do
-    #  @blog_post_02.slug = "this-is-a-valid-slug"
-    #  @blog_post_02.create
-    #  assert_not_nil @blog_post_02.id
-    #end
+    should "succeed if the slug is valid" do
+      @blog_post_02.slug = "this-is-a-valid-slug"
+      @blog_post_02.create
+      assert_not_nil @blog_post_02.id
+    end
 
     should "fail if the slug is not unique" do
 
