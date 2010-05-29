@@ -233,30 +233,46 @@ if the attribute is already defined.
       <pre class="lines">
 
 
-185
-186
-187
-188
-189
-190
-191
-192
-193
-194
-195
-196</pre>
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/typecast.rb', line 185</span>
+      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/typecast.rb', line 268</span>
 
 <span class='kw'>def</span> <span class='id attribute'>attribute</span><span class='lparen'>(</span><span class='id name'>name</span><span class='comma'>,</span> <span class='id type'>type</span> <span class='op'>=</span> <span class='const'>Ohm</span><span class='op'>::</span><span class='const'>Types</span><span class='op'>::</span><span class='const'>String</span><span class='comma'>,</span> <span class='id klass'>klass</span> <span class='op'>=</span> <span class='const'>Ohm</span><span class='op'>::</span><span class='const'>Types</span><span class='lbracket'>[</span><span class='id type'>type</span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='id define_method'>define_method</span><span class='lparen'>(</span><span class='id name'>name</span><span class='rparen'>)</span> <span class='kw'>do</span>
-    <span class='id value'>value</span> <span class='op'>=</span> <span class='id read_local'>read_local</span><span class='lparen'>(</span><span class='id name'>name</span><span class='rparen'>)</span>
-    <span class='id value'>value</span> <span class='op'>&amp;&amp;</span> <span class='id klass'>klass</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='id value'>value</span><span class='rparen'>)</span>
+    <span class='comment'># Primitive types maintain a reference to the original object
+</span>    <span class='comment'># stored in @_attributes[att]. Hence mutation works for the
+</span>    <span class='comment'># Primitive case. For cases like Hash, Array where the value 
+</span>    <span class='comment'># is `JSON.parse`d, we need to set the actual Ohm::Types::Hash 
+</span>    <span class='comment'># (or similar) to @_attributes[att] for mutation to work.
+</span>    <span class='kw'>if</span> <span class='id klass'>klass</span><span class='period'>.</span><span class='id superclass'>superclass</span> <span class='op'>==</span> <span class='const'>Ohm</span><span class='op'>::</span><span class='const'>Types</span><span class='op'>::</span><span class='const'>Primitive</span>
+      <span class='id klass'>klass</span><span class='lbracket'>[</span><span class='id read_local'>read_local</span><span class='lparen'>(</span><span class='id name'>name</span><span class='rparen'>)</span><span class='rbracket'>]</span>
+    <span class='kw'>else</span>
+      <span class='id write_local'>write_local</span><span class='lparen'>(</span><span class='id name'>name</span><span class='comma'>,</span> <span class='id klass'>klass</span><span class='lbracket'>[</span><span class='id read_local'>read_local</span><span class='lparen'>(</span><span class='id name'>name</span><span class='rparen'>)</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
   <span class='kw'>end</span>
 
   <span class='id define_method'>define_method</span><span class='lparen'>(</span><span class='symbol'>:#{</span><span class='id name'>name</span><span class='rbrace'>}</span><span class='tstring_content'>=</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id value'>value</span><span class='op'>|</span>
-    <span class='id write_local'>write_local</span><span class='lparen'>(</span><span class='id name'>name</span><span class='comma'>,</span> <span class='id value'>value</span> <span class='op'>&amp;&amp;</span> <span class='id value'>value</span><span class='period'>.</span><span class='id to_s'>to_s</span><span class='rparen'>)</span>
+    <span class='id write_local'>write_local</span><span class='lparen'>(</span><span class='id name'>name</span><span class='comma'>,</span> <span class='id klass'>klass</span><span class='lbracket'>[</span><span class='id value'>value</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id to_s'>to_s</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
 
   <span class='id attributes'>attributes</span> <span class='op'>&lt;&lt;</span> <span class='id name'>name</span> <span class='kw'>unless</span> <span class='id attributes'>attributes</span><span class='period'>.</span><span class='id include?'>include?</span><span class='lparen'>(</span><span class='id name'>name</span><span class='rparen'>)</span>
@@ -271,7 +287,7 @@ if the attribute is already defined.
 </div>
     
     <div id="footer">
-  Generated on Wed May 26 15:18:05 2010 by 
+  Generated on Sat May 29 19:00:26 2010 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool">yard</a>
   0.5.4 (ruby-1.9.1).
 </div>

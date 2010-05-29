@@ -73,6 +73,28 @@
 All credit goes to gnrfan of github Basically an extraction from <a
 href="http://github.com/gnrfan/ohm_extra_validations">github.com/gnrfan/ohm_extra_validations</a>
 </p>
+<ul>
+<li>2010-05-29 Updated Email Regex, Extracted out regexs to constants
+
+</li>
+</ul>
+<p>
+This module provides the following:
+</p>
+<ul>
+<li>assert_slug
+
+</li>
+<li>assert_email
+
+</li>
+<li>assert_url
+
+</li>
+<li>assert_ipv4
+
+</li>
+</ul>
 
 
   </div>
@@ -80,6 +102,48 @@ href="http://github.com/gnrfan/ohm_extra_validations">github.com/gnrfan/ohm_extr
 <div class="tags">
   
 </div>
+  <h2>Constant Summary</h2>
+  
+    <dl class="constants">
+      
+        <dt id="EMAIL_REGEX-constant" class="">EMAIL_REGEX =
+          <div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+  <h3>See Also:</h3>
+  <ul class="see">
+    
+      <li><a href="http://fightingforalostcause.net/misc/2006/compare-email-regex.php" title="http://fightingforalostcause.net/misc/2006/compare-email-regex.php">http://fightingforalostcause.net/misc/2006/compare-email-regex.php</a></li>
+    
+  </ul>
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^([\w\!\#$\%\&amp;\'\*\+\-\/\=\?\^\`{\|\}\~]+\.)*[\w\!\#$\%\&amp;\'\*\+\-\/\=\?\^\`{\|\}\~]+@((((([a-z0-9]{1}[a-z0-9\-]{0,62}[a-z0-9]{1})|[a-z])\.)+[a-z]{2,6})|(\d{1,3}\.){3}\d{1,3}(\:\d{1,5})?)$</span><span class='regexp_end'>/i</span></span></pre></dd>
+      
+        <dt id="SLUG_REGEX-constant" class="">SLUG_REGEX =
+          
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^[-\w]+$</span><span class='regexp_end'>/</span></span></pre></dd>
+      
+        <dt id="URL_REGEX-constant" class="">URL_REGEX =
+          
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^(http|https):\/\/([a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}|(25[0-5]|2[0-4]\d|[0-1]?\d?\d)(\.(25[0-5]|2[0-4]\d|[0-1]?\d?\d)){3}|localhost)(:[0-9]{1,5})?(\/.*)?$</span><span class='regexp_end'>/ix</span></span></pre></dd>
+      
+        <dt id="IPV4_REGEX-constant" class="">IPV4_REGEX =
+          
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^(25[0-5]|2[0-4]\d|[0-1]?\d?\d)(\.(25[0-5]|2[0-4]\d|[0-1]?\d?\d)){3}$</span><span class='regexp_end'>/</span></span></pre></dd>
+      
+    </dl>
+  
+
 
 
 
@@ -87,7 +151,7 @@ href="http://github.com/gnrfan/ohm_extra_validations">github.com/gnrfan/ohm_extr
 </div>
     
     <div id="footer">
-  Generated on Wed May 26 15:18:05 2010 by 
+  Generated on Sat May 29 19:00:26 2010 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool">yard</a>
   0.5.4 (ruby-1.9.1).
 </div>

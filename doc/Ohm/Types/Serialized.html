@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <meta name="Content-Type" content="text/html; charset=utf-8" />
-<title>Class: Ohm::Types::Primitive</title>
+<title>Class: Ohm::Types::Serialized</title>
 <link rel="stylesheet" href="../../css/style.css" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="../../css/common.css" type="text/css" media="screen" charset="utf-8" />
 
@@ -23,10 +23,10 @@
     <div id="header">
       <div id="menu">
   
-    <a href="../../_index.html">Index (P)</a> &raquo; 
+    <a href="../../_index.html">Index (S)</a> &raquo; 
     <span class='title'><a href="../../Ohm.html" title="Ohm (module)">Ohm</a></span> &raquo; <span class='title'><a href="../Types.html" title="Ohm::Types (module)">Types</a></span>
      &raquo; 
-    <span class="title">Primitive</span>
+    <span class="title">Serialized</span>
   
   
   <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
@@ -43,7 +43,7 @@
     
     <iframe id="search_frame"></iframe>
     
-    <div id="content"><h1>Class: Ohm::Types::Primitive 
+    <div id="content"><h1>Class: Ohm::Types::Serialized 
   
   
 </h1>
@@ -59,7 +59,7 @@
           
             <li class="next"><a href="Base.html" title="Ohm::Types::Base (class)">Base</a></li>
           
-            <li class="next">Ohm::Types::Primitive</li>
+            <li class="next">Ohm::Types::Serialized</li>
           
         </ul>
         <a href="#" class="inheritanceTree">show all</a>
@@ -82,27 +82,46 @@
 
 <div id="subclasses">
   <h2>Direct Known Subclasses</h2>
-  <p class="children"><a href="Date.html" title="Ohm::Types::Date (class)">Date</a>, <a href="Decimal.html" title="Ohm::Types::Decimal (class)">Decimal</a>, <a href="Float.html" title="Ohm::Types::Float (class)">Float</a>, <a href="Integer.html" title="Ohm::Types::Integer (class)">Integer</a>, <a href="String.html" title="Ohm::Types::String (class)">String</a>, <a href="Time.html" title="Ohm::Types::Time (class)">Time</a></p>
+  <p class="children"><a href="Array.html" title="Ohm::Types::Array (class)">Array</a>, <a href="Hash.html" title="Ohm::Types::Hash (class)">Hash</a></p>
 </div>
 
-  <h2>Constant Summary</h2>
-  
-    <dl class="constants">
-      
-        <dt id="EMPTY-constant" class="">EMPTY =
-          
-        </dt>
-        <dd><pre class="code"><span class='kw'>nil</span></pre></dd>
-      
-    </dl>
-  
-
 
   
   
   
   
   
+  <h2>Instance Attribute Summary</h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#object-instance_method" title="#object (instance method)">- (Object) <strong>object</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title readonly">readonly</span>
+    
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Returns the value of attribute object.
+</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
 
   
     <h2>Instance Method Summary</h2>
@@ -132,7 +151,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#initialize-instance_method" title="#initialize (instance method)">- (Primitive) <strong>initialize</strong>(value) </a>
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (Serialized) <strong>initialize</strong>(raw) </a>
     
 
     
@@ -147,7 +166,7 @@
 
   
     <span class="summary_desc"><div class='inline'><p>
-A new instance of Primitive.
+A new instance of Serialized.
 </p>
 </div></span>
   
@@ -194,14 +213,14 @@ A new instance of Primitive.
     <div class="method_details first">
   <p class="signature first" id="initialize-instance_method">
   
-    - (<tt><a href="" title="Ohm::Types::Primitive (class)">Primitive</a></tt>) <strong>initialize</strong>(value) 
+    - (<tt><a href="" title="Ohm::Types::Serialized (class)">Serialized</a></tt>) <strong>initialize</strong>(raw) 
   
 
   
 </p><div class="docstring">
   <div class="discussion">
     <p>
-A new instance of Primitive
+A new instance of Serialized
 </p>
 
 
@@ -215,15 +234,29 @@ A new instance of Primitive
       <pre class="lines">
 
 
-56
-57
-58</pre>
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/typecast.rb', line 56</span>
+      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/typecast.rb', line 130</span>
 
-<span class='kw'>def</span> <span class='id initialize'>initialize</span><span class='lparen'>(</span><span class='id value'>value</span><span class='rparen'>)</span>
-  <span class='ivar'>@raw</span> <span class='op'>=</span> <span class='id value'>value</span>
+<span class='kw'>def</span> <span class='id initialize'>initialize</span><span class='lparen'>(</span><span class='id raw'>raw</span><span class='rparen'>)</span>
+  <span class='ivar'>@object</span> <span class='op'>=</span> <span class='kw'>case</span> <span class='id raw'>raw</span>
+  <span class='kw'>when</span> <span class='kw'>self</span><span class='period'>.</span><span class='id class'>class</span><span class='op'>::</span><span class='const'>RAW</span> <span class='kw'>then</span> <span class='id raw'>raw</span>
+  <span class='kw'>when</span> <span class='op'>::</span><span class='const'>String</span>        <span class='kw'>then</span> <span class='op'>::</span><span class='const'>JSON</span><span class='period'>.</span><span class='id parse'>parse</span><span class='lparen'>(</span><span class='id raw'>raw</span><span class='rparen'>)</span>
+  <span class='kw'>when</span> <span class='kw'>self</span><span class='period'>.</span><span class='id class'>class</span>      <span class='kw'>then</span> <span class='id raw'>raw</span><span class='period'>.</span><span class='id object'>object</span>
+  <span class='kw'>else</span>
+    <span class='op'>::</span><span class='const'>Kernel</span><span class='period'>.</span><span class='id raise'>raise</span> <span class='op'>::</span><span class='const'>TypeError</span><span class='comma'>,</span> 
+      <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>%s does not accept %s</span><span class='tstring_end'>&quot;</span></span> <span class='op'>%</span> <span class='lbracket'>[</span><span class='kw'>self</span><span class='period'>.</span><span class='id class'>class</span><span class='comma'>,</span> <span class='id raw'>raw</span><span class='period'>.</span><span class='id inspect'>inspect</span><span class='rbracket'>]</span>
+  <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -231,6 +264,53 @@ A new instance of Primitive
 </div>
   
 </div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id=""></span>
+      <span id="object-instance_method"></span>
+      <div class="method_details first">
+  <p class="signature first" id="object-instance_method">
+  
+    - (<tt>Object</tt>) <strong>object</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Returns the value of attribute object
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+128
+129
+130</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/typecast.rb', line 128</span>
+
+<span class='kw'>def</span> <span class='id object'>object</span>
+  <span class='ivar'>@object</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
 
 
   <div id="instance_method_details" class="method_details_list">
@@ -250,15 +330,15 @@ A new instance of Primitive
       <pre class="lines">
 
 
-64
-65
-66</pre>
+141
+142
+143</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/typecast.rb', line 64</span>
+      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/typecast.rb', line 141</span>
 
 <span class='kw'>def</span> <span class='op'>==</span><span class='lparen'>(</span><span class='id other'>other</span><span class='rparen'>)</span>
-  <span class='id to_s'>to_s</span> <span class='op'>==</span> <span class='id other'>other</span><span class='period'>.</span><span class='id to_s'>to_s</span>
+  <span class='id object'>object</span> <span class='op'>==</span> <span class='id other'>other</span>        
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -278,15 +358,15 @@ A new instance of Primitive
       <pre class="lines">
 
 
-60
-61
-62</pre>
+145
+146
+147</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/typecast.rb', line 60</span>
+      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/typecast.rb', line 145</span>
 
 <span class='kw'>def</span> <span class='id to_s'>to_s</span>
-  <span class='ivar'>@raw</span><span class='period'>.</span><span class='id to_s'>to_s</span>
+  <span class='id object'>object</span><span class='period'>.</span><span class='id to_json'>to_json</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -298,7 +378,7 @@ A new instance of Primitive
 </div>
     
     <div id="footer">
-  Generated on Sat May 29 19:00:25 2010 by 
+  Generated on Sat May 29 19:00:26 2010 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool">yard</a>
   0.5.4 (ruby-1.9.1).
 </div>

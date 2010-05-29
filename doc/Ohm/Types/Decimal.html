@@ -57,6 +57,8 @@
         <ul class="fullTree">
           <li>Object</li>
           
+            <li class="next"><a href="Base.html" title="Ohm::Types::Base (class)">Base</a></li>
+          
             <li class="next"><a href="Primitive.html" title="Ohm::Types::Primitive (class)">Primitive</a></li>
           
             <li class="next">Ohm::Types::Decimal</li>
@@ -81,7 +83,18 @@
 <div class="clear"></div>
 
 
+  <h2>Constant Summary</h2>
+  
 
+
+  
+  
+  
+  
+  <h3 class="inherited">Constants inherited from <a href="Primitive.html" title="Ohm::Types::Primitive (class)">Primitive</a></h3>
+  <p class="inherited"><a href="Primitive.html#EMPTY-constant" title="Ohm::Types::Primitive::EMPTY (constant)">EMPTY</a></p>
+
+  
   
   
   
@@ -125,20 +138,21 @@
   
   <h3 class="inherited">Methods inherited from <a href="Primitive.html" title="Ohm::Types::Primitive (class)">Primitive</a></h3>
   <p class="inherited"><a href="Primitive.html#%3D%3D-instance_method" title="Ohm::Types::Primitive#== (method)">#==</a>, <a href="Primitive.html#initialize-instance_method" title="Ohm::Types::Primitive#initialize (method)">#initialize</a>, <a href="Primitive.html#to_s-instance_method" title="Ohm::Types::Primitive#to_s (method)">#to_s</a></p>
-<div id="constructor_details" class="method_details_list">
+
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods inherited from <a href="Base.html" title="Ohm::Types::Base (class)">Base</a></h3>
+  <p class="inherited"><a href="Base.html#%5B%5D-class_method" title="Ohm::Types::Base.[] (method)">[]</a>, <a href="Base.html#delegate_to-class_method" title="Ohm::Types::Base.delegate_to (method)">delegate_to</a></p>
+
+  <div id="constructor_details" class="method_details_list">
   <h2>Constructor Details</h2>
   
     <p class="notice">This class inherits a constructor from <a href="Primitive.html#initialize-instance_method" title="Ohm::Types::Primitive#initialize (method)">Ohm::Types::Primitive</a></p>
-  
-</div>
-<div id="method_missing_details" class="method_details_list">
-  <h2>Dynamic Method Handling</h2>
-  <p class="notice super">
-    This class handles dynamic methods through the <tt>method_missing</tt> method
-    
-      in the class <a href="Primitive.html#method_missing-instance_method" title="Ohm::Types::Primitive#method_missing (method)">Ohm::Types::Primitive</a>
-    
-  </p>
   
 </div>
 
@@ -160,12 +174,12 @@
       <pre class="lines">
 
 
-55
-56
-57</pre>
+81
+82
+83</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/typecast.rb', line 55</span>
+      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/typecast.rb', line 81</span>
 
 <span class='kw'>def</span> <span class='id inspect'>inspect</span>
   <span class='id object'>object</span><span class='period'>.</span><span class='id to_s'>to_s</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>F</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span>
@@ -180,7 +194,7 @@
 </div>
     
     <div id="footer">
-  Generated on Wed May 26 15:18:05 2010 by 
+  Generated on Sat May 29 19:00:25 2010 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool">yard</a>
   0.5.4 (ruby-1.9.1).
 </div>
