@@ -1,6 +1,8 @@
 require 'bigdecimal'
 require 'time'
 require 'date'
+require 'json'
+require 'forwardable'
 
 module Ohm
   # Provides all the primitive types. The following are included:
@@ -11,6 +13,8 @@ module Ohm
   # * Float
   # * Date
   # * Time
+  # * Hash
+  # * Array
   module Types
     def self.defined?(type)
       @constants ||= constants.map(&:to_s)
@@ -20,8 +24,35 @@ module Ohm
     def self.[](type)
       const_get(type.to_s.split('::').last)
     end
+  
+    class Base < BasicObject
+      class Exception < ::Exception; end
 
-    class Primitive < BasicObject
+      extend ::Forwardable
+
+      @@delegation_blacklist = [
+        :==, :to_s, :initialize, :inspect, :object_id, :__send__, :__id__
+      ]
+
+      def self.[](value)
+        return self::EMPTY if value.to_s.empty?
+    
+        new(value)
+      end
+
+      def self.delegate_to(klass, except = @@delegation_blacklist)
+        methods = klass.public_instance_methods.map(&:to_sym) - except
+        def_delegators :object, *methods          
+      end
+
+      def inspect
+        object.inspect
+      end
+    end
+
+    class Primitive < Base
+      EMPTY = nil
+      
       def initialize(value)
         @raw = value
       end
@@ -30,28 +61,23 @@ module Ohm
         @raw.to_s
       end
 
-      def inspect
-        object
-      end
-
       def ==(other)
         to_s == other.to_s
       end
-
+     
     protected
       def object
         @raw
       end
-
-      def method_missing(meth, *args, &blk)
-        object.send(meth, *args, &blk)
-      end
     end
 
     class String < Primitive
+      delegate_to ::String
     end
 
     class Decimal < Primitive
+      delegate_to ::BigDecimal
+
       def inspect
         object.to_s('F')
       end
@@ -63,6 +89,8 @@ module Ohm
     end
 
     class Integer < Primitive
+      delegate_to ::Fixnum
+
     protected
       def object
         ::Kernel::Integer(@raw)
@@ -70,6 +98,8 @@ module Ohm
     end
 
     class Float < Primitive
+      delegate_to ::Float
+
     protected
       def object
         ::Kernel::Float(@raw)
@@ -77,6 +107,8 @@ module Ohm
     end
 
     class Time < Primitive
+      delegate_to ::Time
+
     protected
       def object
         ::Time.parse(@raw)
@@ -84,9 +116,60 @@ module Ohm
     end
 
     class Date < Primitive
+      delegate_to ::Date
+
     protected
       def object
         ::Date.parse(@raw)
+      end
+    end
+    
+    class Serialized < Base
+      attr :object
+
+      def initialize(raw)
+        @object = case raw
+        when self.class::RAW then raw
+        when ::String        then ::JSON.parse(raw)
+        when self.class      then raw.object
+        else
+          ::Kernel.raise ::TypeError, 
+            "%s does not accept %s" % [self.class, raw.inspect]
+        end
+      end
+
+      def ==(other)
+        object == other        
+      end
+     
+      def to_s
+        object.to_json
+      end
+    end
+
+    class Hash < Serialized
+      EMPTY = {}
+      RAW   = ::Hash
+
+      delegate_to ::Hash
+
+      # @private since basic object doesn't include a #class we need
+      # to define this manually
+      def class
+        ::Ohm::Types::Hash
+      end
+    end
+
+    class Array < Serialized
+      EMPTY = []
+      RAW   = ::Array
+      
+      delegate_to ::Array
+      
+      # @private since basic object doesn't include a #class we need
+      # to define this manually
+      def class
+        ::Ohm::Types::Array
       end
     end
   end
@@ -184,12 +267,20 @@ module Ohm
       # @return [nil] if the attribute is already defined.
       def attribute(name, type = Ohm::Types::String, klass = Ohm::Types[type])
         define_method(name) do
-          value = read_local(name)
-          value && klass.new(value)
+          # Primitive types maintain a reference to the original object
+          # stored in @_attributes[att]. Hence mutation works for the
+          # Primitive case. For cases like Hash, Array where the value 
+          # is `JSON.parse`d, we need to set the actual Ohm::Types::Hash 
+          # (or similar) to @_attributes[att] for mutation to work.
+          if klass.superclass == Ohm::Types::Primitive
+            klass[read_local(name)]
+          else
+            write_local(name, klass[read_local(name)])
+          end
         end
 
         define_method(:"#{name}=") do |value|
-          write_local(name, value && value.to_s)
+          write_local(name, klass[value].to_s)
         end
 
         attributes << name unless attributes.include?(name)

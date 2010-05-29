@@ -145,7 +145,7 @@ class TestOhmTypecast < Test::Unit::TestCase
 
     test "inspecting" do
       post = Post.new(:price => "50000")
-      assert_equal 50000, post.price.inspect
+      assert_equal '50000', post.price.inspect
     end
   end
 
@@ -191,7 +191,7 @@ class TestOhmTypecast < Test::Unit::TestCase
 
     test "inspecting" do
       post = Post.new(:price => "12345.67890")
-      assert_equal 12345.67890, post.price.inspect
+      assert_equal '12345.6789', post.price.inspect
     end
   end
 
@@ -316,6 +316,233 @@ class TestOhmTypecast < Test::Unit::TestCase
 
     test "still able to access Date" do
       assert_equal Date.today, Post.new.today
+    end
+  end
+
+  context "when using a Hash" do
+    class Post < Ohm::Model
+      include Ohm::Typecast
+
+      attribute :address, Hash
+
+      def hash
+        Hash.new
+      end
+
+      def top_level_hash
+        Hash
+      end
+    end
+    
+    test "importing" do
+      assert_equal Hash.new, Ohm::Types::Hash[nil]
+      assert_equal Hash.new, Ohm::Types::Hash[""]
+      assert_equal Hash.new, Ohm::Types::Hash[{}]
+
+      assert_equal Hash[:a => "b", :c => "d"], 
+        Ohm::Types::Hash[{ :a => "b", :c => "d" }]
+    end
+
+    test "exporting / dumping" do
+      assert_equal "{}", Ohm::Types::Hash[nil].to_s
+      assert_equal "{}", Ohm::Types::Hash[""].to_s
+      assert_equal "{}", Ohm::Types::Hash[{}].to_s
+
+      assert_equal %q{{"a":"b","c":"d"}},
+        Ohm::Types::Hash[{ :a => "b", :c => "d" }].to_s
+    end
+
+    test "still able to get top level methods" do
+      assert_equal({}, Post.new.hash)
+      assert_equal Hash, Post.new.top_level_hash
+    end
+
+    test "handles nil case correctly" do
+      post = Post.create(:address => nil)
+      assert_equal({}, post.address)
+      
+      post = Post[post.id]
+      assert_equal({}, post.address)
+    end
+
+    test "handles empty string case correctly" do
+      post = Post.create(:address => "")
+      assert_equal({}, post.address)
+      
+      post = Post[post.id]
+      assert_equal({}, post.address)
+    end
+
+    test "handles populated hashes" do
+      address = { "address1" => "#123", "city" => "Singapore", "country" => "SG"}
+      post = Post.create(:address => address)
+      assert_equal address, post.address
+      
+      post = Post[post.id]
+      assert_equal address, post.address
+    end
+
+    test "allows for hash operations" do
+      address = { "address1" => "#123", "city" => "Singapore", "country" => "SG"}
+      post = Post.create(:address => address)
+      
+      assert_equal ["address1", "city", "country"], post.address.keys
+      assert_equal ["#123", "Singapore", "SG"], post.address.values
+
+      post = Post[post.id]
+      assert_equal ["address1", "city", "country"], post.address.keys
+      assert_equal ["#123", "Singapore", "SG"], post.address.values
+    end
+
+    test "handles mutation" do
+      address = { "address1" => "#123", "city" => "Singapore", "country" => "SG"}
+      post = Post.create(:address => address)
+      
+      post.address["address1"] = "#456"
+      post.save
+
+      assert_equal ["address1", "city", "country"], post.address.keys
+      assert_equal ["#456", "Singapore", "SG"], post.address.values
+
+      post = Post[post.id]
+      assert_equal ["address1", "city", "country"], post.address.keys
+      assert_equal ["#456", "Singapore", "SG"], post.address.values
+    end
+  
+    Address = Class.new(Struct.new(:city, :country))
+
+    test "raises when trying to assign a non-hash" do
+      assert_raise TypeError do
+        Post.new(:address => [])
+      end
+
+      assert_raise TypeError do
+        Post.new(:address => Address.new)
+      end
+    end
+  end
+
+  context "when using an Array" do
+    class Post < Ohm::Model
+      include Ohm::Typecast
+
+      attribute :addresses, Array
+
+      def array
+        Array.new
+      end
+
+      def top_level_array
+        Array
+      end
+    end
+    
+    test "importing" do
+      assert_equal [], Ohm::Types::Array[nil]
+      assert_equal [], Ohm::Types::Array[""]
+      assert_equal [], Ohm::Types::Array[[]]
+
+      assert_equal ['a', 'b', 'c', 'd'],
+        Ohm::Types::Array[['a', 'b', 'c', 'd']]
+    end
+
+    test "exporting / dumping" do
+      assert_equal "[]", Ohm::Types::Array[nil].to_s
+      assert_equal "[]", Ohm::Types::Array[""].to_s
+      assert_equal "[]", Ohm::Types::Array[[]].to_s
+
+      assert_equal %q{["a","b","c","d"]},
+        Ohm::Types::Array[['a', 'b', 'c', 'd']].to_s
+    end
+
+    test "still able to get top level methods" do
+      assert_equal([], Post.new.array)
+      assert_equal Array, Post.new.top_level_array
+    end
+
+    test "handles nil case correctly" do
+      post = Post.create(:addresses => nil)
+      assert_equal([], post.addresses)
+      
+      post = Post[post.id]
+      assert_equal([], post.addresses)
+    end
+
+    test "handles empty string case correctly" do
+      post = Post.create(:addresses => "")
+      assert_equal([], post.addresses)
+      
+      post = Post[post.id]
+      assert_equal([], post.addresses)
+    end
+
+    test "handles populated arrays" do
+      addresses = [{"city" => "Singapore", "country" => "SG"},
+                   {"city" => "Manila", "country" => "PH"}]
+
+      post = Post.create(:addresses => addresses)
+      assert_equal addresses, post.addresses
+      
+      post = Post[post.id]
+      assert_equal addresses, post.addresses
+    end
+    
+    class Address < Struct.new(:city, :country)
+      def to_json
+        [city, country].to_json
+      end
+    end
+
+    test "handles an arbitrary class as an element of the array" do
+      addresses = [Address.new("Singapore", "SG"),
+                   Address.new("Philippines", "PH")]
+  
+      post = Post.create(:addresses => addresses)
+      assert_equal [['Singapore', 'SG'], ['Philippines', 'PH']], post.addresses
+      
+      post = Post[post.id]
+      assert_equal [['Singapore', 'SG'], ['Philippines', 'PH']], post.addresses
+    end
+
+    test "allows for array operations" do
+      addresses = [{"city" => "Singapore", "country" => "SG"},
+                   {"city" => "Manila", "country" => "PH"}]
+
+
+      post = Post.create(:addresses => addresses)
+      assert_equal 2, post.addresses.size
+      assert_equal addresses + [{"city" => "Hong Kong", "country" => "ZN"}],
+        post.addresses.push({"city" => "Hong Kong", "country" => "ZN"})
+
+      post = Post[post.id]
+      assert_equal 2, post.addresses.size
+      assert_equal addresses + [{"city" => "Hong Kong", "country" => "ZN"}],
+        post.addresses.push({"city" => "Hong Kong", "country" => "ZN"})
+    end
+
+    test "handles mutation" do
+      post = Post.create(:addresses => [1, 2, 3])
+      
+      post.addresses.push(4, 5, 6)
+      post.save
+
+      assert_equal 6, post.addresses.size
+      assert_equal [1, 2, 3, 4, 5, 6], post.addresses
+
+      post = Post[post.id]
+      assert_equal 6, post.addresses.size
+      assert_equal [1, 2, 3, 4, 5, 6], post.addresses
+    end
+  
+
+    test "raises when trying to assign a non-array" do
+      assert_raise TypeError do
+        Post.new(:addresses => {})
+      end
+
+      assert_raise TypeError do
+        Post.new(:addresses => Address.new)
+      end
     end
   end
 end
