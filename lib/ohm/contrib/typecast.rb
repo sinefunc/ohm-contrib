@@ -24,7 +24,7 @@ module Ohm
     def self.[](type)
       const_get(type.to_s.split('::').last)
     end
-  
+
     class Base < BasicObject
       class Exception < ::Exception; end
 
@@ -36,13 +36,13 @@ module Ohm
 
       def self.[](value)
         return self::EMPTY if value.to_s.empty?
-    
+
         new(value)
       end
 
       def self.delegate_to(klass, except = @@delegation_blacklist)
         methods = klass.public_instance_methods.map(&:to_sym) - except
-        def_delegators :object, *methods          
+        def_delegators :object, *methods
       end
 
       def inspect
@@ -52,7 +52,7 @@ module Ohm
 
     class Primitive < Base
       EMPTY = nil
-      
+
       def initialize(value)
         @raw = value
       end
@@ -64,7 +64,7 @@ module Ohm
       def ==(other)
         to_s == other.to_s
       end
-     
+
     protected
       def object
         @raw
@@ -119,7 +119,7 @@ module Ohm
         ::Date.parse(@raw)
       end
     end
-    
+
     class Serialized < Base
       attr :object
 
@@ -133,18 +133,18 @@ module Ohm
           rescue ::JSON::ParserError
             raw
           end
-        when self.class      
+        when self.class
           raw.object
         else
-          ::Kernel.raise ::TypeError, 
+          ::Kernel.raise ::TypeError,
             "%s does not accept %s" % [self.class, raw.inspect]
         end
       end
 
       def ==(other)
-        object == other        
+        object == other
       end
-     
+
       def to_s
         object.to_json
       end
@@ -167,9 +167,9 @@ module Ohm
     class Array < Serialized
       EMPTY = []
       RAW   = ::Array
-      
+
       delegate_to ::Array
-      
+
       # @private since basic object doesn't include a #class we need
       # to define this manually
       def class
@@ -238,7 +238,7 @@ module Ohm
       # Defines a typecasted attribute.
       #
       # @example
-      #   
+      #
       #   class User < Ohm::Model
       #     include Ohm::Typecast
       #
@@ -262,9 +262,9 @@ module Ohm
       #   user = User.new(:age => 20)
       #   user.age - 1 == 19
       #   => true
-      # 
+      #
       # @param [Symbol] name the name of the attribute to define.
-      # @param [Class] type (defaults to Ohm::Types::String) a class defined in 
+      # @param [Class] type (defaults to Ohm::Types::String) a class defined in
       #                Ohm::Types. You may define custom types in Ohm::Types if
       #                you need to.
       # @return [Array] the array of attributes already defined.
@@ -273,8 +273,8 @@ module Ohm
         define_method(name) do
           # Primitive types maintain a reference to the original object
           # stored in @_attributes[att]. Hence mutation works for the
-          # Primitive case. For cases like Hash, Array where the value 
-          # is `JSON.parse`d, we need to set the actual Ohm::Types::Hash 
+          # Primitive case. For cases like Hash, Array where the value
+          # is `JSON.parse`d, we need to set the actual Ohm::Types::Hash
           # (or similar) to @_attributes[att] for mutation to work.
           if klass.superclass == Ohm::Types::Primitive
             klass[read_local(name)]

@@ -14,7 +14,7 @@ class OhmContribCallbacksTest < Test::Unit::TestCase
 
     before :save,     :do_before_save
     after  :save,     :do_after_save
-    
+
     before :delete,   :do_before_delete
     after  :delete,   :do_after_delete
 
@@ -151,8 +151,8 @@ class OhmContribCallbacksTest < Test::Unit::TestCase
       @post = Post[@post.id]
       @post.delete
     end
-    
-    
+
+
     should "call delete related callbacks once" do
       assert_equal 1, @post.count(:do_before_delete)
       assert_equal 1, @post.count(:do_after_delete)

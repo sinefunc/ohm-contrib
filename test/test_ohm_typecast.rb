@@ -106,7 +106,7 @@ class TestOhmTypecast < Test::Unit::TestCase
     test "inspecting a Decimal" do
       post = Post.new(:price => 399.50)
       assert_equal '"399.5"', post.price.inspect
-      
+
       post.price = 'FooBar'
       assert_equal '"FooBar"', post.price.inspect
     end
@@ -364,13 +364,13 @@ class TestOhmTypecast < Test::Unit::TestCase
         Hash
       end
     end
-    
+
     test "importing" do
       assert_equal Hash.new, Ohm::Types::Hash[nil]
       assert_equal Hash.new, Ohm::Types::Hash[""]
       assert_equal Hash.new, Ohm::Types::Hash[{}]
 
-      assert_equal Hash[:a => "b", :c => "d"], 
+      assert_equal Hash[:a => "b", :c => "d"],
         Ohm::Types::Hash[{ :a => "b", :c => "d" }]
     end
 
@@ -391,7 +391,7 @@ class TestOhmTypecast < Test::Unit::TestCase
     test "handles nil case correctly" do
       post = Post.create(:address => nil)
       assert_equal({}, post.address)
-      
+
       post = Post[post.id]
       assert_equal({}, post.address)
     end
@@ -399,7 +399,7 @@ class TestOhmTypecast < Test::Unit::TestCase
     test "handles empty string case correctly" do
       post = Post.create(:address => "")
       assert_equal({}, post.address)
-      
+
       post = Post[post.id]
       assert_equal({}, post.address)
     end
@@ -408,7 +408,7 @@ class TestOhmTypecast < Test::Unit::TestCase
       address = { "address1" => "#123", "city" => "Singapore", "country" => "SG"}
       post = Post.create(:address => address)
       assert_equal address, post.address
-      
+
       post = Post[post.id]
       assert_equal address, post.address
     end
@@ -416,7 +416,7 @@ class TestOhmTypecast < Test::Unit::TestCase
     test "allows for hash operations" do
       address = { "address1" => "#123", "city" => "Singapore", "country" => "SG"}
       post = Post.create(:address => address)
-      
+
       assert_equal ["address1", "city", "country"], post.address.keys
       assert_equal ["#123", "Singapore", "SG"], post.address.values
 
@@ -428,7 +428,7 @@ class TestOhmTypecast < Test::Unit::TestCase
     test "handles mutation" do
       address = { "address1" => "#123", "city" => "Singapore", "country" => "SG"}
       post = Post.create(:address => address)
-      
+
       post.address["address1"] = "#456"
       post.save
 
@@ -439,7 +439,7 @@ class TestOhmTypecast < Test::Unit::TestCase
       assert_equal ["address1", "city", "country"], post.address.keys
       assert_equal ["#456", "Singapore", "SG"], post.address.values
     end
-  
+
     Address = Class.new(Struct.new(:city, :country))
 
     test "raises when trying to assign a non-hash" do
@@ -453,13 +453,13 @@ class TestOhmTypecast < Test::Unit::TestCase
     end
 
     test "inspecting" do
-      post = Post.create(:address => { "address1" => "#456", 
-                                       "city" => "Singapore", 
+      post = Post.create(:address => { "address1" => "#456",
+                                       "city" => "Singapore",
                                        "country" => "SG" })
-    
-      assert_equal %q{{"address1":"#456","city":"Singapore","country":"SG"}}, 
+
+      assert_equal %q{{"address1":"#456","city":"Singapore","country":"SG"}},
         post.address.inspect
-      
+
       post.address = 'FooBar'
       assert_equal %{"\\\"FooBar\\\""}, post.address.inspect
     end
@@ -479,7 +479,7 @@ class TestOhmTypecast < Test::Unit::TestCase
         Array
       end
     end
-    
+
     test "importing" do
       assert_equal [], Ohm::Types::Array[nil]
       assert_equal [], Ohm::Types::Array[""]
@@ -506,7 +506,7 @@ class TestOhmTypecast < Test::Unit::TestCase
     test "handles nil case correctly" do
       post = Post.create(:addresses => nil)
       assert_equal([], post.addresses)
-      
+
       post = Post[post.id]
       assert_equal([], post.addresses)
     end
@@ -514,7 +514,7 @@ class TestOhmTypecast < Test::Unit::TestCase
     test "handles empty string case correctly" do
       post = Post.create(:addresses => "")
       assert_equal([], post.addresses)
-      
+
       post = Post[post.id]
       assert_equal([], post.addresses)
     end
@@ -525,11 +525,11 @@ class TestOhmTypecast < Test::Unit::TestCase
 
       post = Post.create(:addresses => addresses)
       assert_equal addresses, post.addresses
-      
+
       post = Post[post.id]
       assert_equal addresses, post.addresses
     end
-    
+
     class Address < Struct.new(:city, :country)
       def to_json
         [city, country].to_json
@@ -539,10 +539,10 @@ class TestOhmTypecast < Test::Unit::TestCase
     test "handles an arbitrary class as an element of the array" do
       addresses = [Address.new("Singapore", "SG"),
                    Address.new("Philippines", "PH")]
-  
+
       post = Post.create(:addresses => addresses)
       assert_equal [['Singapore', 'SG'], ['Philippines', 'PH']], post.addresses
-      
+
       post = Post[post.id]
       assert_equal [['Singapore', 'SG'], ['Philippines', 'PH']], post.addresses
     end
@@ -579,7 +579,7 @@ class TestOhmTypecast < Test::Unit::TestCase
 
     test "handles mutation" do
       post = Post.create(:addresses => [1, 2, 3])
-      
+
       post.addresses.push(4, 5, 6)
       post.save
 
@@ -590,7 +590,7 @@ class TestOhmTypecast < Test::Unit::TestCase
       assert_equal 6, post.addresses.size
       assert_equal [1, 2, 3, 4, 5, 6], post.addresses
     end
-  
+
 
     test "raises when trying to assign a non-array" do
       assert_raise TypeError do
@@ -603,13 +603,13 @@ class TestOhmTypecast < Test::Unit::TestCase
     end
 
     test "inspecting" do
-      post = Post.create(:addresses => [{ "address1" => "#456", 
-                                          "city" => "Singapore", 
+      post = Post.create(:addresses => [{ "address1" => "#456",
+                                          "city" => "Singapore",
                                           "country" => "SG" }])
-    
-      assert_equal %q{[{"address1":"#456","city":"Singapore","country":"SG"}]}, 
+
+      assert_equal %q{[{"address1":"#456","city":"Singapore","country":"SG"}]},
         post.addresses.inspect
- 
+
       post.addresses = 'FooBar'
       assert_equal %{"\\\"FooBar\\\""}, post.addresses.inspect
     end

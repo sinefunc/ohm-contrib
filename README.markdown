@@ -86,7 +86,7 @@ I studied various typecasting behaviors implemented by a few ORMs in Ruby.
       property :id, Serial
       property :votes, Integer
     end
-    
+
     post = Post.new(:votes => "FooBar")
     post.votes == "FooBar"
     # => true
@@ -103,12 +103,12 @@ I studied various typecasting behaviors implemented by a few ORMs in Ruby.
 #### Mindset:
 
 1. Explosion everytime is too cumbersome.
-2. Mutation of data is less than ideal (Also similar to MySQL silently allowing you 
+2. Mutation of data is less than ideal (Also similar to MySQL silently allowing you
    to store more than 255 chars in a VARCHAR and then truncating that data. Yes I know
    you can configure it to be noisy but the defaults kill).
 3. We just want to operate on it like it should!
 
-#### Short Demo: 
+#### Short Demo:
     class Post < Ohm::Model
       include Ohm::Typecast
       attribute :votes
@@ -122,11 +122,11 @@ I studied various typecasting behaviors implemented by a few ORMs in Ruby.
     post = Post[post.id]
     post.votes == "FooBar"
     # => true
-    
+
     # Here comes the cool part...
     post.votes * 1
     # => ArgumentError: invalid value for Integer: "FooBar"
-    
+
     post.votes = 50
     post.votes * 2 == 100
     # => true
@@ -151,8 +151,8 @@ I studied various typecasting behaviors implemented by a few ORMs in Ruby.
       attribute :tags, Array
     end
 
-    post = Post.create(:price => "10.20", :stock => "100", 
-                       :address => { "city" => "Boston", "country" => "US" }, 
+    post = Post.create(:price => "10.20", :stock => "100",
+                       :address => { "city" => "Boston", "country" => "US" },
                        :tags => ["redis", "ohm", "typecast"])
 
     post.price.to_s == "10.20"
