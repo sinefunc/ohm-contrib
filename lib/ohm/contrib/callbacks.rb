@@ -39,6 +39,7 @@ module Ohm
   module Callbacks
     def self.included(base)
       base.extend Macros
+      base.extend Overrides
     end
 
     module Macros
@@ -107,6 +108,18 @@ module Ohm
       # @private internally used to maintain the state of callbacks
       def callbacks
         @callbacks ||= Hash.new { |h, k| h[k] = Hash.new { |h, k| h[k] = [] }}
+      end
+    end
+  
+    # This module is for class method overrides. As of now
+    # it only overrides Ohm::Model::create to force calling save
+    # instead of calling create so that Model.create will call
+    # not only before/after :create but also before/after :save
+    module Overrides
+      def create(*args)
+        model = new(*args)
+        model.save
+        model
       end
     end
 

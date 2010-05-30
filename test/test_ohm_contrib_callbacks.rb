@@ -94,6 +94,29 @@ class OhmContribCallbacksTest < Test::Unit::TestCase
     end
   end
 
+  context "on create when valid state" do
+    setup do
+      @post = Post.create(:body => "The Body")
+    end
+
+    should "call all callbacks" do
+      assert @post.did?(:do_before_validate)
+      assert @post.did?(:do_after_validate)
+      assert @post.did?(:do_before_create)
+      assert @post.did?(:do_after_create)
+      assert @post.did?(:do_before_save)
+      assert @post.did?(:do_after_save)
+    end
+
+    should "call create / save callbacks only once" do
+      assert_equal 1, @post.count(:do_before_create)
+      assert_equal 1, @post.count(:do_after_create)
+      assert_equal 1, @post.count(:do_before_save)
+      assert_equal 1, @post.count(:do_after_create)
+    end
+  end
+
+
   context "on save of an existing object" do
     setup do
       @post = Post.create(:body => "The Body")
