@@ -92,14 +92,23 @@ class TestOhmTypecast < Test::Unit::TestCase
       assert_kind_of String, post.price.to_s
     end
 
-    test "equality matching" do
+    test "equality and comparable matching" do
       post = Post.create(:price => "399.50")
       assert (post.price == "399.50")
+      assert (post.price < 399.51)
+      assert (post.price > 399.49)
+      assert (post.price <= 399.50)
+      assert (post.price <= 399.51)
+      assert (post.price >= 399.50)
+      assert (post.price >= 399.49)
     end
 
     test "inspecting a Decimal" do
       post = Post.new(:price => 399.50)
-      assert_equal '399.5', post.price.inspect
+      assert_equal '"399.5"', post.price.inspect
+      
+      post.price = 'FooBar'
+      assert_equal '"FooBar"', post.price.inspect
     end
   end
 
@@ -145,7 +154,10 @@ class TestOhmTypecast < Test::Unit::TestCase
 
     test "inspecting" do
       post = Post.new(:price => "50000")
-      assert_equal '50000', post.price.inspect
+      assert_equal '"50000"', post.price.inspect
+
+      post.price = 'FooBar'
+      assert_equal '"FooBar"', post.price.inspect
     end
   end
 
@@ -191,7 +203,10 @@ class TestOhmTypecast < Test::Unit::TestCase
 
     test "inspecting" do
       post = Post.new(:price => "12345.67890")
-      assert_equal '12345.6789', post.price.inspect
+      assert_equal '"12345.67890"', post.price.inspect
+
+      post.price = 'FooBar'
+      assert_equal '"FooBar"', post.price.inspect
     end
   end
 
@@ -249,6 +264,14 @@ class TestOhmTypecast < Test::Unit::TestCase
       assert_raise NoMethodError do
         post.created_at.slice
       end
+    end
+
+    test "inspecting" do
+      post = Post.create(:created_at => Time.utc(2010, 05, 05))
+      assert_equal '"2010-05-05 00:00:00 UTC"', post.created_at.inspect
+
+      post.created_at = 'FooBar'
+      assert_equal '"FooBar"', post.created_at.inspect
     end
   end
 
@@ -316,6 +339,14 @@ class TestOhmTypecast < Test::Unit::TestCase
 
     test "still able to access Date" do
       assert_equal Date.today, Post.new.today
+    end
+
+    test "inspecting" do
+      post = Post.create(:created_on => Date.new(2010, 5, 5))
+      assert_equal '"2010-05-05"', post.created_on.inspect
+
+      post.created_on = 'FooBar'
+      assert_equal '"FooBar"', post.created_on.inspect
     end
   end
 
@@ -419,6 +450,18 @@ class TestOhmTypecast < Test::Unit::TestCase
       assert_raise TypeError do
         Post.new(:address => Address.new)
       end
+    end
+
+    test "inspecting" do
+      post = Post.create(:address => { "address1" => "#456", 
+                                       "city" => "Singapore", 
+                                       "country" => "SG" })
+    
+      assert_equal %q{{"address1":"#456","city":"Singapore","country":"SG"}}, 
+        post.address.inspect
+      
+      post.address = 'FooBar'
+      assert_equal %{"\\\"FooBar\\\""}, post.address.inspect
     end
   end
 
@@ -557,6 +600,18 @@ class TestOhmTypecast < Test::Unit::TestCase
       assert_raise TypeError do
         Post.new(:addresses => Address.new)
       end
+    end
+
+    test "inspecting" do
+      post = Post.create(:addresses => [{ "address1" => "#456", 
+                                          "city" => "Singapore", 
+                                          "country" => "SG" }])
+    
+      assert_equal %q{[{"address1":"#456","city":"Singapore","country":"SG"}]}, 
+        post.addresses.inspect
+ 
+      post.addresses = 'FooBar'
+      assert_equal %{"\\\"FooBar\\\""}, post.addresses.inspect
     end
   end
 end

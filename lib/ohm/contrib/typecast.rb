@@ -46,7 +46,7 @@ module Ohm
       end
 
       def inspect
-        object.inspect
+        @raw.inspect
       end
     end
 
@@ -77,10 +77,6 @@ module Ohm
 
     class Decimal < Primitive
       delegate_to ::BigDecimal
-
-      def inspect
-        object.to_s('F')
-      end
 
     protected
       def object
@@ -129,9 +125,16 @@ module Ohm
 
       def initialize(raw)
         @object = case raw
-        when self.class::RAW then raw
-        when ::String        then ::JSON.parse(raw)
-        when self.class      then raw.object
+        when self.class::RAW
+          raw
+        when ::String
+          begin
+            ::JSON.parse(raw)
+          rescue ::JSON::ParserError
+            raw
+          end
+        when self.class      
+          raw.object
         else
           ::Kernel.raise ::TypeError, 
             "%s does not accept %s" % [self.class, raw.inspect]
@@ -145,6 +148,7 @@ module Ohm
       def to_s
         object.to_json
       end
+      alias :inspect :to_s
     end
 
     class Hash < Serialized
