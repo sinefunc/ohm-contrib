@@ -35,7 +35,7 @@ module Ohm
       ]
 
       def self.[](value)
-        return self::EMPTY if value.to_s.empty?
+        return (self::EMPTY.nil? ? nil : self::EMPTY.dup) if value.to_s.empty?
 
         new(value)
       end
