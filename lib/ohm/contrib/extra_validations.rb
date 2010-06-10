@@ -12,6 +12,7 @@ module Ohm
   #     attribute :author_email
   #     attribute :url
   #     attribute :ipaddr
+  #     attribute :birthday
   #
   #     def validate
   #       super
@@ -21,6 +22,7 @@ module Ohm
   #       assert_ipaddr  :ipaddr
   #       assert_url     :url
   #       assert_email   :author_email
+  #       assert_date    :birthday
   #     end
   #   end
   #
@@ -32,6 +34,7 @@ module Ohm
   module ExtraValidations
     include NumberValidations
     include WebValidations
+    include DateValidations
 
   protected
     def assert_member(att, set, error = [att, :not_member])

@@ -48,4 +48,10 @@ class TestOhmContrib < Test::Unit::TestCase
       Ohm::ExtraValidations
     end
   end
+
+  test "autoloading of DateValidations" do
+    assert_nothing_raised NameError, LoadError do
+      Ohm::DateValidations
+    end
+  end
 end
