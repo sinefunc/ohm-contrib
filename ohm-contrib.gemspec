@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{ohm-contrib}
-  s.version = "0.0.23"
+  s.version = "0.0.24"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Cyril David"]
-  s.date = %q{2010-06-01}
+  s.date = %q{2010-06-11}
   s.description = %q{Highly decoupled drop-in functionality for Ohm models}
   s.email = %q{cyx.ucron@gmail.com}
   s.extra_rdoc_files = [
@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
      "lib/ohm/contrib.rb",
      "lib/ohm/contrib/boundaries.rb",
      "lib/ohm/contrib/callbacks.rb",
+     "lib/ohm/contrib/date_validations.rb",
      "lib/ohm/contrib/extra_validations.rb",
      "lib/ohm/contrib/locking.rb",
      "lib/ohm/contrib/number_validations.rb",
@@ -38,6 +39,7 @@ Gem::Specification.new do |s|
      "test/test_ohm_boundaries.rb",
      "test/test_ohm_contrib.rb",
      "test/test_ohm_contrib_callbacks.rb",
+     "test/test_ohm_date_validations.rb",
      "test/test_ohm_extra_validations.rb",
      "test/test_ohm_number_validations.rb",
      "test/test_ohm_timestamping.rb",
@@ -55,6 +57,7 @@ Gem::Specification.new do |s|
      "test/test_ohm_boundaries.rb",
      "test/test_ohm_contrib.rb",
      "test/test_ohm_contrib_callbacks.rb",
+     "test/test_ohm_date_validations.rb",
      "test/test_ohm_extra_validations.rb",
      "test/test_ohm_number_validations.rb",
      "test/test_ohm_timestamping.rb",
