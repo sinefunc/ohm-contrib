@@ -614,4 +614,45 @@ class TestOhmTypecast < Test::Unit::TestCase
       assert_equal %{"\\\"FooBar\\\""}, post.addresses.inspect
     end
   end
+
+  context "when using Boolean" do
+    class User < Ohm::Model
+      include Ohm::Typecast
+      
+      attribute :is_admin, Boolean
+    end
+
+    test "empty is nil" do
+      assert_equal nil, User.new.is_admin
+
+      u = User.create
+      u = User[u.id]
+
+      assert_equal nil, User.new.is_admin
+    end
+
+    test "false, 0, '0' is false" do
+      [false, 0, '0'].each do |val|
+        assert_equal false, User.new(:is_admin => val).is_admin
+      end
+
+      [false, 0, '0'].each do |val|
+        u = User.create(:is_admin => val)
+        u = User[u.id]
+        assert_equal false, u.is_admin
+      end
+    end
+
+    test "true, 1, '1' is true" do
+      [true, 1, '1'].each do |val|
+        assert_equal true, User.new(:is_admin => val).is_admin
+      end
+
+      [true, 1, '1'].each do |val|
+        u = User.create(:is_admin => val)
+        u = User[u.id]
+        assert_equal true, u.is_admin
+      end
+    end
+  end
 end

@@ -15,6 +15,7 @@ module Ohm
   # * Time
   # * Hash
   # * Array
+  # * Boolean
   module Types
     def self.defined?(type)
       @constants ||= constants.map(&:to_s)
@@ -35,9 +36,13 @@ module Ohm
       ]
 
       def self.[](value)
-        return (self::EMPTY.nil? ? nil : self::EMPTY.dup) if value.to_s.empty?
+        return empty  if value.to_s.empty?
 
         new(value)
+      end
+
+      def self.empty
+        defined?(self::RAW) ? self::RAW.new : nil
       end
 
       def self.delegate_to(klass, except = @@delegation_blacklist)
@@ -51,8 +56,6 @@ module Ohm
     end
 
     class Primitive < Base
-      EMPTY = nil
-
       def initialize(value)
         @raw = value
       end
@@ -120,6 +123,15 @@ module Ohm
       end
     end
 
+    class Boolean
+      def self.[](value)
+        case value
+        when 'false', false, '0', 0 then false
+        when 'true',  true,  '1', 1  then true
+        end
+      end
+    end
+
     class Serialized < Base
       attr :object
 
@@ -152,7 +164,6 @@ module Ohm
     end
 
     class Hash < Serialized
-      EMPTY = {}
       RAW   = ::Hash
 
       delegate_to ::Hash
@@ -165,7 +176,6 @@ module Ohm
     end
 
     class Array < Serialized
-      EMPTY = []
       RAW   = ::Array
 
       delegate_to ::Array
