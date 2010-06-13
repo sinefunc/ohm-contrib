@@ -133,6 +133,20 @@ class TestOhmTypecast < Test::Unit::TestCase
       assert_equal "", post.price.to_s
     end
 
+    test "allows respond_to on an invalid integer" do
+      post = Post.new(:price => "FooBar")
+      assert_nothing_raised ArgumentError do
+        post.price.respond_to?(:**)
+      end
+
+      assert ! post.price.respond_to?(:**)
+    end
+
+    test "falls back to String#respond_to? when invalid" do
+      post = Post.new(:price => "FooBar")
+      assert post.price.respond_to?(:capitalize)
+    end
+
     test "allows for real arithmetic" do
       post = Post.create(:price => "3")
       post = Post[post.id]
@@ -259,10 +273,10 @@ class TestOhmTypecast < Test::Unit::TestCase
       post = Post.create(:created_at => "FooBar")
       post = Post[post.id]
 
-      assert ! post.created_at.respond_to?(:slice)
+      assert ! post.created_at.respond_to?(:abs)
 
       assert_raise NoMethodError do
-        post.created_at.slice
+        post.created_at.abs
       end
     end
 

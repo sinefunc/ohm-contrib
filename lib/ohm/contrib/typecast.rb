@@ -32,7 +32,8 @@ module Ohm
       extend ::Forwardable
 
       @@delegation_blacklist = [
-        :==, :to_s, :initialize, :inspect, :object_id, :__send__, :__id__
+        :==, :to_s, :initialize, :inspect, :object_id, :__send__, :__id__,
+        :respond_to?
       ]
 
       def self.[](value)
@@ -66,6 +67,12 @@ module Ohm
 
       def ==(other)
         to_s == other.to_s
+      end
+
+      def respond_to?(method)
+        object.respond_to?(method)
+      rescue ::ArgumentError
+        @raw.respond_to?(method)
       end
 
     protected
@@ -161,6 +168,10 @@ module Ohm
         object.to_json
       end
       alias :inspect :to_s
+
+      def respond_to?(method)
+        object.respond_to?(method)
+      end
     end
 
     class Hash < Serialized
