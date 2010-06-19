@@ -20,13 +20,12 @@ module Ohm
     end
 
     module ClassMethods
-      def first
-        all.first
+      def first(opts = {})
+        find(opts).sort(:start => 0, :limit => 1).first
       end
 
-      # @todo Add support for passing in conditions
-      def last
-        self[db.get(key(:id))]
+      def last(opts = {})
+        find(opts).sort(:start => 0, :limit => 1, :order => "DESC").first
       end
     end
   end

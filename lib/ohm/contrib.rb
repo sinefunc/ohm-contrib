@@ -1,6 +1,6 @@
 module Ohm
   module Contrib
-    VERSION = '0.0.25'
+    VERSION = '0.0.26'
   end
 
   autoload :Boundaries,        "ohm/contrib/boundaries"
