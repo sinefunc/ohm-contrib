@@ -51,21 +51,15 @@ class TestOhmBoundaries < Test::Unit::TestCase
     end
 
     context "when searching name => matz" do
-      should "have matz as the first Person" do
+      test "matz is the first and last" do
         assert_equal @matz, Person.first(:name => "matz")
-      end
-
-      should "have matz as the last Person" do
         assert_equal @matz, Person.last(:name => "matz")
       end
     end
 
     context "when searching name => linus" do
-      should "have matz as the first Person" do
+      test "linus is first and last" do
         assert_equal @linus, Person.first(:name => "linus")
-      end
-
-      should "have matz as the last Person" do
         assert_equal @linus, Person.last(:name => "linus")
       end
     end
@@ -76,6 +70,5 @@ class TestOhmBoundaries < Test::Unit::TestCase
         assert_nil Person.last(:name => "quentin")
       end
     end
-
   end
 end

@@ -38,29 +38,29 @@ class TestOhmTypecast < Test::Unit::TestCase
   end
 
   context "when using a decimal" do
-    class Post < Ohm::Model
+    class PostDecimal < Ohm::Model
       include Ohm::Typecast
 
       attribute :price, Decimal
     end
 
     test "handles nil case correctly" do
-      post = Post.create(:price => nil)
-      post = Post[post.id]
+      post = PostDecimal.create(:price => nil)
+      post = PostDecimal[post.id]
 
       assert_nil post.price
     end
 
     test "handles empty string case correctly" do
-      post = Post.create(:price => "")
-      post = Post[post.id]
+      post = PostDecimal.create(:price => "")
+      post = PostDecimal[post.id]
 
       assert_equal "", post.price.to_s
     end
 
     test "allows for real arithmetic" do
-      post = Post.create(:price => "0.01")
-      post = Post[post.id]
+      post = PostDecimal.create(:price => "0.01")
+      post = PostDecimal[post.id]
 
       assert_equal 0.02,   post.price + post.price
       assert_equal 0.0,    post.price - post.price
@@ -69,8 +69,8 @@ class TestOhmTypecast < Test::Unit::TestCase
     end
 
     test "is accurate accdg to the decimal spec" do
-      post = Post.create(:price => "0.0001")
-      post = Post[post.id]
+      post = PostDecimal.create(:price => "0.0001")
+      post = PostDecimal[post.id]
 
       sum = 0
       1_000.times { sum += post.price }
@@ -78,22 +78,22 @@ class TestOhmTypecast < Test::Unit::TestCase
     end
 
     test "using += with price" do
-      post = Post.create(:price => "0.0001")
-      post = Post[post.id]
+      post = PostDecimal.create(:price => "0.0001")
+      post = PostDecimal[post.id]
 
       post.price += 1
       assert_equal 1.0001, post.price.to_f
     end
 
     test "assigning a raw BigDecimal" do
-      post = Post.create(:price => BigDecimal("399.50"))
-      post = Post[post.id]
+      post = PostDecimal.create(:price => BigDecimal("399.50"))
+      post = PostDecimal[post.id]
 
       assert_kind_of String, post.price.to_s
     end
 
     test "equality and comparable matching" do
-      post = Post.create(:price => "399.50")
+      post = PostDecimal.create(:price => "399.50")
       assert (post.price == "399.50")
       assert (post.price < 399.51)
       assert (post.price > 399.49)
@@ -104,7 +104,7 @@ class TestOhmTypecast < Test::Unit::TestCase
     end
 
     test "inspecting a Decimal" do
-      post = Post.new(:price => 399.50)
+      post = PostDecimal.new(:price => 399.50)
       assert_equal '"399.5"', post.price.inspect
 
       post.price = 'FooBar'
@@ -544,15 +544,15 @@ class TestOhmTypecast < Test::Unit::TestCase
       assert_equal addresses, post.addresses
     end
 
-    class Address < Struct.new(:city, :country)
-      def to_json
-        [city, country].to_json
+    class AddressArr < Class.new(Struct.new(:city, :country))
+      def to_json(*args)
+        [city, country].to_json(*args)
       end
     end
 
     test "handles an arbitrary class as an element of the array" do
-      addresses = [Address.new("Singapore", "SG"),
-                   Address.new("Philippines", "PH")]
+      addresses = [AddressArr.new("Singapore", "SG"),
+                   AddressArr.new("Philippines", "PH")]
 
       post = Post.create(:addresses => addresses)
       assert_equal [['Singapore', 'SG'], ['Philippines', 'PH']], post.addresses
@@ -612,7 +612,7 @@ class TestOhmTypecast < Test::Unit::TestCase
       end
 
       assert_raise TypeError do
-        Post.new(:addresses => Address.new)
+        Post.new(:addresses => AddressArr.new)
       end
     end
 

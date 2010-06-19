@@ -47,7 +47,7 @@ class TestOhmToHash < Test::Unit::TestCase
   end
 
   context "when a comment has a reference to a person" do
-    Person = Class.new(Ohm::Model)
+    self::Person = Class.new(Ohm::Model)
 
     class Comment < Ohm::Model
       include Ohm::ToHash

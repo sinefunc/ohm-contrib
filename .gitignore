@@ -22,3 +22,4 @@ pkg
 /.rvmrc
 /.yardoc
 /doc
+/tests
