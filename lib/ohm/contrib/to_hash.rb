@@ -29,8 +29,7 @@ module Ohm
     def to_hash
       atts = attributes + counters
       hash = atts.inject({}) { |h, att| h[att] = send(att); h }
-      hash[:id] = @id
-      hash
+      super.merge(hash)
     end
     alias :to_h :to_hash
   end
