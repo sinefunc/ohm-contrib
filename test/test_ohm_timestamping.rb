@@ -39,8 +39,11 @@ class TestOhmTimestamping < Test::Unit::TestCase
 
   context "on update" do
     setup do
+      Timecop.freeze(Time.utc(2010, 10, 30))
+
       @person = Person.create
       @old_created_at = @person.created_at.to_s
+      @old_updated_at = @person.updated_at.to_s
 
       @now = Time.utc(2010, 10, 31)
       Timecop.freeze(@now)
@@ -54,6 +57,7 @@ class TestOhmTimestamping < Test::Unit::TestCase
     end
 
     should "set updated_at to the current Time" do
+      assert_not_equal @old_updated_at, @person.updated_at
       assert_equal @now.to_s, @person.updated_at
     end
   end

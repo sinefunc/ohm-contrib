@@ -29,7 +29,7 @@ module Ohm
 
   protected
     def write
-      self.updated_at ||= Time.now.utc
+      self.updated_at = Time.now.utc
 
       super
     end
