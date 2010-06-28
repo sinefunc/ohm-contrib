@@ -75,7 +75,6 @@ module Ohm
         @raw.respond_to?(method)
       end
 
-    protected
       def object
         @raw
       end
@@ -88,7 +87,6 @@ module Ohm
     class Decimal < Primitive
       delegate_to ::BigDecimal
 
-    protected
       def object
         ::Kernel::BigDecimal(@raw)
       end
@@ -97,7 +95,6 @@ module Ohm
     class Integer < Primitive
       delegate_to ::Fixnum
 
-    protected
       def object
         ::Kernel::Integer(@raw)
       end
@@ -106,7 +103,6 @@ module Ohm
     class Float < Primitive
       delegate_to ::Float
 
-    protected
       def object
         ::Kernel::Float(@raw)
       end
@@ -115,7 +111,6 @@ module Ohm
     class Time < Primitive
       delegate_to ::Time
 
-    protected
       def object
         ::Time.parse(@raw)
       end
@@ -124,7 +119,6 @@ module Ohm
     class Date < Primitive
       delegate_to ::Date
 
-    protected
       def object
         ::Date.parse(@raw)
       end
