@@ -54,4 +54,11 @@ class TestOhmContrib < Test::Unit::TestCase
       Ohm::DateValidations
     end
   end
+
+  test "autoloading of LunarMacros" do
+    require 'lunar'
+    assert_nothing_raised NameError, LoadError do
+      Ohm::LunarMacros
+    end
+  end
 end

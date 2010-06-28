@@ -13,4 +13,5 @@ module Ohm
   autoload :Typecast,          "ohm/contrib/typecast"
   autoload :Locking,           "ohm/contrib/locking"
   autoload :Callbacks,         "ohm/contrib/callbacks"
+  autoload :LunarMacros,       "ohm/contrib/lunar_macros"
 end
