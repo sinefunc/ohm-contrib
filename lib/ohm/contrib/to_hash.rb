@@ -25,6 +25,8 @@ module Ohm
   #
   #   Post.create(:body => "Body").to_hash == { :id => 1, :body => "Body" }
   #   # => true
+  #
+  # @todo use super when Ohm has finally release their #to_hash impl.
   module ToHash
     def to_hash
       atts = attributes + counters
