@@ -171,6 +171,7 @@ module Ohm
 
     def delete
       execute_callback(:before, :delete)
+
       super.tap do |is_deleted|
         execute_callback(:after, :delete)  if is_deleted
       end
