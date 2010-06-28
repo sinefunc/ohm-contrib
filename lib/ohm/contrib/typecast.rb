@@ -175,7 +175,7 @@ module Ohm
     end
 
     class Hash < Serialized
-      RAW   = ::Hash
+      RAW = ::Hash
 
       delegate_to ::Hash
 
@@ -187,7 +187,7 @@ module Ohm
     end
 
     class Array < Serialized
-      RAW   = ::Array
+      RAW = ::Array
 
       delegate_to ::Array
 
