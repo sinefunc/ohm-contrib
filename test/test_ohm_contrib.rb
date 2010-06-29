@@ -61,4 +61,10 @@ class TestOhmContrib < Test::Unit::TestCase
       Ohm::LunarMacros
     end
   end
+
+  test "autoloading of Slug" do
+    assert_nothing_raised NameError, LoadError do
+      Ohm::Slug
+    end
+  end
 end

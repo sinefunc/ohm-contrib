@@ -14,4 +14,5 @@ module Ohm
   autoload :Locking,           "ohm/contrib/locking"
   autoload :Callbacks,         "ohm/contrib/callbacks"
   autoload :LunarMacros,       "ohm/contrib/lunar_macros"
+  autoload :Slug,              "ohm/contrib/slug"
 end
