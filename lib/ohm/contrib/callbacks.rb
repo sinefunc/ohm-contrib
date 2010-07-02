@@ -1,6 +1,20 @@
 module Ohm
   # Minimalistic callback support for Ohm::Model.
   #
+  # You can implement callbacks by overriding any of the following
+  # methods:
+  #
+  #    - before_validate
+  #    - after_validate
+  #    - before_create
+  #    - after_create
+  #    - before_save
+  #    - after_save
+  #    - before_delete
+  #    - after_delete
+  # 
+  # If you prefer to do a class level declaration that is also possible.
+  #
   # @example
   #
   #   class Post < Ohm::Model
@@ -35,18 +49,7 @@ module Ohm
   #       # do something with the ids
   #     end
   #   end
-  #   
-  # Also, the following instance level callbacks are available:
-  #
-  # - before_validate
-  # - after_validate
-  # - before_create
-  # - after_create
-  # - before_save
-  # - after_save
-  # - before_delete
-  # - after_delete
-  #
+ 
   module Callbacks
     def self.included(base)
       base.extend Macros
