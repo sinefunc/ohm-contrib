@@ -35,6 +35,17 @@ module Ohm
   #       # do something with the ids
   #     end
   #   end
+  #   
+  # Also, the following instance level callbacks are available:
+  #
+  # - before_validate
+  # - after_validate
+  # - before_create
+  # - after_create
+  # - before_save
+  # - after_save
+  # - before_delete
+  # - after_delete
   #
   module Callbacks
     def self.included(base)
@@ -176,12 +187,24 @@ module Ohm
         execute_callback(:after, :delete)  if is_deleted
       end
     end
+  
+  protected
+    def before_validate() end
+    def after_validate()  end
+    def before_save()     end
+    def after_save()      end
+    def before_create()   end
+    def after_create()    end
+    def before_delete()   end
+    def after_delete()    end
 
   private
     def execute_callback(position, method)
       self.class.callbacks[position][method].each do |callback|
         __send__(callback)
       end
+
+      __send__("#{ position }_#{ method }")
     end
   end
 end
