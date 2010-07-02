@@ -55,7 +55,7 @@
   
     
       <dt class="r1">Includes:</dt>
-      <dd class="r1"><a href="NumberValidations.html" title="Ohm::NumberValidations (module)">NumberValidations</a>, <a href="WebValidations.html" title="Ohm::WebValidations (module)">WebValidations</a></dd>
+      <dd class="r1"><a href="DateValidations.html" title="Ohm::DateValidations (module)">DateValidations</a>, <a href="NumberValidations.html" title="Ohm::NumberValidations (module)">NumberValidations</a>, <a href="WebValidations.html" title="Ohm::WebValidations (module)">WebValidations</a></dd>
       
     
   
@@ -92,6 +92,7 @@ Includes Ohm::NumberValidations and Ohm::WebValidations.
   <span class='id attribute'>attribute</span> <span class='symbol'>:author_email</span>
   <span class='id attribute'>attribute</span> <span class='symbol'>:url</span>
   <span class='id attribute'>attribute</span> <span class='symbol'>:ipaddr</span>
+  <span class='id attribute'>attribute</span> <span class='symbol'>:birthday</span>
 
   <span class='kw'>def</span> <span class='id validate'>validate</span>
     <span class='kw'>super</span>
@@ -101,6 +102,7 @@ Includes Ohm::NumberValidations and Ohm::WebValidations.
     <span class='id assert_ipaddr'>assert_ipaddr</span>  <span class='symbol'>:ipaddr</span>
     <span class='id assert_url'>assert_url</span>     <span class='symbol'>:url</span>
     <span class='id assert_email'>assert_email</span>   <span class='symbol'>:author_email</span>
+    <span class='id assert_date'>assert_date</span>    <span class='symbol'>:birthday</span>
   <span class='kw'>end</span>
 <span class='kw'>end</span>
 
@@ -121,6 +123,9 @@ Includes Ohm::NumberValidations and Ohm::WebValidations.
   
   
   
+  <h3 class="inherited">Constants included from <a href="NumberValidations.html" title="Ohm::NumberValidations (module)">NumberValidations</a></h3>
+  <p class="inherited"><a href="NumberValidations.html#DECIMAL_REGEX-constant" title="Ohm::NumberValidations::DECIMAL_REGEX (constant)">DECIMAL_REGEX</a></p>
+
   
   
   
@@ -128,8 +133,15 @@ Includes Ohm::NumberValidations and Ohm::WebValidations.
   <h3 class="inherited">Constants included from <a href="WebValidations.html" title="Ohm::WebValidations (module)">WebValidations</a></h3>
   <p class="inherited"><a href="WebValidations.html#EMAIL_REGEX-constant" title="Ohm::WebValidations::EMAIL_REGEX (constant)">EMAIL_REGEX</a>, <a href="WebValidations.html#IPV4_REGEX-constant" title="Ohm::WebValidations::IPV4_REGEX (constant)">IPV4_REGEX</a>, <a href="WebValidations.html#SLUG_REGEX-constant" title="Ohm::WebValidations::SLUG_REGEX (constant)">SLUG_REGEX</a>, <a href="WebValidations.html#URL_REGEX-constant" title="Ohm::WebValidations::URL_REGEX (constant)">URL_REGEX</a></p>
 
+  
+  
+  
+  
+  <h3 class="inherited">Constants included from <a href="DateValidations.html" title="Ohm::DateValidations (module)">DateValidations</a></h3>
+  <p class="inherited"><a href="DateValidations.html#DATE_REGEX-constant" title="Ohm::DateValidations::DATE_REGEX (constant)">DATE_REGEX</a></p>
 
 
+
   
   
   
@@ -140,11 +152,21 @@ Includes Ohm::NumberValidations and Ohm::WebValidations.
   
   
   
+  
+  
+  
+  
+  
+  <h2>Method Summary</h2>
+  
+  <h3 class="inherited">Methods included from <a href="DateValidations.html" title="Ohm::DateValidations (module)">DateValidations</a></h3>
+  <p class="inherited"><a href="DateValidations.html#assert_date-instance_method" title="Ohm::DateValidations#assert_date (method)">#assert_date</a></p>
+
 
 </div>
     
     <div id="footer">
-  Generated on Sat May 29 19:43:01 2010 by 
+  Generated on Fri Jul  2 20:44:12 2010 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool">yard</a>
   0.5.4 (ruby-1.9.1).
 </div>

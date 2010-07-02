@@ -85,18 +85,6 @@
   <p class="children"><a href="Date.html" title="Ohm::Types::Date (class)">Date</a>, <a href="Decimal.html" title="Ohm::Types::Decimal (class)">Decimal</a>, <a href="Float.html" title="Ohm::Types::Float (class)">Float</a>, <a href="Integer.html" title="Ohm::Types::Integer (class)">Integer</a>, <a href="String.html" title="Ohm::Types::String (class)">String</a>, <a href="Time.html" title="Ohm::Types::Time (class)">Time</a></p>
 </div>
 
-  <h2>Constant Summary</h2>
-  
-    <dl class="constants">
-      
-        <dt id="EMPTY-constant" class="">EMPTY =
-          
-        </dt>
-        <dd><pre class="code"><span class='kw'>nil</span></pre></dd>
-      
-    </dl>
-  
-
 
   
   
@@ -157,6 +145,46 @@ A new instance of Primitive.
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#object-instance_method" title="#object (instance method)">- (Object) <strong>object</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#respond_to%3F-instance_method" title="#respond_to? (instance method)">- (Boolean) <strong>respond_to?</strong>(method) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#to_s-instance_method" title="#to_s (instance method)">- (Object) <strong>to_s</strong> </a>
     
 
@@ -186,7 +214,7 @@ A new instance of Primitive.
   
   
   <h3 class="inherited">Methods inherited from <a href="Base.html" title="Ohm::Types::Base (class)">Base</a></h3>
-  <p class="inherited"><a href="Base.html#%5B%5D-class_method" title="Ohm::Types::Base.[] (method)">[]</a>, <a href="Base.html#delegate_to-class_method" title="Ohm::Types::Base.delegate_to (method)">delegate_to</a>, <a href="Base.html#inspect-instance_method" title="Ohm::Types::Base#inspect (method)">#inspect</a></p>
+  <p class="inherited"><a href="Base.html#%5B%5D-class_method" title="Ohm::Types::Base.[] (method)">[]</a>, <a href="Base.html#delegate_to-class_method" title="Ohm::Types::Base.delegate_to (method)">delegate_to</a>, <a href="Base.html#empty-class_method" title="Ohm::Types::Base.empty (method)">empty</a>, <a href="Base.html#inspect-instance_method" title="Ohm::Types::Base#inspect (method)">#inspect</a></p>
 
   <div id="constructor_details" class="method_details_list">
   <h2>Constructor Details</h2>
@@ -215,12 +243,12 @@ A new instance of Primitive
       <pre class="lines">
 
 
-56
-57
-58</pre>
+60
+61
+62</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/typecast.rb', line 56</span>
+      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/typecast.rb', line 60</span>
 
 <span class='kw'>def</span> <span class='id initialize'>initialize</span><span class='lparen'>(</span><span class='id value'>value</span><span class='rparen'>)</span>
   <span class='ivar'>@raw</span> <span class='op'>=</span> <span class='id value'>value</span>
@@ -250,15 +278,96 @@ A new instance of Primitive
       <pre class="lines">
 
 
-64
-65
-66</pre>
+68
+69
+70</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/typecast.rb', line 64</span>
+      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/typecast.rb', line 68</span>
 
 <span class='kw'>def</span> <span class='op'>==</span><span class='lparen'>(</span><span class='id other'>other</span><span class='rparen'>)</span>
   <span class='id to_s'>to_s</span> <span class='op'>==</span> <span class='id other'>other</span><span class='period'>.</span><span class='id to_s'>to_s</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="object-instance_method">
+  
+    - (<tt>Object</tt>) <strong>object</strong> 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+78
+79
+80</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/typecast.rb', line 78</span>
+
+<span class='kw'>def</span> <span class='id object'>object</span>
+  <span class='ivar'>@raw</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="respond_to?-instance_method">
+  
+    - (<tt><a href="Boolean.html" title="Ohm::Types::Boolean (class)">Boolean</a></tt>) <strong>respond_to?</strong>(method) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  <h3>Returns:</h3>
+<ul class="return">
+  
+    <li>
+      
+        <span class='type'>(<tt><a href="Boolean.html" title="Ohm::Types::Boolean (class)">Boolean</a></tt>)</span>
+      
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+72
+73
+74
+75
+76</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/typecast.rb', line 72</span>
+
+<span class='kw'>def</span> <span class='id respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='id method'>method</span><span class='rparen'>)</span>
+  <span class='id object'>object</span><span class='period'>.</span><span class='id respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='id method'>method</span><span class='rparen'>)</span>
+<span class='kw'>rescue</span> <span class='op'>::</span><span class='const'>ArgumentError</span>
+  <span class='ivar'>@raw</span><span class='period'>.</span><span class='id respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='id method'>method</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -278,12 +387,12 @@ A new instance of Primitive
       <pre class="lines">
 
 
-60
-61
-62</pre>
+64
+65
+66</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/typecast.rb', line 60</span>
+      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/typecast.rb', line 64</span>
 
 <span class='kw'>def</span> <span class='id to_s'>to_s</span>
   <span class='ivar'>@raw</span><span class='period'>.</span><span class='id to_s'>to_s</span>
@@ -298,7 +407,7 @@ A new instance of Primitive
 </div>
     
     <div id="footer">
-  Generated on Sat May 29 19:43:00 2010 by 
+  Generated on Fri Jul  2 20:44:11 2010 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool">yard</a>
   0.5.4 (ruby-1.9.1).
 </div>

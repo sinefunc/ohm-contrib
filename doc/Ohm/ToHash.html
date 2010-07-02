@@ -65,7 +65,16 @@
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    <p>
+    
+  <p class="note todo">
+    <strong>TODO:</strong> 
+    <div class='inline'><p>
+use super when Ohm has finally release their #to_hash impl.
+</p>
+</div>
+  </p>
+
+<p>
 Ohm has already added its own `to_hash` method. The difference is that it
 chose the albeit better whitelisted approach.
 </p>
@@ -160,15 +169,15 @@ chose the albeit better whitelisted approach.
       <pre class="lines">
 
 
-29
-30
 31
 32
 33
-34</pre>
+34
+35
+36</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/to_hash.rb', line 29</span>
+      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/to_hash.rb', line 31</span>
 
 <span class='kw'>def</span> <span class='id to_hash'>to_hash</span>
   <span class='id atts'>atts</span> <span class='op'>=</span> <span class='id attributes'>attributes</span> <span class='op'>+</span> <span class='id counters'>counters</span>
@@ -186,7 +195,7 @@ chose the albeit better whitelisted approach.
 </div>
     
     <div id="footer">
-  Generated on Sat May 29 19:43:00 2010 by 
+  Generated on Fri Jul  2 20:44:11 2010 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool">yard</a>
   0.5.4 (ruby-1.9.1).
 </div>

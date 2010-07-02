@@ -83,7 +83,43 @@
 <div class="clear"></div>
 
 
-  <h2>Constant Summary</h2>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <h2>Instance Method Summary</h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#object-instance_method" title="#object (instance method)">- (Object) <strong>object</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
   
 
 
@@ -91,25 +127,11 @@
   
   
   
-  <h3 class="inherited">Constants inherited from <a href="Primitive.html" title="Ohm::Types::Primitive (class)">Primitive</a></h3>
-  <p class="inherited"><a href="Primitive.html#EMPTY-constant" title="Ohm::Types::Primitive::EMPTY (constant)">EMPTY</a></p>
-
   
   
-  
-  
-  
-
-
-  
-  
-  
-  
-  
-  <h2>Method Summary</h2>
   
   <h3 class="inherited">Methods inherited from <a href="Primitive.html" title="Ohm::Types::Primitive (class)">Primitive</a></h3>
-  <p class="inherited"><a href="Primitive.html#%3D%3D-instance_method" title="Ohm::Types::Primitive#== (method)">#==</a>, <a href="Primitive.html#initialize-instance_method" title="Ohm::Types::Primitive#initialize (method)">#initialize</a>, <a href="Primitive.html#to_s-instance_method" title="Ohm::Types::Primitive#to_s (method)">#to_s</a></p>
+  <p class="inherited"><a href="Primitive.html#%3D%3D-instance_method" title="Ohm::Types::Primitive#== (method)">#==</a>, <a href="Primitive.html#initialize-instance_method" title="Ohm::Types::Primitive#initialize (method)">#initialize</a>, <a href="Primitive.html#respond_to%3F-instance_method" title="Ohm::Types::Primitive#respond_to? (method)">#respond_to?</a>, <a href="Primitive.html#to_s-instance_method" title="Ohm::Types::Primitive#to_s (method)">#to_s</a></p>
 
   
   
@@ -119,7 +141,7 @@
   
   
   <h3 class="inherited">Methods inherited from <a href="Base.html" title="Ohm::Types::Base (class)">Base</a></h3>
-  <p class="inherited"><a href="Base.html#%5B%5D-class_method" title="Ohm::Types::Base.[] (method)">[]</a>, <a href="Base.html#delegate_to-class_method" title="Ohm::Types::Base.delegate_to (method)">delegate_to</a>, <a href="Base.html#inspect-instance_method" title="Ohm::Types::Base#inspect (method)">#inspect</a></p>
+  <p class="inherited"><a href="Base.html#%5B%5D-class_method" title="Ohm::Types::Base.[] (method)">[]</a>, <a href="Base.html#delegate_to-class_method" title="Ohm::Types::Base.delegate_to (method)">delegate_to</a>, <a href="Base.html#empty-class_method" title="Ohm::Types::Base.empty (method)">empty</a>, <a href="Base.html#inspect-instance_method" title="Ohm::Types::Base#inspect (method)">#inspect</a></p>
 
   <div id="constructor_details" class="method_details_list">
   <h2>Constructor Details</h2>
@@ -129,10 +151,44 @@
 </div>
 
 
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="object-instance_method">
+  
+    - (<tt>Object</tt>) <strong>object</strong> 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+122
+123
+124</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/typecast.rb', line 122</span>
+
+<span class='kw'>def</span> <span class='id object'>object</span>
+  <span class='op'>::</span><span class='const'>Date</span><span class='period'>.</span><span class='id parse'>parse</span><span class='lparen'>(</span><span class='ivar'>@raw</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
 </div>
     
     <div id="footer">
-  Generated on Sat May 29 19:43:01 2010 by 
+  Generated on Fri Jul  2 20:44:12 2010 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool">yard</a>
   0.5.4 (ruby-1.9.1).
 </div>

@@ -97,7 +97,8 @@
           
         </dt>
         <dd><pre class="code"><span class='lbracket'>[</span>
-  <span class='symbol'>:==</span><span class='comma'>,</span> <span class='symbol'>:to_s</span><span class='comma'>,</span> <span class='symbol'>:initialize</span><span class='comma'>,</span> <span class='symbol'>:inspect</span><span class='comma'>,</span> <span class='symbol'>:object_id</span><span class='comma'>,</span> <span class='symbol'>:__send__</span><span class='comma'>,</span> <span class='symbol'>:__id__</span>
+  <span class='symbol'>:==</span><span class='comma'>,</span> <span class='symbol'>:to_s</span><span class='comma'>,</span> <span class='symbol'>:initialize</span><span class='comma'>,</span> <span class='symbol'>:inspect</span><span class='comma'>,</span> <span class='symbol'>:object_id</span><span class='comma'>,</span> <span class='symbol'>:__send__</span><span class='comma'>,</span> <span class='symbol'>:__id__</span><span class='comma'>,</span>
+  <span class='symbol'>:respond_to?</span>
 <span class='rbracket'>]</span></pre></dd>
       
     </dl>
@@ -135,6 +136,26 @@
   <span class="summary_signature">
     
       <a href="#delegate_to-class_method" title="delegate_to (class method)">+ (Object) <strong>delegate_to</strong>(klass, except = @@delegation_blacklist) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#empty-class_method" title="empty (class method)">+ (Object) <strong>empty</strong> </a>
     
 
     
@@ -200,18 +221,18 @@
       <pre class="lines">
 
 
-37
-38
 39
 40
-41</pre>
+41
+42
+43</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/typecast.rb', line 37</span>
+      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/typecast.rb', line 39</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='op'>[]</span><span class='lparen'>(</span><span class='id value'>value</span><span class='rparen'>)</span>
-  <span class='kw'>return</span> <span class='kw'>self</span><span class='op'>::</span><span class='const'>EMPTY</span> <span class='kw'>if</span> <span class='id value'>value</span><span class='period'>.</span><span class='id to_s'>to_s</span><span class='period'>.</span><span class='id empty?'>empty?</span>
-    
+  <span class='kw'>return</span> <span class='id empty'>empty</span>  <span class='kw'>if</span> <span class='id value'>value</span><span class='period'>.</span><span class='id to_s'>to_s</span><span class='period'>.</span><span class='id empty?'>empty?</span>
+
   <span class='id new'>new</span><span class='lparen'>(</span><span class='id value'>value</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -232,17 +253,45 @@
       <pre class="lines">
 
 
-43
-44
-45
-46</pre>
+49
+50
+51
+52</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/typecast.rb', line 43</span>
+      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/typecast.rb', line 49</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id delegate_to'>delegate_to</span><span class='lparen'>(</span><span class='id klass'>klass</span><span class='comma'>,</span> <span class='id except'>except</span> <span class='op'>=</span> <span class='cvar'>@@delegation_blacklist</span><span class='rparen'>)</span>
   <span class='id methods'>methods</span> <span class='op'>=</span> <span class='id klass'>klass</span><span class='period'>.</span><span class='id public_instance_methods'>public_instance_methods</span><span class='period'>.</span><span class='id map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_sym</span><span class='rparen'>)</span> <span class='op'>-</span> <span class='id except'>except</span>
-  <span class='id def_delegators'>def_delegators</span> <span class='symbol'>:object</span><span class='comma'>,</span> <span class='op'>*</span><span class='id methods'>methods</span>          
+  <span class='id def_delegators'>def_delegators</span> <span class='symbol'>:object</span><span class='comma'>,</span> <span class='op'>*</span><span class='id methods'>methods</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="empty-class_method">
+  
+    + (<tt>Object</tt>) <strong>empty</strong> 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+45
+46
+47</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/typecast.rb', line 45</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id empty'>empty</span>
+  <span class='kw'>defined?</span><span class='lparen'>(</span><span class='kw'>self</span><span class='op'>::</span><span class='const'>RAW</span><span class='rparen'>)</span> <span class='op'>?</span> <span class='kw'>self</span><span class='op'>::</span><span class='const'>RAW</span><span class='period'>.</span><span class='id new'>new</span> <span class='op'>:</span> <span class='kw'>nil</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -268,15 +317,15 @@
       <pre class="lines">
 
 
-48
-49
-50</pre>
+54
+55
+56</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/typecast.rb', line 48</span>
+      <pre class="code"><span class="info file"># File 'lib/ohm/contrib/typecast.rb', line 54</span>
 
 <span class='kw'>def</span> <span class='id inspect'>inspect</span>
-  <span class='id object'>object</span><span class='period'>.</span><span class='id inspect'>inspect</span>
+  <span class='ivar'>@raw</span><span class='period'>.</span><span class='id inspect'>inspect</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -288,7 +337,7 @@
 </div>
     
     <div id="footer">
-  Generated on Sat May 29 19:43:00 2010 by 
+  Generated on Fri Jul  2 20:44:11 2010 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool">yard</a>
   0.5.4 (ruby-1.9.1).
 </div>
