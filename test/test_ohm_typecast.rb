@@ -289,6 +289,50 @@ class TestOhmTypecast < Test::Unit::TestCase
     end
   end
 
+  context "timezones and the Time type" do
+    class Post < Ohm::Model
+      include Ohm::Typecast
+      
+      attribute :printed_at, Time
+    end
+
+    test "2010-08-07 is parsed as 2010-08-07 00:00:00 UTC" do
+      post = Post.new(:printed_at => "2010-08-07")
+      assert_equal Time.utc(2010, 8, 7).to_s, post.printed_at.utc.to_s
+
+      post.save
+      post = Post[post.id]
+      assert_equal Time.utc(2010, 8, 7).to_s, post.printed_at.utc.to_s
+    end
+
+    test "2010-08-07 00:00 is parsed as 2010-08-07 00:00:00 UTC" do
+      post = Post.new(:printed_at => "2010-08-07 00:00")
+      assert_equal Time.utc(2010, 8, 7).to_s, post.printed_at.utc.to_s
+
+      post.save
+      post = Post[post.id]
+      assert_equal Time.utc(2010, 8, 7).to_s, post.printed_at.utc.to_s
+    end
+
+    test "2010-08-07 18:29 is parsed as 2010-08-07 18:29:00 UTC" do
+      post = Post.new(:printed_at => "2010-08-07 18:29")
+      assert_equal Time.utc(2010, 8, 7, 18, 29).to_s, post.printed_at.utc.to_s
+
+      post.save
+      post = Post[post.id]
+      assert_equal Time.utc(2010, 8, 7, 18, 29).to_s, post.printed_at.utc.to_s
+    end
+
+    test "2010-08-07 18:29:31 is parsed as 2010-08-07 18:29:31 UTC" do
+      post = Post.new(:printed_at => "2010-08-07 18:29:31")
+      assert_equal Time.utc(2010, 8, 7, 18, 29, 31).to_s, post.printed_at.utc.to_s
+
+      post.save
+      post = Post[post.id]
+      assert_equal Time.utc(2010, 8, 7, 18, 29, 31).to_s, post.printed_at.utc.to_s
+    end
+  end
+  
   context "when using a date" do
     class Post < Ohm::Model
       include Ohm::Typecast
