@@ -12,7 +12,7 @@ begin
     gem.authors = ["Cyril David"]
     gem.add_development_dependency "contest", ">= 0"
     gem.add_development_dependency "redis", ">= 0"
-    gem.add_development_dependency "ohm", ">= 0"
+    # gem.add_development_dependency "ohm", ">= 0"
     gem.add_development_dependency "timecop", ">= 0"
     gem.add_development_dependency "mocha", ">= 0"
     gem.add_development_dependency "lunar", ">= 0"

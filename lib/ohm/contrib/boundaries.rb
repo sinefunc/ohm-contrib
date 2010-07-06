@@ -21,11 +21,12 @@ module Ohm
 
     module ClassMethods
       def first(opts = {})
-        find(opts).sort(:start => 0, :limit => 1).first
+        all.first(opts)
       end
 
       def last(opts = {})
-        find(opts).sort(:start => 0, :limit => 1, :order => "DESC").first
+        opts.merge!(:order => "DESC")
+        all.first(opts)
       end
     end
   end
