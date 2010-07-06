@@ -29,11 +29,11 @@ module Ohm
     #
     # @see Model#mutex
     def lock!(wait = 0.1)
-      until db.setnx(key(:_lock), lock_timeout)
-        next unless lock = db.get(key(:_lock))
+      until key[:_lock].setnx(lock_timeout)
+        next unless lock = key[:_lock].get
         sleep(wait) and next unless lock_expired?(lock)
 
-        break unless lock = db.getset(key(:_lock), lock_timeout)
+        break unless lock = key[:_lock].getset(lock_timeout)
         break if lock_expired?(lock)
       end
     end
@@ -41,7 +41,7 @@ module Ohm
     # Release the lock.
     # @see Model#mutex
     def unlock!
-      db.del(key(:_lock))
+      key[:_lock].del
     end
 
     def lock_timeout
