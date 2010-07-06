@@ -21,12 +21,19 @@ module Ohm
 
     module ClassMethods
       def first(opts = {})
-        all.first(opts)
+        if opts.any?
+          find(opts).first
+        else
+          all.first(opts)
+        end
       end
 
       def last(opts = {})
-        opts.merge!(:order => "DESC")
-        all.first(opts)
+        if opts.any?
+          find(opts).first(:order => "DESC")
+        else
+          all.first(:order => "DESC")
+        end
       end
     end
   end

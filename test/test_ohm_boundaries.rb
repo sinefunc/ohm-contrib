@@ -51,29 +51,23 @@ class TestOhmBoundaries < Test::Unit::TestCase
     end
 
     context "when searching name => matz" do
-      # TODO: must implement this
-      #   assert_equal @matz, Person.first(:name => "matz")
-      #   assert_equal @matz, Person.last(:name => "matz")
       test "matz is the first and last" do
-        pend "matz is the first and last"
+        assert_equal @matz, Person.first(:name => "matz")
+        assert_equal @matz, Person.last(:name => "matz")
       end
     end
 
     context "when searching name => linus" do
-      # TODO : must implement this
-      #   assert_equal @linus, Person.first(:name => "linus")
-      #   assert_equal @linus, Person.last(:name => "linus") 
       test "linus is first and last" do
-        pend "linus is first and last"
+        assert_equal @linus, Person.first(:name => "linus")
+        assert_equal @linus, Person.last(:name => "linus") 
       end
     end
 
     context "when searching name => quentin" do
-      # TODO : must implement this
-      #   assert_nil Person.first(:name => "quentin")
-      #   assert_nil Person.last(:name => "quentin")       
       should "have nil as first and last" do
-        pend "have nil as first and last"
+        assert_nil Person.first(:name => "quentin")
+        assert_nil Person.last(:name => "quentin")       
       end
     end
   end
