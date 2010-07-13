@@ -39,7 +39,11 @@ module Ohm
           self.class.lunar_fields(type).each do |field|
             value = send(field)
             
-            i.send type, field, value  unless value.to_s.empty?
+            if type == :text and value.kind_of?(Enumerable)
+              i.text field, value.join(' ')  unless value.empty?
+            else
+              i.send type, field, value  unless value.to_s.empty?
+            end
           end
         end
       end
