@@ -23,6 +23,8 @@ module Ohm
   #       assert_url     :url
   #       assert_email   :author_email
   #       assert_date    :birthday
+  #       assert_min_length :slug, 10
+  #       assert_max_length :slug, 25
   #     end
   #   end
   #
@@ -30,11 +32,12 @@ module Ohm
   #   post.valid?
   #   post.errors
   #   # [[:price, :not_decimal], [:state, :not_member], [:ipaddr, :not_ipaddr],
-  #   #  [:url, :not_url], [:author_email, :not_email]]
+  #   #  [:url, :not_url], [:author_email, :not_email],[:slug, :too_short]]
   module ExtraValidations
     include NumberValidations
     include WebValidations
     include DateValidations
+    include LengthValidations
 
   protected
     def assert_member(att, set, error = [att, :not_member])
