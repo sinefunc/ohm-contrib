@@ -262,7 +262,7 @@ class TestOhmTypecast < Test::Unit::TestCase
     end
 
     test "allows for real time operations" do
-      post = Post.create(:created_at => "2010-05-10")
+      post = Post.create(:created_at => "2010-05-10T00:00Z")
       post = Post[post.id]
 
       assert_respond_to post.created_at, :strftime
@@ -296,8 +296,8 @@ class TestOhmTypecast < Test::Unit::TestCase
       attribute :printed_at, Time
     end
 
-    test "2010-08-07 is parsed as 2010-08-07 00:00:00 UTC" do
-      post = Post.new(:printed_at => "2010-08-07")
+    test "2010-08-07T00:00Z is parsed as 2010-08-07 00:00:00 UTC" do
+      post = Post.new(:printed_at => "2010-08-07T00:00Z")
       assert_equal Time.utc(2010, 8, 7).to_s, post.printed_at.utc.to_s
 
       post.save
@@ -305,17 +305,8 @@ class TestOhmTypecast < Test::Unit::TestCase
       assert_equal Time.utc(2010, 8, 7).to_s, post.printed_at.utc.to_s
     end
 
-    test "2010-08-07 00:00 is parsed as 2010-08-07 00:00:00 UTC" do
-      post = Post.new(:printed_at => "2010-08-07 00:00")
-      assert_equal Time.utc(2010, 8, 7).to_s, post.printed_at.utc.to_s
-
-      post.save
-      post = Post[post.id]
-      assert_equal Time.utc(2010, 8, 7).to_s, post.printed_at.utc.to_s
-    end
-
-    test "2010-08-07 18:29 is parsed as 2010-08-07 18:29:00 UTC" do
-      post = Post.new(:printed_at => "2010-08-07 18:29")
+    test "2010-08-07 18:29Z is parsed as 2010-08-07 18:29:00 UTC" do
+      post = Post.new(:printed_at => "2010-08-07 18:29Z")
       assert_equal Time.utc(2010, 8, 7, 18, 29).to_s, post.printed_at.utc.to_s
 
       post.save
@@ -323,8 +314,8 @@ class TestOhmTypecast < Test::Unit::TestCase
       assert_equal Time.utc(2010, 8, 7, 18, 29).to_s, post.printed_at.utc.to_s
     end
 
-    test "2010-08-07 18:29:31 is parsed as 2010-08-07 18:29:31 UTC" do
-      post = Post.new(:printed_at => "2010-08-07 18:29:31")
+    test "2010-08-07T18:29:31Z is parsed as 2010-08-07 18:29:31 UTC" do
+      post = Post.new(:printed_at => "2010-08-07T18:29:31Z")
       assert_equal Time.utc(2010, 8, 7, 18, 29, 31).to_s, post.printed_at.utc.to_s
 
       post.save

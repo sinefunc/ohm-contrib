@@ -111,17 +111,8 @@ module Ohm
     class Time < Primitive
       delegate_to ::Time
 
-      YYYY_MM_DD = /\A([0-9]{4})-([01]?[0-9])-([0123]?[0-9])\z/
-      YYYY_MM_DD_HH_MM_SS = /\A([0-9]{4})-([01]?[0-9])-([0123]?[0-9]) ([\d]{1,2}):([\d]{1,2})(:([\d]{1,2}))?\z/
-
       def object
-        if @raw =~ YYYY_MM_DD
-          ::Time.utc($1, $2, $3)
-        elsif @raw =~ YYYY_MM_DD_HH_MM_SS
-          ::Time.utc($1, $2, $3, $4, $5, $7)
-        else
-          ::Time.parse(@raw)
-        end
+        ::Time.parse(@raw).utc
       end
     end
 
