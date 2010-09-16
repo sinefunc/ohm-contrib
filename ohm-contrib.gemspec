@@ -1,6 +1,7 @@
+
 Gem::Specification.new do |s|
-  s.name = 'ohm'
-  s.version = 0.0.32
+  s.name = 'ohm-contrib'
+  s.version = "0.0.33"
   s.summary = %{A collection of decoupled drop-in modules for Ohm}
   s.date = %q{2010-05-12}
   s.author = "Cyril David"
@@ -13,11 +14,14 @@ Gem::Specification.new do |s|
 
   s.require_paths = ['lib']
 
+  s.rubyforge_project = "ohm-contrib"
+
   s.has_rdoc = false
+  s.add_dependency "ohm"
 
   s.add_development_dependency "cutest"
   s.add_development_dependency "redis"
-  s.add_development_dependency "ohm"
+  s.add_development_dependency "lunar"
   s.add_development_dependency "override"
 end
 
