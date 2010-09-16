@@ -1,0 +1,24 @@
+<%- require './lib/ohm/contrib' %>
+Gem::Specification.new do |s|
+  s.name = 'ohm'
+  s.version = <%= Ohm::Contrib::VERSION %>
+  s.summary = %{A collection of decoupled drop-in modules for Ohm}
+  s.date = %q{2010-05-12}
+  s.author = "Cyril David"
+  s.email = "cyx.ucron@gmail.com"
+  s.homepage = "http://github.com/cyx/ohm-contrib"
+
+  s.specification_version = 2 if s.respond_to? :specification_version=
+
+  s.files = <%= Dir['lib/**/*.rb', 'README*', 'LICENSE', 'Rakefile', 'test/**/*.*'].inspect %>
+
+  s.require_paths = ['lib']
+
+  s.has_rdoc = false
+
+  s.add_development_dependency "cutest"
+  s.add_development_dependency "redis"
+  s.add_development_dependency "ohm"
+  s.add_development_dependency "override"
+end
+

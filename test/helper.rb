@@ -1,16 +1,26 @@
-require 'rubygems'
-require 'test/unit'
-require 'contest'
+require 'cutest'
 require 'redis'
 require 'ohm'
-require 'timecop'
-require 'mocha'
+require 'override'
 
-Ohm.connect :host => "localhost", :port => "6379"
+Ohm.connect :host => "localhost", :port => 6379, :db => 1
 
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-$LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'ohm/contrib'
 
-class Test::Unit::TestCase
+NOW = Time.utc(2010, 5, 12)
+
+include Override
+
+prepare { 
+  Ohm.flush 
+  override(Time, :now => NOW)
+}
+
+def assert_nothing_raised(*exceptions)
+  begin
+    yield
+  rescue *exceptions
+    flunk(caller[1])
+  end
 end
+
