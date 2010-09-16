@@ -54,3 +54,4 @@ protected
 end
 
 load File.expand_path('./callbacks_lint.rb', File.dirname(__FILE__))
+

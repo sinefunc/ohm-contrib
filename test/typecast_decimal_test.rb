@@ -52,7 +52,7 @@ end
 test "assigning a raw BigDecimal" do
   post = Post.create(:price => BigDecimal("399.50"))
   post = Post[post.id]
-  
+
   assert post.price.to_s.kind_of?(String)
 end
 

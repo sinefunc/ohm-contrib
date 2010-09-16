@@ -40,7 +40,7 @@ end
 
 class Document < Ohm::Model
   include Ohm::LunarMacros
-  
+
   fuzzy    :filename
   text     :content
   number   :author_id
@@ -54,10 +54,10 @@ end
 
 test "fuzzy indexing" do
   doc = Document.create(:filename => "amazing.mp3")
-  
-  strs = %w{a am ama amaz amazi amazin amazing amazing. amazing.m 
+
+  strs = %w{a am ama amaz amazi amazin amazing amazing. amazing.m
             amazing.mp amazing.mp3}
-  
+
   strs.each do |str|
     r = Lunar.search(Document, :fuzzy => { :filename => str })
     assert r.include?(doc)
@@ -78,7 +78,7 @@ test "text indexing" do
 
   queries = ['quick', 'brown', 'fox', 'quick brown' 'quick fox', 'fox brown',
              'the quick brown fox']
-  
+
   queries.each do |q|
     r = Lunar.search(Document, :q => q)
     assert r.include?(doc)

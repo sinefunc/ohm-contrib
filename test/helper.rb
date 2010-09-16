@@ -11,8 +11,8 @@ NOW = Time.utc(2010, 5, 12)
 
 include Override
 
-prepare { 
-  Ohm.flush 
+prepare {
+  Ohm.flush
   override(Time, :now => NOW)
 }
 

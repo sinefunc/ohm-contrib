@@ -6,7 +6,7 @@ class Person < Ohm::Model
   include Ohm::DateValidations
 
   attribute :birthday
-  
+
   def validate
     assert_date :birthday
   end

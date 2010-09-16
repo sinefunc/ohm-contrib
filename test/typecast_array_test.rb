@@ -88,7 +88,7 @@ test "allows for array operations" do
 
   post = Post.create(:addresses => addresses)
   assert 2 == post.addresses.size
-  
+
   expected = addresses + [{"city" => "Hong Kong", "country" => "ZN"}]
   actual   = post.addresses.push({"city" => "Hong Kong", "country" => "ZN"})
 

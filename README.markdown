@@ -199,3 +199,4 @@ Note on Patches/Pull Requests
 Copyright
 ---------
 Copyright (c) 2010 Cyril David. See LICENSE for details.
+

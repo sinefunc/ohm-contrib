@@ -4,7 +4,7 @@ require File.expand_path("./helper", File.dirname(__FILE__))
 
 class User < Ohm::Model
   include Ohm::Typecast
-  
+
   attribute :is_admin, Boolean
 end
 

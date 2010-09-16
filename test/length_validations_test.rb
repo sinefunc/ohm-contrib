@@ -6,7 +6,7 @@ class Person < Ohm::Model
   include Ohm::LengthValidations
 
   attribute :name
-  
+
   def validate
     assert_min_length :name, 5
     assert_max_length :name, 10

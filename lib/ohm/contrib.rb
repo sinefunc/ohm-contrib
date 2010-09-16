@@ -16,3 +16,4 @@ module Ohm
   autoload :LunarMacros,       "ohm/contrib/lunar_macros"
   autoload :Slug,              "ohm/contrib/slug"
 end
+

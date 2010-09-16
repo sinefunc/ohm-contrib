@@ -19,11 +19,11 @@ module Ohm
       def text(*atts)     lunar_fields(:text,     *atts) end
       def number(*atts)   lunar_fields(:number,   *atts) end
       def sortable(*atts) lunar_fields(:sortable, *atts) end
-    
+
       def lunar_fields(type, *atts)
         @lunar_fields ||= Hash.new { |h, k| h[k] = [] }
 
-        atts.each { |att| 
+        atts.each { |att|
           @lunar_fields[type] << att  unless @lunar_fields[type].include?(att)
         }
 
@@ -34,11 +34,11 @@ module Ohm
     def update_lunar_index
       Lunar.index self.class do |i|
         i.id id
-        
+
         [:fuzzy, :text, :number, :sortable].each do |type|
           self.class.lunar_fields(type).each do |field|
             value = send(field)
-            
+
             if type == :text and value.kind_of?(Enumerable)
               i.text field, value.join(' ')  unless value.empty?
             else
@@ -55,3 +55,4 @@ module Ohm
     end
   end
 end
+

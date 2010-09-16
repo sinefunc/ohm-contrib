@@ -36,4 +36,3 @@ test "inspecting" do
   assert 'FooBar' == post.content
 end
 
-

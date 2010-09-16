@@ -4,7 +4,7 @@ require File.expand_path("./helper", File.dirname(__FILE__))
 
 class Post < Ohm::Model
   include Ohm::Typecast
-  
+
   attribute :printed_at, Time
 end
 

@@ -20,7 +20,7 @@ test "importing" do
   assert Hash.new == Ohm::Types::Hash[nil]
   assert Hash.new == Ohm::Types::Hash[""]
   assert Hash.new == Ohm::Types::Hash[{}]
-  
+
   expected = Hash[:a => "b", :c => "d"]
   assert expected == Ohm::Types::Hash[{ :a => "b", :c => "d" }]
 end
@@ -29,7 +29,7 @@ test "exporting / dumping" do
   assert "{}" == Ohm::Types::Hash[nil].to_s
   assert "{}" == Ohm::Types::Hash[""].to_s
   assert "{}" == Ohm::Types::Hash[{}].to_s
-  
+
   expected = %q{{"a":"b","c":"d"}}
   assert expected == Ohm::Types::Hash[{ :a => "b", :c => "d" }].to_s
 end
@@ -107,7 +107,7 @@ test "inspecting" do
   post = Post.create(:address => { "address1" => "#456",
                                    "city" => "Singapore",
                                    "country" => "SG" })
-  
+
   expected = %q{{"address1":"#456","city":"Singapore","country":"SG"}}
   assert expected == post.address.inspect
 
