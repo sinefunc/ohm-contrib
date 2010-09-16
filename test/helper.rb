@@ -1,11 +1,10 @@
 require 'cutest'
 require 'redis'
 require 'ohm'
+require 'ohm/contrib'
 require 'override'
 
 Ohm.connect :host => "localhost", :port => 6379, :db => 1
-
-require 'ohm/contrib'
 
 NOW = Time.utc(2010, 5, 12)
 
