@@ -1,7 +1,7 @@
 
 Gem::Specification.new do |s|
   s.name = 'ohm-contrib'
-  s.version = "0.0.34"
+  s.version = "0.0.35"
   s.summary = %{A collection of decoupled drop-in modules for Ohm}
   s.date = %q{2010-05-12}
   s.author = "Cyril David"
