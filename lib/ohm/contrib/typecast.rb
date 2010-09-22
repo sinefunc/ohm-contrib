@@ -82,6 +82,10 @@ module Ohm
 
     class String < Primitive
       delegate_to ::String
+
+      def type
+        ::String
+      end
     end
 
     class Decimal < Primitive
@@ -89,6 +93,10 @@ module Ohm
 
       def object
         ::Kernel::BigDecimal(@raw)
+      end
+
+      def type
+        ::BigDecimal
       end
     end
 
@@ -98,6 +106,10 @@ module Ohm
       def object
         ::Kernel::Integer(@raw)
       end
+
+      def type
+        ::Fixnum
+      end
     end
 
     class Float < Primitive
@@ -105,6 +117,10 @@ module Ohm
 
       def object
         ::Kernel::Float(@raw)
+      end
+
+      def type
+        ::Float
       end
     end
 
@@ -114,6 +130,10 @@ module Ohm
       def object
         ::Time.parse(@raw).utc
       end
+
+      def type
+        ::Time
+      end
     end
 
     class Date < Primitive
@@ -121,6 +141,10 @@ module Ohm
 
       def object
         ::Date.parse(@raw)
+      end
+
+      def type
+        ::Date
       end
     end
 
@@ -165,6 +189,10 @@ module Ohm
 
       def respond_to?(method)
         object.respond_to?(method)
+      end
+
+      def type
+        self.class::RAW
       end
     end
 

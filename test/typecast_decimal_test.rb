@@ -75,3 +75,8 @@ test "inspecting a Decimal" do
   assert '"FooBar"' == post.price.inspect
 end
 
+test "type is BigDecimal" do
+  post = Post.new(:price => 399.50)
+  assert BigDecimal == post.price.type
+end
+

@@ -75,3 +75,8 @@ test "inspecting" do
   assert '"FooBar"' == post.created_on.inspect
 end
 
+test "type is Date" do
+  post = Post.create(:created_on => Date.new(2010, 5, 5))
+  assert Date == post.created_on.type
+end
+

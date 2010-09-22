@@ -152,3 +152,8 @@ test "inspecting" do
   assert %{"\\\"FooBar\\\""} == post.addresses.inspect
 end
 
+test "type is array" do
+  post = Post.create(:addresses => ["address1"])
+
+  assert post.addresses.type == Array
+end

@@ -65,3 +65,8 @@ test "inspecting" do
   assert '"FooBar"' == post.created_at.inspect
 end
 
+test "type is Time" do
+  post = Post.create(:created_at => Time.utc(2010, 05, 05))
+  assert Time == post.created_at.type
+end
+

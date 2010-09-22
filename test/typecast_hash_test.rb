@@ -115,3 +115,8 @@ test "inspecting" do
   assert %{"\\\"FooBar\\\""} == post.address.inspect
 end
 
+test "type is Hash" do
+  post = Post.new(:address => { "address1" => "#456" })
+  assert Hash == post.address.type
+end
+

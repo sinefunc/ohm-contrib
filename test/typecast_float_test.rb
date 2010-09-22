@@ -50,3 +50,8 @@ test "inspecting" do
   assert '"FooBar"' == post.price.inspect
 end
 
+test "type is Float" do
+  post = Post.new(:price => 399.50)
+  assert Float == post.price.type
+end
+

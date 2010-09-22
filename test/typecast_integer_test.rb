@@ -64,3 +64,8 @@ test "inspecting" do
   assert '"FooBar"' == post.price.inspect
 end
 
+test "type is Fixnum" do
+  post = Post.new(:price => 399)
+  assert Fixnum == post.price.type
+end
+
