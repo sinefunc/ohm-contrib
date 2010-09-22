@@ -10,6 +10,8 @@ module Ohm
   #    - after_create
   #    - before_save
   #    - after_save
+  #    - before_update
+  #    - after_update
   #    - before_delete
   #    - after_delete
   #
@@ -176,10 +178,18 @@ module Ohm
     # If the save also succeeds, all after :save callbacks are
     # executed.
     def save
-      execute_callback(:before, :save)  if valid?
+      existing = !new?
+
+      if valid?
+        execute_callback(:before, :save)  
+        execute_callback(:before, :update) if existing
+      end
 
       super.tap do |is_saved|
-        execute_callback(:after, :save)  if is_saved
+        if is_saved
+          execute_callback(:after, :save)  
+          execute_callback(:after, :update) if existing
+        end
       end
     end
 
@@ -198,6 +208,8 @@ module Ohm
     def after_save()      end
     def before_create()   end
     def after_create()    end
+    def before_update()   end
+    def after_update()    end
     def before_delete()   end
     def after_delete()    end
 

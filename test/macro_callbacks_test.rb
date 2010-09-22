@@ -18,6 +18,9 @@ class Post < Ohm::Model
 
   before :delete,   :do_before_delete
   after  :delete,   :do_after_delete
+  
+  before :update,   :do_before_update
+  after  :update,   :do_after_update
 
   def validate
     super
@@ -40,6 +43,8 @@ protected
   def do_after_create()    incr(:do_after_create)    end
   def do_before_save()     incr(:do_before_save)     end
   def do_after_save()      incr(:do_after_save)      end
+  def do_before_update()   incr(:do_before_update)   end
+  def do_after_update()    incr(:do_after_update)    end
   def do_before_delete()   incr(:do_before_delete)   end
   def do_after_delete()    incr(:do_after_delete)    end
 

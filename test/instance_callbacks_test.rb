@@ -28,6 +28,8 @@ protected
   def after_create()    incr(:do_after_create)    end
   def before_save()     incr(:do_before_save)     end
   def after_save()      incr(:do_after_save)      end
+  def before_update()   incr(:do_before_update)   end
+  def after_update()    incr(:do_after_update)    end
   def before_delete()   incr(:do_before_delete)   end
   def after_delete()    incr(:do_after_delete)    end
 
