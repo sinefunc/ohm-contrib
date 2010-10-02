@@ -15,5 +15,6 @@ module Ohm
   autoload :Callbacks,         "ohm/contrib/callbacks"
   autoload :LunarMacros,       "ohm/contrib/lunar_macros"
   autoload :Slug,              "ohm/contrib/slug"
+  autoload :Scope,             "ohm/contrib/scope"
 end
 
