@@ -1,4 +1,3 @@
-
 Gem::Specification.new do |s|
   s.name = 'ohm-contrib'
   s.version = "0.0.36"

@@ -18,7 +18,7 @@ class Post < Ohm::Model
 
   before :delete,   :do_before_delete
   after  :delete,   :do_after_delete
-  
+
   before :update,   :do_before_update
   after  :update,   :do_after_update
 

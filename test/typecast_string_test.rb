@@ -40,3 +40,4 @@ test "type is String" do
   post = Post.new(:content => "FooBar")
   assert String == post.content.type
 end
+

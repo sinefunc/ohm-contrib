@@ -157,3 +157,4 @@ test "type is array" do
 
   assert post.addresses.type == Array
 end
+

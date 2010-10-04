@@ -181,13 +181,13 @@ module Ohm
       existing = !new?
 
       if valid?
-        execute_callback(:before, :save)  
+        execute_callback(:before, :save)
         execute_callback(:before, :update) if existing
       end
 
       super.tap do |is_saved|
         if is_saved
-          execute_callback(:after, :save)  
+          execute_callback(:after, :save)
           execute_callback(:after, :update) if existing
         end
       end
