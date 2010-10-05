@@ -221,8 +221,8 @@ module Ohm
     end
   end
 
-  # Provides unobtrusive, non-explosive typecasting.Instead of exploding on set
-  # of an invalid value, this module takes the approach of just taking in
+  # Provides unobtrusive, non-explosive typecasting. Instead of exploding on
+  # set of an invalid value, this module takes the approach of just taking in
   # parameters and letting you do validation yourself. The only thing this
   # module does for you is the boilerplate casting you might need to do.
   #
@@ -261,7 +261,7 @@ module Ohm
   #
   #   item = Item.create(:price => "299", :posted => Time.now.utc)
   #   item = Item[item.id]
-  #   item.price.class == Ohm::Types::Decimal
+  #   item.price.class == BigDecimal
   #   # => true
   #
   #   item.price.to_s == "299"
@@ -313,17 +313,15 @@ module Ohm
       # @return [Array] the array of attributes already defined.
       # @return [nil] if the attribute is already defined.
       def attribute(name, type = Ohm::Types::String, klass = Ohm::Types[type])
-        define_method(name) do
-          # Primitive types maintain a reference to the original object
-          # stored in @_attributes[att]. Hence mutation works for the
-          # Primitive case. For cases like Hash, Array where the value
-          # is `JSON.parse`d, we need to set the actual Ohm::Types::Hash
-          # (or similar) to @_attributes[att] for mutation to work.
-          if klass.superclass == Ohm::Types::Primitive
-            klass[read_local(name)]
-          else
-            write_local(name, klass[read_local(name)])
-          end
+        # Primitive types maintain a reference to the original object
+        # stored in @_attributes[att]. Hence mutation works for the
+        # Primitive case. For cases like Hash, Array where the value
+        # is `JSON.parse`d, we need to set the actual Ohm::Types::Hash
+        # (or similar) to @_attributes[att] for mutation to work.
+        if klass.superclass == Ohm::Types::Primitive
+          define_method(name) { klass[read_local(name)] }
+        else
+          define_method(name) { write_local(name, klass[read_local(name)]) }
         end
 
         define_method(:"#{name}=") do |value|
@@ -332,6 +330,7 @@ module Ohm
 
         attributes << name unless attributes.include?(name)
       end
+      alias :typecast :attribute
 
     private
       def const_missing(name)
