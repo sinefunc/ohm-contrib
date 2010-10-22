@@ -16,5 +16,6 @@ module Ohm
   autoload :LunarMacros,       "ohm/contrib/lunar_macros"
   autoload :Slug,              "ohm/contrib/slug"
   autoload :Scope,             "ohm/contrib/scope"
+  autoload :SoftDelete,        "ohm/contrib/soft_delete"
 end
 
