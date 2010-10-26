@@ -34,6 +34,8 @@ module Ohm
   #   post.deleted?
   #   # => true
   module SoftDelete
+    IS_DELETED = "1"
+
     def self.included(base)
       base.attribute :deleted
       base.index :deleted
@@ -41,31 +43,26 @@ module Ohm
     end
 
     def delete
-      update(:deleted => "1")
+      update(:deleted => IS_DELETED)
     end
 
     def deleted?
-      deleted == "1"
+      deleted == IS_DELETED
     end
 
-    private
-
+  private
     def create_model_membership
-      self.class.all_including_deleted << self
+      self.class.key[:all].sadd(self.id)
     end
 
     def delete_model_membership
       key.del
-      self.class.all_including_deleted.delete(self)
+      self.class.key[:all].srem(self.id)
     end
 
     module ClassMethods
-      def all_including_deleted
-        Ohm::Model::Index.new(key[:all], Ohm::Model::Wrapper.wrap(self))
-      end
-
       def all
-        all_including_deleted.except(:deleted => "1")
+        super.except(:deleted => IS_DELETED)
       end
     end
   end

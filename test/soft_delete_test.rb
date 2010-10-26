@@ -7,6 +7,9 @@ class Person < Ohm::Model
 
   attribute :name
   index :name
+
+  attribute :age
+  index :age
 end
 
 test "deleted?" do
@@ -37,6 +40,18 @@ test "find excludes deleted records" do
   person.delete
 
   assert Person.find(:name => "matz").empty?
+  assert Person.all.find(:name => "matz").empty?
+end
+
+test "find with many criteria excludes deleted records" do
+  person = Person.create(:name => "matz", :age => 38)
+
+  assert Person.find(:name => "matz", :age => 38).first == person
+
+  person.delete
+
+  assert Person.find(:name => "matz", :age => 38).empty?
+  assert Person.all.find(:name => "matz", :age => 38).empty?
 end
 
 test "exists? returns true for deleted records" do
