@@ -1,6 +1,6 @@
 module Ohm
   module Contrib
-    VERSION = "0.0.39"
+    VERSION = "0.0.40"
   end
 
   autoload :ActiveModelExtension, "ohm/contrib/active_model_extension"
@@ -19,4 +19,3 @@ module Ohm
   autoload :Scope,                "ohm/contrib/scope"
   autoload :SoftDelete,           "ohm/contrib/soft_delete"
 end
-
