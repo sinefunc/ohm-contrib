@@ -56,11 +56,12 @@ module Ohm
     end
 
     def errors
-      Errors.new(@model.errors)
+      Errors.new(@model.class.to_reference, @model.errors)
     end
 
     class Errors
-      def initialize(errors)
+      def initialize(scope, errors)
+        @scope  = scope
         @errors = Hash.new { |hash, key| hash[key] = [] }
 
         errors.each do |key, value|
@@ -74,7 +75,7 @@ module Ohm
 
       def full_messages
         @errors.map do |key, value|
-          "#{key}: #{value.join(", ")}"
+          I18n::t("ohm.%s.%s.%s" % [@scope, key, value])
         end
       end
     end
