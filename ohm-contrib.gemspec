@@ -1,6 +1,7 @@
+
 Gem::Specification.new do |s|
   s.name = 'ohm-contrib'
-  s.version = "0.0.40"
+  s.version = "0.0.41"
   s.summary = %{A collection of decoupled drop-in modules for Ohm.}
   s.description = %{Includes a couple of core functions such as callbacks, timestamping, typecasting and lots of generic validation routines.}
   s.author = "Cyril David"
@@ -23,3 +24,4 @@ Gem::Specification.new do |s|
   s.add_development_dependency "lunar"
   s.add_development_dependency "override"
 end
+

@@ -11,13 +11,28 @@ module Ohm
     end
 
     def slug(str = to_s)
-      str.gsub("'", "").gsub(/\p{^Alnum}/u, " ").strip.gsub(/\s+/, "-").downcase
+      ret = iconv(str)
+      ret.gsub!("'", "")
+      ret.gsub!(/\p{^Alnum}/u, " ")
+      ret.strip!
+      ret.gsub!(/\s+/, "-")
+      ret.downcase
     end
     module_function :slug
+
+    def iconv(str)
+      begin
+        require "iconv"
+
+        Iconv.iconv("ascii//translit//ignore", "utf-8", str)[0]
+      rescue LoadError
+        return str
+      end
+    end
+    module_function :iconv
 
     def to_param
       "#{ id }-#{ slug }"
     end
   end
 end
-

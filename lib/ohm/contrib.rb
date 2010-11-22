@@ -1,6 +1,6 @@
 module Ohm
   module Contrib
-    VERSION = "0.0.40"
+    VERSION = "0.0.41"
   end
 
   autoload :ActiveModelExtension, "ohm/contrib/active_model_extension"
