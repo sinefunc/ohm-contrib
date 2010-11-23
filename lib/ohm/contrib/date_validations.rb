@@ -13,7 +13,7 @@ module Ohm
 
   private
     def is_date_parseable?(year, month, day)
-      Date.new(Integer(year), Integer(month), Integer(day))
+      Date.new(year.to_i, month.to_i, day.to_i)
     rescue ArgumentError
       return false
     else
@@ -21,4 +21,3 @@ module Ohm
     end
   end
 end
-
