@@ -1,8 +1,19 @@
 require 'bigdecimal'
 require 'time'
 require 'date'
-require 'json'
 require 'forwardable'
+
+begin
+  require "yajl/json_gem"
+rescue LoadError
+  $stderr.puts(
+    "WARNING: Currently using the `json` gem. You might encounter encoding " +
+    "problems with `Ohm::Types::Hash` and `Ohm::Types::Array`. Best to use " +
+    "the `yajl-ruby` gem to avoid problems and also for performance reasons."
+  )
+
+  require "json"
+end
 
 module Ohm
   # Provides all the primitive types. The following are included:
@@ -343,4 +354,3 @@ module Ohm
     end
   end
 end
-

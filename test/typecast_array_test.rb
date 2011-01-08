@@ -139,22 +139,8 @@ test "raises when trying to assign a non-array" do
   end
 end
 
-test "inspecting" do
-  post = Post.create(:addresses => [{ "address1" => "#456",
-                                      "city" => "Singapore",
-                                      "country" => "SG" }])
-
-  expected = %q{[{"address1":"#456","city":"Singapore","country":"SG"}]}
-
-  assert expected == post.addresses.inspect
-
-  post.addresses = 'FooBar'
-  assert %{"\\\"FooBar\\\""} == post.addresses.inspect
-end
-
 test "type is array" do
   post = Post.create(:addresses => ["address1"])
 
   assert post.addresses.type == Array
 end
-

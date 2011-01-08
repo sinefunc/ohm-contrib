@@ -103,20 +103,18 @@ test "raises when trying to assign a non-hash" do
   end
 end
 
-test "inspecting" do
-  post = Post.create(:address => { "address1" => "#456",
-                                   "city" => "Singapore",
-                                   "country" => "SG" })
-
-  expected = %q{{"address1":"#456","city":"Singapore","country":"SG"}}
-  assert expected == post.address.inspect
-
-  post.address = 'FooBar'
-  assert %{"\\\"FooBar\\\""} == post.address.inspect
-end
-
 test "type is Hash" do
   post = Post.new(:address => { "address1" => "#456" })
   assert Hash == post.address.type
 end
 
+test "ascii 8bit encoding" do
+  txt = File.expand_path("fixtures/ascii8bit.txt", File.dirname(__FILE__))
+
+  data = File.read(txt, :encoding => "ascii-8bit")
+
+  post = Post.create(:address => { "address1" => data })
+  post = Post[post.id]
+
+  assert_equal post.address["address1"], data.force_encoding("UTF-8")
+end if defined?(Encoding)
