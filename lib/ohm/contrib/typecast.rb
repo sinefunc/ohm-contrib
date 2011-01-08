@@ -29,8 +29,7 @@ module Ohm
   # * Boolean
   module Types
     def self.defined?(type)
-      @constants ||= constants.map(&:to_s)
-      @constants.include?(type.to_s)
+      constants.include?(type.to_sym)
     end
 
     def self.[](type)
