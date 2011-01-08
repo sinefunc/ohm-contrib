@@ -14,8 +14,8 @@ module Ohm
   autoload :Typecast,             "ohm/contrib/typecast"
   autoload :Locking,              "ohm/contrib/locking"
   autoload :Callbacks,            "ohm/contrib/callbacks"
-  autoload :LunarMacros,          "ohm/contrib/lunar_macros"
   autoload :Slug,                 "ohm/contrib/slug"
   autoload :Scope,                "ohm/contrib/scope"
   autoload :SoftDelete,           "ohm/contrib/soft_delete"
+  autoload :FulltextSearching,    "ohm/contrib/fulltext_searching"
 end
