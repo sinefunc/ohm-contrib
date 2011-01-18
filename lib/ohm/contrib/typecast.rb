@@ -339,8 +339,13 @@ module Ohm
         end
 
         attributes << name unless attributes.include?(name)
+        types[name] = type
       end
       alias :typecast :attribute
+
+      def types
+        @types ||= {}
+      end
 
     private
       def const_missing(name)
