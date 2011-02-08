@@ -1,8 +1,10 @@
-require 'cutest'
-require 'redis'
-require 'ohm'
-require 'ohm/contrib'
-require 'override'
+$:.unshift(File.expand_path("../lib", File.dirname(__FILE__)))
+
+require "cutest"
+require "redis"
+require "ohm"
+require "ohm/contrib"
+require "override"
 
 Ohm.connect :host => "localhost", :port => 6379, :db => 1
 
