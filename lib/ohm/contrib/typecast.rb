@@ -29,7 +29,8 @@ module Ohm
   # * Boolean
   module Types
     def self.defined?(type)
-      constants.include?(type.to_sym)
+      @_constants ||= constants.map { |c| c.to_sym }
+      @_constants.include?(type.to_sym)
     end
 
     def self.[](type)
@@ -57,7 +58,7 @@ module Ohm
       end
 
       def self.delegate_to(klass, except = @@delegation_blacklist)
-        methods = klass.public_instance_methods.map(&:to_sym) - except
+        methods = klass.public_instance_methods.map { |e| e.to_sym } - except
         def_delegators :object, *methods
       end
 
