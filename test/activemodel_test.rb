@@ -23,3 +23,5 @@ class ActiveModelTest < Test::Unit::TestCase
     @model = Post.new
   end
 end
+
+

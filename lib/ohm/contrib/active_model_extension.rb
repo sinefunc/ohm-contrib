@@ -11,17 +11,21 @@ require "active_model"
 #   end
 module Ohm
   module ActiveModelExtension
+    def self.included(model)
+      model.extend ActiveModel::Naming
+    end
+
     def to_model
       ActiveModelInterface.new(self)
     end
   end
 
   class ActiveModelInterface
+    extend ActiveModel::Naming
+
     def initialize(model)
       @model = model
     end
-
-    extend ActiveModel::Naming
 
     def to_model
       self
