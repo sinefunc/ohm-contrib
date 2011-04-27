@@ -190,19 +190,19 @@ module Ohm
     # If the save also succeeds, all after :save callbacks are
     # executed.
     def save
-      existing = !new?
-
       return unless valid?
 
+      is_new = new?
+
       execute_callback(:before, :save)
-      execute_callback(:before, :update) if existing
-      execute_callback(:before, :create) if not existing
+      execute_callback(:before, :create) if is_new
+      execute_callback(:before, :update) if not is_new
 
       save!
 
       execute_callback(:after, :save)
-      execute_callback(:after, :update) if existing
-      execute_callback(:after, :create) if not existing
+      execute_callback(:after, :create) if is_new
+      execute_callback(:after, :update) if not is_new
 
       return self
     end
