@@ -55,7 +55,6 @@ module Ohm
   module Callbacks
     def self.included(base)
       base.extend Macros
-      base.extend Overrides
     end
 
     module Macros
@@ -127,18 +126,6 @@ module Ohm
       end
     end
 
-    # This module is for class method overrides. As of now
-    # it only overrides Ohm::Model::create to force calling save
-    # instead of calling create so that Model.create will call
-    # not only before/after :create but also before/after :save
-    module Overrides
-      def create(*args)
-        model = new(*args)
-        model.save
-        model
-      end
-    end
-
     # Overrides the validate method of Ohm::Model. This is a bit tricky,
     # since typically you override this. Make sure you do something like:
     #
@@ -159,28 +146,26 @@ module Ohm
       execute_callback(:after, :validate)
     end
 
-    # Save this record without validating the record.
-    # Used with DG typicall for 1-2 attribute updates
-    # which doesn't really need the full-on callback + validation
-    # steps.
-    def save!
-      return create! if new?
+    # The overriden create of Ohm::Model. It checks if the
+    # model is valid, and executes all before :create callbacks.
+    #
+    # If the create succeeds, all after :create callbacks are
+    # executed.
+    def create
+      return unless valid?
 
-      mutex do
-        write
-        update_indices
-      end
-    end
+      execute_callback(:before, :create)
+      execute_callback(:before, :save)
 
-    # Used in tangent with #save!, basically skipping the validation
-    # and callback steps.
-    def create!
       initialize_id
 
       mutex do
         create_model_membership
         write
         add_to_indices
+
+        execute_callback(:after, :create)
+        execute_callback(:after, :save)
       end
     end
 
@@ -189,29 +174,19 @@ module Ohm
     #
     # If the save also succeeds, all after :save callbacks are
     # executed.
-    def save(is_new = new?)
+    def save
+      return create if new?
       return unless valid?
 
       execute_callback(:before, :save)
-      execute_callback(:before, :create) if is_new
-      execute_callback(:before, :update) if not is_new
+      execute_callback(:before, :update)
 
-      save!
+      mutex do
+        write
+        update_indices
 
-      execute_callback(:after, :save)
-      execute_callback(:after, :create) if is_new
-      execute_callback(:after, :update) if not is_new
-
-      return self
-    end
-
-    # We re-use #save, and then tack on #create_model_membership
-    # to make sure that the Model:all set contains the `id`.
-    def create
-      if save(true)
-        create_model_membership
-
-        return self
+        execute_callback(:after, :save)
+        execute_callback(:after, :update)
       end
     end
 
