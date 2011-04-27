@@ -165,12 +165,19 @@ module Ohm
     # If the create succeeds, all after :create callbacks are
     # executed.
     def create
-      execute_callback(:before, :create)  if valid?
+      return unless valid?
+      initialize_id
 
-      super.tap do |is_created|
-        @__valid = nil
+      mutex do
+        execute_callback(:before, :save)
+        execute_callback(:before, :create)
 
-        execute_callback(:after, :create)  if is_created
+        create_model_membership
+        write
+        add_to_indices
+
+        execute_callback(:after, :save)
+        execute_callback(:after, :create)
       end
     end
 
@@ -180,20 +187,18 @@ module Ohm
     # If the save also succeeds, all after :save callbacks are
     # executed.
     def save
-      existing = !new?
+      return create if new?
+      return unless valid?
 
-      if valid?
+      mutex do
         execute_callback(:before, :save)
-        execute_callback(:before, :update) if existing
-      end
+        execute_callback(:before, :update)
 
-      super.tap do |is_saved|
-        @__valid = nil
+        write
+        update_indices
 
-        if is_saved
-          execute_callback(:after, :save)
-          execute_callback(:after, :update) if existing
-        end
+        execute_callback(:after, :save)
+        execute_callback(:after, :update)
       end
     end
 
@@ -203,12 +208,6 @@ module Ohm
       super.tap do |is_deleted|
         execute_callback(:after, :delete)  if is_deleted
       end
-    end
-
-    def valid?
-      return @__valid unless @__valid.nil?
-
-      @__valid = super
     end
 
   protected
