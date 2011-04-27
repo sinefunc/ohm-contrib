@@ -189,10 +189,8 @@ module Ohm
     #
     # If the save also succeeds, all after :save callbacks are
     # executed.
-    def save
+    def save(is_new = new?)
       return unless valid?
-
-      is_new = new?
 
       execute_callback(:before, :save)
       execute_callback(:before, :create) if is_new
@@ -210,7 +208,7 @@ module Ohm
     # We re-use #save, and then tack on #create_model_membership
     # to make sure that the Model:all set contains the `id`.
     def create
-      if save
+      if save(true)
         create_model_membership
 
         return self
