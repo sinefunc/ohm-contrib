@@ -159,28 +159,6 @@ module Ohm
       execute_callback(:after, :validate)
     end
 
-    # The overriden create of Ohm::Model. It checks if the
-    # model is valid, and executes all before :create callbacks.
-    #
-    # If the create succeeds, all after :create callbacks are
-    # executed.
-    def create
-      return unless valid?
-      initialize_id
-
-      mutex do
-        execute_callback(:before, :save)
-        execute_callback(:before, :create)
-
-        create_model_membership
-        write
-        add_to_indices
-
-        execute_callback(:after, :save)
-        execute_callback(:after, :create)
-      end
-    end
-
     # Save this record without validating the record.
     # Used with DG typicall for 1-2 attribute updates
     # which doesn't really need the full-on callback + validation
@@ -227,6 +205,16 @@ module Ohm
       execute_callback(:after, :create) if not existing
 
       return self
+    end
+
+    # We re-use #save, and then tack on #create_model_membership
+    # to make sure that the Model:all set contains the `id`.
+    def create
+      if save
+        create_model_membership
+
+        return self
+      end
     end
 
     def delete
