@@ -206,7 +206,7 @@ module Ohm
     end
 
     def valid?
-      return @__valid if defined?(@__valid)
+      return @__valid unless @__valid.nil?
 
       @__valid = super
     end
