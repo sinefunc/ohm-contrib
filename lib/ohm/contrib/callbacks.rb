@@ -181,25 +181,52 @@ module Ohm
       end
     end
 
+    # Save this record without validating the record.
+    # Used with DG typicall for 1-2 attribute updates
+    # which doesn't really need the full-on callback + validation
+    # steps.
+    def save!
+      return create! if new?
+
+      mutex do
+        write
+        update_indices
+      end
+    end
+
+    # Used in tangent with #save!, basically skipping the validation
+    # and callback steps.
+    def create!
+      initialize_id
+
+      mutex do
+        create_model_membership
+        write
+        add_to_indices
+      end
+    end
+
     # The overridden save of Ohm::Model. It checks if the model
     # is valid, and executes all before :save callbacks.
     #
     # If the save also succeeds, all after :save callbacks are
     # executed.
     def save
-      return create if new?
+      existing = !new?
+
       return unless valid?
 
-      mutex do
-        execute_callback(:before, :save)
-        execute_callback(:before, :update)
+      execute_callback(:before, :save)
+      execute_callback(:before, :update) if existing
+      execute_callback(:before, :create) if not existing
 
-        write
-        update_indices
+      save!
 
-        execute_callback(:after, :save)
-        execute_callback(:after, :update)
-      end
+      execute_callback(:after, :save)
+      execute_callback(:after, :update) if existing
+      execute_callback(:after, :create) if not existing
+
+      return self
     end
 
     def delete
