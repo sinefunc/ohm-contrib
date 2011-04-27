@@ -168,6 +168,8 @@ module Ohm
       execute_callback(:before, :create)  if valid?
 
       super.tap do |is_created|
+        @__valid = nil
+
         execute_callback(:after, :create)  if is_created
       end
     end
@@ -186,6 +188,8 @@ module Ohm
       end
 
       super.tap do |is_saved|
+        @__valid = nil
+
         if is_saved
           execute_callback(:after, :save)
           execute_callback(:after, :update) if existing
@@ -199,6 +203,12 @@ module Ohm
       super.tap do |is_deleted|
         execute_callback(:after, :delete)  if is_deleted
       end
+    end
+
+    def valid?
+      return @__valid if defined?(@__valid)
+
+      @__valid = super
     end
 
   protected
@@ -223,4 +233,3 @@ module Ohm
     end
   end
 end
-
