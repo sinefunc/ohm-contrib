@@ -113,7 +113,7 @@ test "ascii 8bit encoding" do
 
   data = File.read(txt, :encoding => "ascii-8bit")
 
-  post = Post.create(:address => { "address1" => data })
+  post = Post.create(:address => { "address1" => data.force_encoding("UTF-8") })
   post = Post[post.id]
 
   assert_equal post.address["address1"], data.force_encoding("UTF-8")
