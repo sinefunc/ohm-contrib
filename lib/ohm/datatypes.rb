@@ -33,11 +33,11 @@ module Ohm
       end
 
       def Time(att)
-        attribute(att, lambda { |t| t.respond_to?(:to_str) ? Time.parse(t) : t })
+        attribute(att, lambda { |t| t && (t.kind_of?(Time) ? t : Time.parse(t)) })
       end
 
       def Date(att)
-        attribute(att, lambda { |d| d.respond_to?(:to_str) ? Date.parse(d) : d })
+        attribute(att, lambda { |d| d && (d.kind_of?(Date) ? d : Date.parse(d)) })
       end
 
       def UnixTime(att)
@@ -45,16 +45,11 @@ module Ohm
       end
 
       def Hash(att)
-        attribute(att, serialized_json { |val| SerializedHash[val] })
+        attribute(att, lambda { |h| h && (h.kind_of?(Hash) ? SerializedHash[h] : JSON(h)) })
       end
 
       def Array(att)
-        attribute(att, serialized_json { |val| SerializedArray.new(val) })
-      end
-
-    private
-      def serialized_json(&blk)
-        lambda { |v| v && (v.respond_to?(:to_str) ? JSON(v) : blk.call(v)) }
+        attribute(att, lambda { |a| a && (a.kind_of?(Array) ? SerializedArray.new(a) : JSON(a)) })
       end
     end
 
