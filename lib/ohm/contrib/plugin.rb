@@ -19,14 +19,14 @@ module Ohm
         raise Unknown.new(plugin) if name.nil?
 
         require path
-        Ohm.const_get(name)
+        Ohm.const_get(name, false)
       else
         raise Unknown.new(plugin)
       end
     end
 
-    def self.register(name, path)
-      registry[name] = path
+    def self.register(name, name_and_path)
+      registry[name] = name_and_path
     end
 
     def self.registry
