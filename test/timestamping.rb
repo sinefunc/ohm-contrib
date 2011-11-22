@@ -3,7 +3,7 @@
 require File.expand_path("./helper", File.dirname(__FILE__))
 
 class Person < Ohm::Model
-  plugin :timestamping
+  include Ohm::Timestamping
 end
 
 test "a new? record" do

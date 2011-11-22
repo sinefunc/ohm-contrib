@@ -49,6 +49,10 @@ module Ohm
   #   end
 
   module Callbacks
+    def self.included(model)
+      model.extend ClassMethods
+    end
+
     module ClassMethods
       # Use to add a before callback on `method`. Only symbols
       # are allowed, no string eval, no block option also.

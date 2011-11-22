@@ -3,7 +3,7 @@
 require_relative "helper"
 
 class Article < Ohm::Model
-  plugin :slug
+  include Ohm::Slug
   attribute :title
 
   def to_s

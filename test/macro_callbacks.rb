@@ -3,7 +3,7 @@
 require File.expand_path("./helper", File.dirname(__FILE__))
 
 class Post < Ohm::Model
-  plugin :callbacks
+  include Ohm::Callbacks
 
   attribute :body
 

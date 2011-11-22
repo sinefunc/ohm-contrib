@@ -36,8 +36,10 @@ module Ohm
   module SoftDelete
     DELETED_FLAG = "1"
 
-    def self.setup(model)
+    def self.included(model)
       model.attribute :deleted
+
+      model.extend ClassMethods
     end
 
     def delete

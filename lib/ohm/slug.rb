@@ -1,5 +1,9 @@
 module Ohm
   module Slug
+    def self.included(model)
+      model.extend ClassMethods
+    end
+
     module ClassMethods
       def [](id)
         super(id.to_i)

@@ -3,7 +3,7 @@
 require File.expand_path("./helper", File.dirname(__FILE__))
 
 class Person < Ohm::Model
-  plugin :softdelete
+  include Ohm::SoftDelete
 
   attribute :name
   index :name

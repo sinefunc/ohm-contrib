@@ -3,7 +3,7 @@
 require_relative "helper"
 
 class Comment < Ohm::Model
-  plugin :timestamping
+  include Ohm::Timestamping
 end
 
 test "timestamps are added during creation" do
@@ -15,16 +15,15 @@ test "timestamps are added during creation" do
 end
 
 class Server < Ohm::Model
-  plugin :locking
+  include Ohm::Locking
 end
 
 test "mutex method is added at instance and class level" do
-  assert Server.respond_to?(:mutex)
   assert Server.new.respond_to?(:mutex)
 end
 
 class Article < Ohm::Model
-  plugin :callbacks
+  include Ohm::Callbacks
 
   attribute :title
 
@@ -51,7 +50,7 @@ end
 class Post < Ohm::Model
   attribute :title
 
-  plugin :slug
+  include Ohm::Slug
 
   def to_s
     title
@@ -67,7 +66,7 @@ test "slugging" do
 end
 
 class Order < Ohm::Model
-  plugin :scope
+  include Ohm::Scope
 
   attribute :state
   index :state
@@ -97,7 +96,7 @@ test "scope" do
 end
 
 class User < Ohm::Model
-  plugin :softdelete
+  include Ohm::SoftDelete
 
   attribute :email
   index :email
@@ -123,7 +122,7 @@ test "soft delete" do
 end
 
 class Product < Ohm::Model
-  plugin :datatypes
+  include Ohm::DataTypes
 
   String  :name
   Integer :stock

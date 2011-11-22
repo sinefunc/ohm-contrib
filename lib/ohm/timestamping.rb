@@ -1,3 +1,6 @@
+require_relative "callbacks"
+require_relative "datatypes"
+
 module Ohm
   # Provides created_at / updated_at timestamps.
   #
@@ -16,9 +19,9 @@ module Ohm
   #   post.updated_at.to_s == Time.now.utc.to_s
   #   # => true
   module Timestamping
-    def self.setup(model)
-      model.plugin :callbacks
-      model.plugin :datatypes
+    def self.included(model)
+      model.send :include, Callbacks
+      model.send :include, DataTypes
 
       model.UnixTime :created_at
       model.UnixTime :updated_at

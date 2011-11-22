@@ -1,9 +1,11 @@
 module Ohm
   module Scope
-    def self.setup(model)
+    def self.included(model)
       unless model.const_defined?(:DefinedScopes, false)
         model.const_set(:DefinedScopes, Module.new)
       end
+
+      model.extend ClassMethods
     end
 
     module ClassMethods

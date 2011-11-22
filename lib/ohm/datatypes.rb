@@ -5,9 +5,13 @@ require "time"
 
 module Ohm
   module DataTypes
+    def self.included(model)
+      model.extend ClassMethods
+    end
+
     module ClassMethods
       def String(att)
-        attribute(att) 
+        attribute(att)
       end
 
       def Integer(att)
@@ -21,7 +25,7 @@ module Ohm
       def Float(att)
         attribute(att, lambda { |x| x.to_f })
       end
-  
+
       def Boolean(att)
         attribute(att, lambda { |x| !!x })
 
@@ -35,7 +39,7 @@ module Ohm
       def Date(att)
         attribute(att, lambda { |d| d.respond_to?(:to_str) ? Date.parse(d) : d })
       end
-  
+
       def UnixTime(att)
         attribute(att, lambda { |t| t && UnixTime.at(t.to_i) })
       end
@@ -59,7 +63,7 @@ module Ohm
         to_i.to_s
       end
     end
-  
+
     class SerializedHash < Hash
       def to_s
         JSON.dump(self)
