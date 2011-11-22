@@ -21,10 +21,9 @@ module Ohm
   module Timestamping
     def self.included(model)
       model.send :include, Callbacks
-      model.send :include, DataTypes
 
-      model.UnixTime :created_at
-      model.UnixTime :updated_at
+      model.attribute :created_at, DataTypes::Type::Timestamp
+      model.attribute :updated_at, DataTypes::Type::Timestamp
 
       model.before :create, :set_created_at
       model.before :save,   :set_updated_at

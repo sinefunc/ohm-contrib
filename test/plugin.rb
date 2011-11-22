@@ -124,15 +124,15 @@ end
 class Product < Ohm::Model
   include Ohm::DataTypes
 
-  String  :name
-  Integer :stock
-  Decimal :price
-  Float   :rating
-  Time    :bought_at
-  Date    :date_released
-  Hash    :sizes
-  Array   :stores
-  Boolean :published
+  attribute :name
+  attribute :stock, Type::Integer
+  attribute :price, Type::Decimal
+  attribute :rating, Type::Float
+  attribute :bought_at, Type::Time
+  attribute :date_released, Type::Date
+  attribute :sizes, Type::Hash
+  attribute :stores, Type::Array
+  attribute :published, Type::Boolean
 end
 
 test "typecast" do
@@ -209,5 +209,4 @@ test "typecast" do
 
   p = Product[p.id]
   assert_equal true, p.published
-  assert_equal true, p.published?
 end
