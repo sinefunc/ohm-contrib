@@ -8,6 +8,6 @@ require_relative "timestamping"
 
 module Ohm
   module Contrib
-    VERSION = "0.1.2"
+    VERSION = "1.0.rc0"
   end
 end
