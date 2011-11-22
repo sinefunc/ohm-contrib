@@ -3,7 +3,7 @@
 require File.expand_path("./helper", File.dirname(__FILE__))
 
 class Person < Ohm::Model
-  include Ohm::SoftDelete
+  plugin :SoftDelete
 
   attribute :name
   index :name
@@ -32,15 +32,15 @@ test "all excludes deleted records" do
   assert Person.all.empty?
 end
 
-test "find excludes deleted records" do
+test "find does not exclude deleted records" do
   person = Person.create(:name => "matz")
 
   assert Person.find(:name => "matz").first == person
 
   person.delete
 
-  assert Person.find(:name => "matz").empty?
-  assert Person.all.find(:name => "matz").empty?
+  assert Person.find(:name => "matz").include?(person)
+  assert Person.all.find(:name => "matz").include?(person)
 end
 
 test "find with many criteria excludes deleted records" do
@@ -69,4 +69,14 @@ test "Model[n] can be used to retrieve deleted records" do
 
   assert Person[person.id].deleted?
   assert Person[person.id].name == "matz"
+end
+
+test "restoring" do
+  person = Person.create(:name => "matz")
+  person.delete
+
+  assert Person.all.empty?
+
+  person.restore
+  assert Person.all.include?(person)
 end

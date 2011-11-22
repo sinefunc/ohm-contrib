@@ -3,12 +3,9 @@
 require File.expand_path("./helper", File.dirname(__FILE__))
 
 class Post < Ohm::Model
-  include Ohm::Callbacks
+  plugin :Callbacks
 
   attribute :body
-
-  before :validate, :do_before_validate
-  after  :validate, :do_after_validate
 
   before :create,   :do_before_create
   after  :create,   :do_after_create
@@ -23,8 +20,6 @@ class Post < Ohm::Model
   after  :update,   :do_after_update
 
   def validate
-    super
-
     assert_present :body
   end
 
@@ -37,8 +32,6 @@ class Post < Ohm::Model
   end
 
 protected
-  def do_before_validate() incr(:do_before_validate) end
-  def do_after_validate()  incr(:do_after_validate)  end
   def do_before_create()   incr(:do_before_create)   end
   def do_after_create()    incr(:do_after_create)    end
   def do_before_save()     incr(:do_before_save)     end
@@ -58,5 +51,4 @@ protected
   end
 end
 
-load File.expand_path('./callbacks_lint.rb', File.dirname(__FILE__))
-
+load File.expand_path('lint/callbacks.rb', File.dirname(__FILE__))

@@ -3,7 +3,7 @@
 require File.expand_path("./helper", File.dirname(__FILE__))
 
 class Person < Ohm::Model
-  include Ohm::Timestamping
+  plugin :Timestamping
 end
 
 test "a new? record" do
@@ -14,9 +14,9 @@ end
 test "on create" do
   person = Person.create
   person = Person[person.id]
-
-  assert NOW.to_s == person.created_at
-  assert NOW.to_s == person.updated_at
+  
+  assert NOW == person.created_at
+  assert NOW == person.updated_at
 end
 
 test "on update" do
@@ -26,7 +26,6 @@ test "on update" do
   person.save
   person = Person[person.id]
 
-  assert NOW.to_s == person.created_at
-  assert Time.utc(2010, 5, 13).to_s == person.updated_at
+  assert NOW == person.created_at
+  assert Time.utc(2010, 5, 13) == person.updated_at
 end
-

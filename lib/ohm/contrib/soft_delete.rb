@@ -4,7 +4,7 @@ module Ohm
   # @example
   #
   #   class Post < Ohm::Model
-  #     include Ohm::SoftDelete
+  #     plugin :SoftDelete
   #
   #     attribute :title
   #     index :title
@@ -23,7 +23,7 @@ module Ohm
   #   Post.all.empty?
   #   # => true
   #
-  #   Post.find(:title => 'Title').empty?
+  #   Post.find(:title => 'Title').include?(post)
   #   # => true
   #
   #   Post.exists?(post.id)
@@ -34,35 +34,37 @@ module Ohm
   #   post.deleted?
   #   # => true
   module SoftDelete
-    IS_DELETED = "1"
+    DELETED_FLAG = "1"
 
-    def self.included(base)
-      base.attribute :deleted
-      base.index :deleted
-      base.extend ClassMethods
+    def self.setup(model)
+      model.attribute :deleted
     end
 
     def delete
-      update(:deleted => IS_DELETED)
+      self.class.all.delete(self)
+      self.class.deleted.add(self)
+
+      update(deleted: DELETED_FLAG)
+    end
+
+    def restore
+      self.class.all.add(self)
+      self.class.deleted.delete(self)
+
+      update(deleted: nil)
     end
 
     def deleted?
-      deleted == IS_DELETED
-    end
-
-  private
-    def create_model_membership
-      self.class.key[:all].sadd(self.id)
-    end
-
-    def delete_model_membership
-      key.del
-      self.class.key[:all].srem(self.id)
+      deleted == DELETED_FLAG
     end
 
     module ClassMethods
-      def all
-        super.except(:deleted => IS_DELETED)
+      def deleted
+        Model::Set.new(key[:deleted], Model::Wrapper.wrap(self))
+      end
+
+      def exists?(id)
+        super || key[:deleted].sismember(id)
       end
     end
   end

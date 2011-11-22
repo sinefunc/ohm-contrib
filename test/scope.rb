@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-require File.expand_path("./helper", File.dirname(__FILE__))
+require_relative "helper"
 
 class Post < Ohm::Model
   set :comments, Comment
@@ -17,7 +17,7 @@ module Finders
 end
 
 class Comment < Ohm::Model
-  include Ohm::Scope
+  plugin :Scope 
 
   attribute :status
   index :status
@@ -73,4 +73,3 @@ test "isolated from List" do
     video.comments.rejected
   end
 end
-

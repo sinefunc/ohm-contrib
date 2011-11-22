@@ -5,6 +5,14 @@ module Ohm
   # In addition, since future ohm versions might drop mutexes, I thought it
   # might be a good idea to preseve this feature as a drop-in module.
   module Locking
+    # In addition to adding Model#mutex, we also allow mutexes
+    # at the class level.
+    #
+    # This is useful when you are locking a global resource.
+    def self.setup(model)
+      model.extend self
+    end
+
     # Lock the object before executing the block, and release it once the block
     # is done.
     #
@@ -53,4 +61,3 @@ module Ohm
     end
   end
 end
-

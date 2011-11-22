@@ -1,14 +1,12 @@
 module Ohm
   module Scope
-    def self.included(base)
-      unless defined?(base::DefinedScopes)
-        base.const_set(:DefinedScopes, Module.new)
+    def self.setup(model)
+      unless model.const_defined?(:DefinedScopes, false)
+        model.const_set(:DefinedScopes, Module.new)
       end
-
-      base.extend Macros
     end
 
-    module Macros
+    module ClassMethods
       def scope(scope = nil, &block)
         self::DefinedScopes.module_eval(&block) if block_given?
         self::DefinedScopes.send(:include, scope) if scope
@@ -25,5 +23,6 @@ module Ohm
 
     Ohm::Model::Set.send :include, OverloadedSet
   end
-end
 
+  Model::Set.send :include, Scope::OverloadedSet
+end

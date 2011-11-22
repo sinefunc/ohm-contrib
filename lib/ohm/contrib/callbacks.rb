@@ -4,8 +4,6 @@ module Ohm
   # You can implement callbacks by overriding any of the following
   # methods:
   #
-  #    - before_validate
-  #    - after_validate
   #    - before_create
   #    - after_create
   #    - before_save
@@ -21,8 +19,6 @@ module Ohm
   #
   #   class Post < Ohm::Model
   #     include Ohm::Callbacks
-  #
-  #     before :validate, :clean_decimals
   #
   #     before :create, :timestamp!
   #     before :save,   :recalc_votes
@@ -53,11 +49,7 @@ module Ohm
   #   end
 
   module Callbacks
-    def self.included(base)
-      base.extend Macros
-    end
-
-    module Macros
+    module ClassMethods
       # Use to add a before callback on `method`. Only symbols
       # are allowed, no string eval, no block option also.
       #
@@ -79,12 +71,12 @@ module Ohm
       #     end
       #   end
       #
-      # @param [Symbol] method the method type, `:validate`, `:create`, or `:save`
+      # @param [Symbol] method the method type, e.g. `:create`, or `:save`
       # @param [Symbol] callback the name of the method to execute
       # @return [Array] the callback in an array if added e.g. [:timestamp]
       # @return [nil] if the callback already exists
       def before(method, callback)
-        unless callbacks[:before][method].include? callback
+        unless callbacks[:before][method].include?(callback)
           callbacks[:before][method] << callback
         end
       end
@@ -115,7 +107,7 @@ module Ohm
       # @return [Array] the callback in an array if added e.g. [:timestamp]
       # @return [nil] if the callback already exists
       def after(method, callback)
-        unless callbacks[:after][method].include? callback
+        unless callbacks[:after][method].include?(callback)
           callbacks[:after][method] << callback
         end
       end
@@ -126,76 +118,35 @@ module Ohm
       end
     end
 
-    # Overrides the validate method of Ohm::Model. This is a bit tricky,
-    # since typically you override this. Make sure you do something like:
-    #
-    #   def validate
-    #     super
-    #
-    #     # do your assertions
-    #   end
-    #
-    # This ensures that you call this method when you defined your own validate
-    # method.
-    #
-    # In all honesty, I don't see the value of putting this here, and I'm still
-    # weighing if this is _really_ needed.
-    def validate
-      execute_callback(:before, :validate)
-      super
-      execute_callback(:after, :validate)
-    end
-
     # The overriden create of Ohm::Model. It checks if the
     # model is valid, and executes all before :create callbacks.
     #
     # If the create succeeds, all after :create callbacks are
     # executed.
-    def create
-      return unless valid?
+    def write
+      creating = @creating
 
-      execute_callback(:before, :create)
+      execute_callback(:before, :create) if creating
+      execute_callback(:before, :update) unless creating
       execute_callback(:before, :save)
 
-      initialize_id
+      super
 
-      mutex do
-        create_model_membership
-        write
-        add_to_indices
-
-        execute_callback(:after, :create)
-        execute_callback(:after, :save)
-      end
+      execute_callback(:after, :create) if creating
+      execute_callback(:after, :update) unless creating
+      execute_callback(:after, :save)
     end
 
-    # The overridden save of Ohm::Model. It checks if the model
-    # is valid, and executes all before :save callbacks.
-    #
-    # If the save also succeeds, all after :save callbacks are
-    # executed.
-    def save
-      return create if new?
-      return unless valid?
-
-      execute_callback(:before, :save)
-      execute_callback(:before, :update)
-
-      mutex do
-        write
-        update_indices
-
-        execute_callback(:after, :save)
-        execute_callback(:after, :update)
-      end
+    def create
+      @creating = true
+      super
+      @creating = false
     end
 
     def delete
       execute_callback(:before, :delete)
-
-      super.tap do |is_deleted|
-        execute_callback(:after, :delete)  if is_deleted
-      end
+      super
+      execute_callback(:after, :delete)
     end
 
   protected

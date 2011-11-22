@@ -1,9 +1,9 @@
 # encoding: UTF-8
 
-require File.expand_path("./helper", File.dirname(__FILE__))
+require_relative "helper"
 
 class Post < Ohm::Model
-  include Ohm::Callbacks
+  plugin :Callbacks
 
   attribute :body
 
@@ -22,8 +22,6 @@ class Post < Ohm::Model
   end
 
 protected
-  def before_validate() incr(:do_before_validate) end
-  def after_validate()  incr(:do_after_validate)  end
   def before_create()   incr(:do_before_create)   end
   def after_create()    incr(:do_after_create)    end
   def before_save()     incr(:do_before_save)     end
@@ -32,7 +30,6 @@ protected
   def after_update()    incr(:do_after_update)    end
   def before_delete()   incr(:do_before_delete)   end
   def after_delete()    incr(:do_after_delete)    end
-
 
   def incr(action)
     val = instance_variable_get("@#{ action }")
@@ -43,5 +40,4 @@ protected
   end
 end
 
-load File.expand_path('./callbacks_lint.rb', File.dirname(__FILE__))
-
+load File.expand_path('lint/callbacks.rb', File.dirname(__FILE__))

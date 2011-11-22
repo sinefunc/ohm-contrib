@@ -2,9 +2,6 @@ test "save on invalid" do
   post = Post.new
   post.save
 
-  assert post.did?(:do_before_validate)
-  assert post.did?(:do_after_validate)
-
   assert ! post.did?(:do_before_create)
   assert ! post.did?(:do_after_create)
   assert ! post.did?(:do_before_save)
@@ -17,8 +14,6 @@ test "saving a valid model" do
   post = Post.new(:body => "The Body")
   post.save
 
-  assert post.did?(:do_before_validate)
-  assert post.did?(:do_after_validate)
   assert post.did?(:do_before_create)
   assert post.did?(:do_after_create)
   assert post.did?(:do_before_save)
@@ -40,8 +35,6 @@ end
 test "Post::create on a valid model invokes all callbacks (except update)" do
   post = Post.create(:body => "The Body")
 
-  assert post.did?(:do_before_validate)
-  assert post.did?(:do_after_validate)
   assert post.did?(:do_before_create)
   assert post.did?(:do_after_create)
   assert post.did?(:do_before_save)
@@ -67,8 +60,6 @@ test "on successful save of existing record" do
   assert ! post.did?(:do_before_create)
   assert ! post.did?(:do_after_create)
 
-  assert post.did?(:do_before_validate)
-  assert post.did?(:do_after_validate)
   assert post.did?(:do_before_save)
   assert post.did?(:do_after_save)
   assert post.did?(:do_before_update)
@@ -88,8 +79,6 @@ test "on successful save of existing record (using #update)" do
   assert ! post.did?(:do_before_create)
   assert ! post.did?(:do_after_create)
 
-  assert post.did?(:do_before_validate)
-  assert post.did?(:do_after_validate)
   assert post.did?(:do_before_save)
   assert post.did?(:do_after_save)
   assert post.did?(:do_before_update)
@@ -107,9 +96,6 @@ test "on failed save of existing record" do
 
   post.body = nil
   post.save
-
-  assert post.did?(:do_before_validate)
-  assert post.did?(:do_after_validate)
 
   assert ! post.did?(:do_before_create)
   assert ! post.did?(:do_after_create)
@@ -129,8 +115,6 @@ test "on delete" do
   assert 1 == post.count(:do_before_delete)
   assert 1 == post.count(:do_after_delete)
 
-  assert ! post.did?(:do_before_validate)
-  assert ! post.did?(:do_after_validate)
   assert ! post.did?(:do_before_create)
   assert ! post.did?(:do_after_create)
   assert ! post.did?(:do_before_save)
