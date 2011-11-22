@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = "ohm-contrib"
-  s.version = "1.0.rc0"
+  s.version = "1.0.rc1"
   s.summary = %{A collection of decoupled drop-in modules for Ohm.}
   s.description = %{Includes a couple of core functions such as callbacks, timestamping, typecasting and lots of generic validation routines.}
   s.author = "Cyril David"

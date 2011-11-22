@@ -143,8 +143,7 @@ module Ohm
 
     def create
       @creating = true
-      super
-      @creating = false
+      super.tap { @creating = false }
     end
 
     def delete
