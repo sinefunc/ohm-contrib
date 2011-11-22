@@ -3,7 +3,7 @@
 require_relative "helper"
 
 class Comment < Ohm::Model
-  plugin :Timestamping
+  plugin :timestamping
 end
 
 test "timestamps are added during creation" do
@@ -15,7 +15,7 @@ test "timestamps are added during creation" do
 end
 
 class Server < Ohm::Model
-  plugin :Locking
+  plugin :locking
 end
 
 test "mutex method is added at instance and class level" do
@@ -24,8 +24,8 @@ test "mutex method is added at instance and class level" do
 end
 
 class Article < Ohm::Model
-  plugin :Callbacks
-  
+  plugin :callbacks
+
   attribute :title
 
   list  :comments, Comment
@@ -50,8 +50,8 @@ end
 
 class Post < Ohm::Model
   attribute :title
-  
-  plugin :Slug
+
+  plugin :slug
 
   def to_s
     title
@@ -67,11 +67,11 @@ test "slugging" do
 end
 
 class Order < Ohm::Model
-  plugin :Scope
-  
+  plugin :scope
+
   attribute :state
   index :state
-  
+
   attribute :deleted
   index :deleted
 
@@ -97,7 +97,7 @@ test "scope" do
 end
 
 class User < Ohm::Model
-  plugin :SoftDelete
+  plugin :softdelete
 
   attribute :email
   index :email
@@ -110,7 +110,7 @@ test "soft delete" do
   assert User.all.empty?
   assert User.deleted.include?(user)
   assert User.find(email: "a@a.com").include?(user)
-  
+
   assert user.deleted?
   assert User[user.id] == user
 
@@ -123,8 +123,8 @@ test "soft delete" do
 end
 
 class Product < Ohm::Model
-  plugin :DataTypes
-  
+  plugin :datatypes
+
   String  :name
   Integer :stock
   Decimal :price
@@ -144,7 +144,7 @@ test "typecast" do
 
   p = Product[p.id]
   assert_equal 1, p.stock
-  
+
   time = Time.now.utc
   p = Product.new(bought_at: time)
   assert p.bought_at.kind_of?(Time)
@@ -167,7 +167,7 @@ test "typecast" do
   assert_equal Date.today, p.date_released
 
   sizes = { "XS" => 1, "S" => 2, "L" => 3 }
-  
+
   p = Product.new(sizes: sizes)
   assert p.sizes.kind_of?(Hash)
 
@@ -175,7 +175,7 @@ test "typecast" do
 
   p = Product[p.id]
   assert_equal sizes, p.sizes
-  
+
   stores = ["walmart", "marshalls", "jcpenny"]
   p = Product.new(stores: stores)
   assert p.stores.kind_of?(Array)
@@ -186,7 +186,7 @@ test "typecast" do
   assert_equal stores, p.stores
 
   p = Product.new(price: 0.001)
-  
+
   x = 0
   1000.times { x += p.price }
   assert_equal 1, x
@@ -198,7 +198,7 @@ test "typecast" do
 
   p = Product.new(rating: 4.5)
   assert p.rating.kind_of?(Float)
-  
+
   p.save
   p = Product[p.id]
   assert_equal 4.5, p.rating

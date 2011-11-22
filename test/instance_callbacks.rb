@@ -3,7 +3,7 @@
 require_relative "helper"
 
 class Post < Ohm::Model
-  plugin :Callbacks
+  plugin :callbacks
 
   attribute :body
 

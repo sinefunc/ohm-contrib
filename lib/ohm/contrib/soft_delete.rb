@@ -4,7 +4,7 @@ module Ohm
   # @example
   #
   #   class Post < Ohm::Model
-  #     plugin :SoftDelete
+  #     plugin :softdelete
   #
   #     attribute :title
   #     index :title

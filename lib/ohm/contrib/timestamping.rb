@@ -17,8 +17,8 @@ module Ohm
   #   # => true
   module Timestamping
     def self.setup(model)
-      model.plugin :Callbacks
-      model.plugin :DataTypes
+      model.plugin :callbacks
+      model.plugin :datatypes
 
       model.UnixTime :created_at
       model.UnixTime :updated_at

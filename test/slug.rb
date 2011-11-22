@@ -3,7 +3,7 @@
 require_relative "helper"
 
 class Article < Ohm::Model
-  plugin :Slug
+  plugin :slug
   attribute :title
 
   def to_s
@@ -22,4 +22,3 @@ test "finding" do
 
   assert 1 == Article["1-a-very-unique-and-interesting-string"].id
 end
-

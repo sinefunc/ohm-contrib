@@ -17,7 +17,7 @@ module Finders
 end
 
 class Comment < Ohm::Model
-  plugin :Scope 
+  plugin :scope
 
   attribute :status
   index :status
