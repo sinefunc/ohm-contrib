@@ -155,6 +155,7 @@ test "typecast" do
   assert_equal time, p.bought_at
 
   p = Product.new(date_released: Date.today)
+
   assert p.date_released.kind_of?(Date)
 
   p = Product.new(date_released: "2011-11-22")
@@ -163,7 +164,7 @@ test "typecast" do
   p.save
 
   p = Product[p.id]
-  assert_equal Date.today, p.date_released
+  assert_equal Date.new(2011, 11, 22), p.date_released
 
   sizes = { "XS" => 1, "S" => 2, "L" => 3 }
 

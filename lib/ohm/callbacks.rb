@@ -1,21 +1,11 @@
 module Ohm
-  # Minimalistic callback support for Ohm::Model.
+  # This plugin originally handled both instance level and
+  # class level callbacks.
   #
-  # You can implement callbacks by overriding any of the following
-  # methods:
+  # Starting with Ohm 1.0, instance level callbacks are part of
+  # the core, this plugin only adds macro level callbacks.
   #
-  #    - before_create
-  #    - after_create
-  #    - before_save
-  #    - after_save
-  #    - before_update
-  #    - after_update
-  #    - before_delete
-  #    - after_delete
-  #
-  # If you prefer to do a class level declaration that is also possible.
-  #
-  # @example
+  # The following is an example usage of this plugin:
   #
   #   class Post < Ohm::Model
   #     include Ohm::Callbacks
@@ -47,7 +37,6 @@ module Ohm
   #       # do something with the ids
   #     end
   #   end
-
   module Callbacks
     def self.included(model)
       model.extend ClassMethods
@@ -122,55 +111,52 @@ module Ohm
       end
     end
 
-    # The overriden create of Ohm::Model. It checks if the
-    # model is valid, and executes all before :create callbacks.
-    #
-    # If the create succeeds, all after :create callbacks are
-    # executed.
-    def write
-      creating = @creating
-
-      execute_callback(:before, :create) if creating
-      execute_callback(:before, :update) unless creating
-      execute_callback(:before, :save)
-
+  protected
+    def before_save
       super
+      execute_callback(:before, :save)
+    end
 
-      execute_callback(:after, :create) if creating
-      execute_callback(:after, :update) unless creating
+    def after_save
+      super
       execute_callback(:after, :save)
     end
 
-    def create
-      @creating = true
-      super.tap { @creating = false }
+    def before_create
+      super
+      execute_callback(:before, :create)
     end
 
-    def delete
+    def after_create
+      super
+      execute_callback(:after, :create)
+    end
+
+    def before_update
+      super
+      execute_callback(:before, :update)
+    end
+
+    def after_update
+      super
+      execute_callback(:after, :update)
+    end
+
+    def before_delete
+      super
       execute_callback(:before, :delete)
+    end
+
+    def after_delete
       super
       execute_callback(:after, :delete)
     end
-
-  protected
-    def before_validate() end
-    def after_validate()  end
-    def before_save()     end
-    def after_save()      end
-    def before_create()   end
-    def after_create()    end
-    def before_update()   end
-    def after_update()    end
-    def before_delete()   end
-    def after_delete()    end
 
   private
     def execute_callback(position, method)
       self.class.callbacks[position][method].each do |callback|
         __send__(callback)
       end
-
-      __send__("#{ position }_#{ method }")
     end
   end
 end

@@ -1,4 +1,3 @@
-require_relative "callbacks"
 require_relative "datatypes"
 
 module Ohm
@@ -20,21 +19,20 @@ module Ohm
   #   # => true
   module Timestamping
     def self.included(model)
-      model.send :include, Callbacks
-
       model.attribute :created_at, DataTypes::Type::Timestamp
       model.attribute :updated_at, DataTypes::Type::Timestamp
-
-      model.before :create, :set_created_at
-      model.before :save,   :set_updated_at
     end
 
   protected
-    def set_created_at
+    def before_create
+      super
+
       self.created_at ||= Time.now.utc.to_i
     end
 
-    def set_updated_at
+    def before_save
+      super
+
       self.updated_at = Time.now.utc.to_i
     end
   end
