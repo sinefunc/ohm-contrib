@@ -7,7 +7,7 @@ module Ohm
   module DataTypes
     module Type
       Integer   = lambda { |x| x.to_i }
-      Decimal   = lambda { |x| x && BigDecimal(x.to_s) }
+      Decimal   = lambda { |x| BigDecimal(x.to_s) }
       Float     = lambda { |x| x.to_f }
       Boolean   = lambda { |x| !!x }
       Time      = lambda { |t| t && (t.kind_of?(::Time) ? t : ::Time.parse(t)) }
