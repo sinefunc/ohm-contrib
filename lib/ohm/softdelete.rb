@@ -43,17 +43,19 @@ module Ohm
     end
 
     def delete
-      self.class.all.delete(self)
-      self.class.deleted.add(self)
-
-      update(deleted: DELETED_FLAG)
+      db.multi do
+        model.all.key.srem(id)
+        model.deleted.key.sadd(id)
+        set :deleted, DELETED_FLAG
+      end
     end
 
     def restore
-      self.class.all.add(self)
-      self.class.deleted.delete(self)
-
-      update(deleted: nil)
+      db.multi do
+        model.all.key.sadd(id)
+        model.deleted.key.srem(id)
+        set :deleted, nil
+      end
     end
 
     def deleted?
@@ -62,7 +64,7 @@ module Ohm
 
     module ClassMethods
       def deleted
-        Model::Set.new(key[:deleted], Model::Wrapper.wrap(self))
+        Set.new(key[:deleted], key, self)
       end
 
       def exists?(id)

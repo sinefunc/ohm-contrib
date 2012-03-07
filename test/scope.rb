@@ -3,11 +3,7 @@
 require_relative "helper"
 
 class Post < Ohm::Model
-  set :comments, Comment
-end
-
-class Video < Ohm::Model
-  list :comments, Comment
+  set :comments, :Comment
 end
 
 module Finders
@@ -31,6 +27,10 @@ class Comment < Ohm::Model
   scope Finders
 end
 
+setup do
+  Comment.index :status
+end
+
 test "has a predefined scope" do
   assert defined?(Comment::DefinedScopes)
 end
@@ -38,18 +38,18 @@ end
 test "allows custom methods for the defined scopes" do
   post = Post.create
   comment = Comment.create(:status => "approved")
-  post.comments << comment
+  post.comments.key.sadd(comment.id)
 
-  assert post.comments.approved.is_a?(Ohm::Model::Set)
+  assert post.comments.approved.is_a?(Ohm::MultiSet)
   assert post.comments.approved.include?(comment)
 end
 
 test "allows custom methods to be included from a module" do
   post = Post.create
   comment = Comment.create(:status => "rejected")
-  post.comments << comment
+  post.comments.key.sadd(comment.id)
 
-  assert post.comments.rejected.is_a?(Ohm::Model::Set)
+  assert post.comments.rejected.is_a?(Ohm::MultiSet)
   assert post.comments.rejected.include?(comment)
 end
 
@@ -60,16 +60,4 @@ test "works with the main Comment.all collection as well" do
 
   assert Comment.all.approved.include?(approved)
   assert Comment.all.rejected.include?(rejected)
-end
-
-test "isolated from List" do
-  video = Video.create
-
-  assert_raise NoMethodError do
-    video.comments.approved
-  end
-
-  assert_raise NoMethodError do
-    video.comments.rejected
-  end
 end

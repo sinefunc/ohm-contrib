@@ -27,7 +27,7 @@ class Article < Ohm::Model
 
   attribute :title
 
-  list  :comments, Comment
+  set :comments, Comment
   after :save, :append_comment
 
 private
@@ -36,7 +36,7 @@ private
   end
 
   def append_comment
-    comments.add(Comment.create)
+    comments.key.sadd(Comment.create.id)
   end
 end
 
@@ -86,6 +86,9 @@ class Order < Ohm::Model
 end
 
 test "scope" do
+  Order.index :state
+  Order.index :deleted
+
   paid = Order.create(state: "paid", deleted: nil)
 
   assert Order.all.paid.include?(paid)
@@ -103,6 +106,8 @@ class User < Ohm::Model
 end
 
 test "soft delete" do
+  User.index :email
+
   user = User.create(email: "a@a.com")
   user.delete
 
@@ -135,7 +140,7 @@ class Product < Ohm::Model
   attribute :published, Type::Boolean
 end
 
-test "typecast" do
+test "datatypes" do
   p = Product.new(stock: "1")
 
   assert_equal 1, p.stock
@@ -170,7 +175,6 @@ test "typecast" do
 
   p = Product.new(sizes: sizes)
   assert p.sizes.kind_of?(Hash)
-
   p.save
 
   p = Product[p.id]

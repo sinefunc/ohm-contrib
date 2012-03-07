@@ -22,9 +22,8 @@ module Ohm
         extend model::DefinedScopes if defined?(model::DefinedScopes)
       end
     end
-
-    Ohm::Model::Set.send :include, OverloadedSet
   end
 
-  Model::Set.send :include, Scope::OverloadedSet
+  Set.send :include, Scope::OverloadedSet
+  MultiSet.send :include, Scope::OverloadedSet
 end
