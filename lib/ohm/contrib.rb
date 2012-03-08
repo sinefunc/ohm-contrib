@@ -4,7 +4,7 @@ require_relative "locking"
 require_relative "scope"
 require_relative "slug"
 require_relative "softdelete"
-require_relative "timestamping"
+require_relative "timestamps"
 
 module Ohm
   module Contrib

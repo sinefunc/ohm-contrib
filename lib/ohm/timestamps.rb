@@ -6,7 +6,7 @@ module Ohm
   # @example
   #
   #   class Post < Ohm::Model
-  #     include Ohm::Timestamping
+  #     include Ohm::Timestamps
   #   end
   #
   #   post = Post.create
@@ -17,7 +17,7 @@ module Ohm
   #   post.save
   #   post.updated_at.to_i == Time.now.utc.to_i
   #   # => true
-  module Timestamping
+  module Timestamps
     def self.included(model)
       model.attribute :created_at, DataTypes::Type::Timestamp
       model.attribute :updated_at, DataTypes::Type::Timestamp

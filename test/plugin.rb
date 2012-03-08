@@ -3,7 +3,7 @@
 require_relative "helper"
 
 class Comment < Ohm::Model
-  include Ohm::Timestamping
+  include Ohm::Timestamps
 end
 
 test "timestamps are added during creation" do
