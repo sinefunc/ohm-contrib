@@ -1,5 +1,4 @@
 require_relative "datatypes"
-require_relative "callbacks"
 
 module Ohm
   # Provides created_at / updated_at timestamps.
@@ -25,16 +24,10 @@ module Ohm
     end
 
     def save!
-      new = new?
+      self.created_at = Time.now.utc.to_i if new?
+      self.updated_at = Time.now.utc.to_i
 
-      super do |t|
-        t.before do
-          self.created_at = Time.now.utc.to_i if new
-          self.updated_at = Time.now.utc.to_i
-        end
-
-        yield t if block_given?
-      end
+      super
     end
   end
 end
