@@ -26,16 +26,14 @@ class Article < Ohm::Model
   include Ohm::Callbacks
 
   attribute :title
-
   set :comments, Comment
-  after :save, :append_comment
 
 private
   def before_save
     self.title = title.gsub("<br>", " ")
   end
 
-  def append_comment
+  def after_save
     comments.key.sadd(Comment.create.id)
   end
 end
