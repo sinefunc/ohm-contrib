@@ -36,64 +36,6 @@ module Ohm
       model.extend ClassMethods
     end
 
-    module Scripted
-      def save!
-        new = new?
-
-        _execute_before_callbacks(new)
-        result = super
-        _execute_after_callbacks(new)
-
-        return result
-      end
-
-      def delete
-        before_delete
-        result = super
-        after_delete
-
-        return result
-      end
-    end
-
-    module PureRuby
-      def save
-        new = new?
-
-        super do |t|
-          t.before do
-            _execute_before_callbacks(new)
-          end
-
-          t.after do
-            _execute_after_callbacks(new)
-          end
-
-          yield t if block_given?
-        end
-      end
-
-      def delete
-        super do |t|
-          t.before do
-            before_delete
-          end
-
-          t.after do
-            after_delete
-          end
-
-          yield t if block_given?
-        end
-      end
-    end
-
-    if defined?(Ohm::Model::Scripted)
-      include Scripted
-    else
-      include PureRuby
-    end
-
     module ClassMethods
       # Use to add a before callback on `method`. Only symbols
       # are allowed, no string eval, no block option also.
@@ -160,6 +102,36 @@ module Ohm
       # @private internally used to maintain the state of callbacks
       def callbacks
         @callbacks ||= Hash.new { |h, k| h[k] = Hash.new { |h, k| h[k] = [] }}
+      end
+    end
+
+    def save
+      new = new?
+
+      super do |t|
+        t.before do
+          _execute_before_callbacks(new)
+        end
+
+        t.after do
+          _execute_after_callbacks(new)
+        end
+
+        yield t if block_given?
+      end
+    end
+
+    def delete
+      super do |t|
+        t.before do
+          before_delete
+        end
+
+        t.after do
+          after_delete
+        end
+
+        yield t if block_given?
       end
     end
 
