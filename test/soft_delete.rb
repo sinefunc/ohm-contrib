@@ -12,11 +12,6 @@ class Person < Ohm::Model
   index :age
 end
 
-setup do
-  Person.index :name
-  Person.index :age
-end
-
 test "deleted?" do
   person = Person.create
 

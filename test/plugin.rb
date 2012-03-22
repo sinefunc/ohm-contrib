@@ -84,9 +84,6 @@ class Order < Ohm::Model
 end
 
 test "scope" do
-  Order.index :state
-  Order.index :deleted
-
   paid = Order.create(state: "paid", deleted: nil)
 
   assert Order.all.paid.include?(paid)
@@ -104,8 +101,6 @@ class User < Ohm::Model
 end
 
 test "soft delete" do
-  User.index :email
-
   user = User.create(email: "a@a.com")
   user.delete
 

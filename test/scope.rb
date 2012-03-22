@@ -27,10 +27,6 @@ class Comment < Ohm::Model
   scope Finders
 end
 
-setup do
-  Comment.index :status
-end
-
 test "has a predefined scope" do
   assert defined?(Comment::DefinedScopes)
 end
