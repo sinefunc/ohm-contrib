@@ -5,6 +5,7 @@ require_relative "scope"
 require_relative "slug"
 require_relative "softdelete"
 require_relative "timestamps"
+require_relative "versioned"
 
 module Ohm
   module Contrib
