@@ -1,4 +1,4 @@
-require_relative "datatypes"
+require File.expand_path("../datatypes", __FILE__)
 
 module Ohm
   # Provides created_at / updated_at timestamps.

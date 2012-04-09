@@ -1,11 +1,11 @@
-require_relative "callbacks"
-require_relative "datatypes"
-require_relative "locking"
-require_relative "scope"
-require_relative "slug"
-require_relative "softdelete"
-require_relative "timestamps"
-require_relative "versioned"
+require File.expand_path("../callbacks", __FILE__)
+require File.expand_path("../datatypes", __FILE__)
+require File.expand_path("../locking", __FILE__)
+require File.expand_path("../scope", __FILE__)
+require File.expand_path("../slug", __FILE__)
+require File.expand_path("../softdelete", __FILE__)
+require File.expand_path("../timestamps", __FILE__)
+require File.expand_path("../versioned", __FILE__)
 
 module Ohm
   module Contrib
