@@ -1,7 +1,7 @@
 module Ohm
   module Scope
     def self.included(model)
-      unless model.const_defined?(:DefinedScopes, false)
+      unless model.const_defined?(:DefinedScopes)
         model.const_set(:DefinedScopes, Module.new)
       end
 

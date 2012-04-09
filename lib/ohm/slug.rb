@@ -13,7 +13,7 @@ module Ohm
     def slug(str = to_s)
       ret = transcode(str)
       ret.gsub!("'", "")
-      ret.gsub!(/\p{^Alnum}/u, " ")
+      ret.gsub!(/[^0-9A-Za-z]/u, " ")
       ret.strip!
       ret.gsub!(/\s+/, "-")
       ret.downcase

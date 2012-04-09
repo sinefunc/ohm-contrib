@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require_relative "helper"
+require File.expand_path("../helper", __FILE__)
 
 class Comment < Ohm::Model
   include Ohm::Timestamps
@@ -39,7 +39,7 @@ private
 end
 
 test "class-level, instance level callbacks" do
-  a = Article.create(title: "Foo<br>Bar")
+  a = Article.create(:title => "Foo<br>Bar")
 
   assert_equal "Foo Bar", a.title
   assert_equal 1, a.comments.size
@@ -56,10 +56,10 @@ class Post < Ohm::Model
 end
 
 test "slugging" do
-  post = Post.create(title: "Foo Bar Baz")
+  post = Post.create(:title => "Foo Bar Baz")
   assert_equal "1-foo-bar-baz", post.to_param
 
-  post = Post.create(title: "Décor")
+  post = Post.create(:title => "Décor")
   assert_equal "2-decor", post.to_param
 end
 
@@ -74,22 +74,22 @@ class Order < Ohm::Model
 
   scope do
     def paid
-      find(state: "paid")
+      find(:state => "paid")
     end
 
     def deleted
-      find(deleted: 1)
+      find(:deleted => 1)
     end
   end
 end
 
 test "scope" do
-  paid = Order.create(state: "paid", deleted: nil)
+  paid = Order.create(:state => "paid", :deleted => nil)
 
   assert Order.all.paid.include?(paid)
   assert_equal 0, Order.all.paid.deleted.size
 
-  paid.update(deleted: 1)
+  paid.update(:deleted => 1)
   assert Order.all.paid.deleted.include?(paid)
 end
 
@@ -101,12 +101,12 @@ class User < Ohm::Model
 end
 
 test "soft delete" do
-  user = User.create(email: "a@a.com")
+  user = User.create(:email => "a@a.com")
   user.delete
 
   assert User.all.empty?
   assert User.deleted.include?(user)
-  assert User.find(email: "a@a.com").include?(user)
+  assert User.find(:email => "a@a.com").include?(user)
 
   assert user.deleted?
   assert User[user.id] == user
@@ -134,7 +134,7 @@ class Product < Ohm::Model
 end
 
 test "datatypes" do
-  p = Product.new(stock: "1")
+  p = Product.new(:stock => "1")
 
   assert_equal 1, p.stock
   p.save
@@ -143,7 +143,7 @@ test "datatypes" do
   assert_equal 1, p.stock
 
   time = Time.now.utc
-  p = Product.new(bought_at: time)
+  p = Product.new(:bought_at => time)
   assert p.bought_at.kind_of?(Time)
 
   p.save
@@ -152,11 +152,11 @@ test "datatypes" do
   assert p.bought_at.kind_of?(Time)
   assert_equal time, p.bought_at
 
-  p = Product.new(date_released: Date.today)
+  p = Product.new(:date_released => Date.today)
 
   assert p.date_released.kind_of?(Date)
 
-  p = Product.new(date_released: "2011-11-22")
+  p = Product.new(:date_released => "2011-11-22")
   assert p.date_released.kind_of?(Date)
 
   p.save
@@ -166,7 +166,7 @@ test "datatypes" do
 
   sizes = { "XS" => 1, "S" => 2, "L" => 3 }
 
-  p = Product.new(sizes: sizes)
+  p = Product.new(:sizes => sizes)
   assert p.sizes.kind_of?(Hash)
   p.save
 
@@ -174,7 +174,7 @@ test "datatypes" do
   assert_equal sizes, p.sizes
 
   stores = ["walmart", "marshalls", "jcpenny"]
-  p = Product.new(stores: stores)
+  p = Product.new(:stores => stores)
   assert p.stores.kind_of?(Array)
 
   p.save
@@ -182,7 +182,7 @@ test "datatypes" do
   p = Product[p.id]
   assert_equal stores, p.stores
 
-  p = Product.new(price: 0.001)
+  p = Product.new(:price => 0.001)
 
   x = 0
   1000.times { x += p.price }
@@ -193,14 +193,14 @@ test "datatypes" do
   p = Product[p.id]
   assert_equal 0.001, p.price
 
-  p = Product.new(rating: 4.5)
+  p = Product.new(:rating => 4.5)
   assert p.rating.kind_of?(Float)
 
   p.save
   p = Product[p.id]
   assert_equal 4.5, p.rating
 
-  p = Product.new(published: 1)
+  p = Product.new(:published => 1)
   assert_equal true, p.published
 
   p.save

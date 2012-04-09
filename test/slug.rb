@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-require_relative "helper"
+require File.expand_path("../helper", __FILE__)
 
 class Article < Ohm::Model
   include Ohm::Slug
@@ -12,13 +12,13 @@ class Article < Ohm::Model
 end
 
 test "to_param" do
-  article = Article.create(title: "A very Unique and Interesting String?'")
+  article = Article.create(:title => "A very Unique and Interesting String?'")
 
   assert '1-a-very-unique-and-interesting-string' == article.to_param
 end
 
 test "finding" do
-  article = Article.create(title: "A very Unique and Interesting String?'")
+  article = Article.create(:title => "A very Unique and Interesting String?'")
 
   assert 1 == Article["1-a-very-unique-and-interesting-string"].id
 end

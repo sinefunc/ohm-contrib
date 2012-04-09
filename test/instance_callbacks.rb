@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-require_relative "helper"
+require File.expand_path("../helper", __FILE__)
 
 class Post < Ohm::Model
   include Ohm::Callbacks
