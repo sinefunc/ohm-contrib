@@ -3,4 +3,4 @@ redis -v 2.2.2
 scrivener -v 0.0.3
 override -v 0.0.10
 nest -v 1.1.1
-ohm -v 1.0.0.rc2
+ohm -v 1.0.1
