@@ -45,166 +45,228 @@ test "class-level, instance level callbacks" do
   assert_equal 1, a.comments.size
 end
 
-class Post < Ohm::Model
-  attribute :title
+# slugging
+scope do
+  class Post < Ohm::Model
+    attribute :title
 
-  include Ohm::Slug
+    include Ohm::Slug
 
-  def to_s
-    title
+    def to_s
+      title
+    end
+  end
+
+  test "slugging" do
+    post = Post.create(:title => "Foo Bar Baz")
+    assert_equal "1-foo-bar-baz", post.to_param
+
+    post = Post.create(:title => "Décor")
+    assert_equal "2-decor", post.to_param
   end
 end
 
-test "slugging" do
-  post = Post.create(:title => "Foo Bar Baz")
-  assert_equal "1-foo-bar-baz", post.to_param
+# Ohm::Scope
+scope do
+  class Order < Ohm::Model
+    include Ohm::Scope
 
-  post = Post.create(:title => "Décor")
-  assert_equal "2-decor", post.to_param
-end
+    attribute :state
+    index :state
 
-class Order < Ohm::Model
-  include Ohm::Scope
+    attribute :deleted
+    index :deleted
 
-  attribute :state
-  index :state
+    scope do
+      def paid
+        find(:state => "paid")
+      end
 
-  attribute :deleted
-  index :deleted
-
-  scope do
-    def paid
-      find(:state => "paid")
+      def deleted
+        find(:deleted => 1)
+      end
     end
+  end
 
-    def deleted
-      find(:deleted => 1)
-    end
+  test "scoping" do
+    paid = Order.create(:state => "paid", :deleted => nil)
+
+    assert Order.all.paid.include?(paid)
+    assert_equal 0, Order.all.paid.deleted.size
+
+    paid.update(:deleted => 1)
+    assert Order.all.paid.deleted.include?(paid)
   end
 end
 
-test "scope" do
-  paid = Order.create(:state => "paid", :deleted => nil)
+# soft delete
+scope do
+  class User < Ohm::Model
+    include Ohm::SoftDelete
 
-  assert Order.all.paid.include?(paid)
-  assert_equal 0, Order.all.paid.deleted.size
+    attribute :email
+    index :email
+  end
 
-  paid.update(:deleted => 1)
-  assert Order.all.paid.deleted.include?(paid)
+  setup do
+    user = User.create(:email => "a@a.com")
+    user.delete
+
+    user
+  end
+
+  test "removes from User.all" do |user|
+    assert User.all.empty?
+  end
+
+  test "adds to User.deleted" do |user|
+    assert User.deleted.include?(user)
+  end
+
+  test "doesn't remove from indices" do |user|
+    assert User.find(:email => "a@a.com").include?(user)
+  end
+
+  test "makes it deleted?" do |user|
+    assert user.deleted?
+  end
+
+  test "is still retrievable" do |user|
+    assert_equal user, User[user.id]
+  end
+
+  test "restore" do |user|
+    user.restore
+
+    assert User.all.include?(user)
+    assert User.deleted.empty?
+
+    assert ! user.deleted?
+  end
 end
 
-class User < Ohm::Model
-  include Ohm::SoftDelete
+# datatypes
+scope do
+  class Product < Ohm::Model
+    include Ohm::DataTypes
 
-  attribute :email
-  index :email
-end
+    attribute :name
+    attribute :stock, Type::Integer
+    attribute :price, Type::Decimal
+    attribute :rating, Type::Float
+    attribute :bought_at, Type::Time
+    attribute :date_released, Type::Date
+    attribute :sizes, Type::Hash
+    attribute :stores, Type::Array
+    attribute :published, Type::Boolean
+  end
 
-test "soft delete" do
-  user = User.create(:email => "a@a.com")
-  user.delete
+  test "Type::Integer" do
+    p = Product.new(:stock => "1")
 
-  assert User.all.empty?
-  assert User.deleted.include?(user)
-  assert User.find(:email => "a@a.com").include?(user)
+    assert_equal 1, p.stock
+    p.save
 
-  assert user.deleted?
-  assert User[user.id] == user
+    p = Product[p.id]
+    assert_equal 1, p.stock
+  end
 
-  user.restore
+  test "Type::Time" do
+    time = Time.utc(2011, 11, 22)
+    p = Product.new(:bought_at => time)
+    assert p.bought_at.kind_of?(Time)
 
-  assert User.all.include?(user)
-  assert User.deleted.empty?
+    p.save
 
-  assert ! user.deleted?
-end
+    p = Product[p.id]
+    assert p.bought_at.kind_of?(Time)
+    assert_equal time, p.bought_at
 
-class Product < Ohm::Model
-  include Ohm::DataTypes
+    assert_equal "2011-11-22 00:00:00 UTC", p.key.hget(:bought_at)
+    assert_equal "2011-11-22 00:00:00 UTC", p.bought_at.to_s
+  end
 
-  attribute :name
-  attribute :stock, Type::Integer
-  attribute :price, Type::Decimal
-  attribute :rating, Type::Float
-  attribute :bought_at, Type::Time
-  attribute :date_released, Type::Date
-  attribute :sizes, Type::Hash
-  attribute :stores, Type::Array
-  attribute :published, Type::Boolean
-end
+  test "Type::Date" do
+    p = Product.new(:date_released => Date.today)
 
-test "datatypes" do
-  p = Product.new(:stock => "1")
+    assert p.date_released.kind_of?(Date)
 
-  assert_equal 1, p.stock
-  p.save
+    p = Product.new(:date_released => "2011-11-22")
+    assert p.date_released.kind_of?(Date)
 
-  p = Product[p.id]
-  assert_equal 1, p.stock
+    p.save
 
-  time = Time.now.utc
-  p = Product.new(:bought_at => time)
-  assert p.bought_at.kind_of?(Time)
+    p = Product[p.id]
+    assert_equal Date.new(2011, 11, 22), p.date_released
+    assert_equal "2011-11-22", p.key.hget(:date_released)
+    assert_equal "2011-11-22", p.date_released.to_s
+  end
 
-  p.save
+  test "Type::Hash" do
+    sizes = { "XS" => 1, "S" => 2, "L" => 3 }
 
-  p = Product[p.id]
-  assert p.bought_at.kind_of?(Time)
-  assert_equal time, p.bought_at
+    p = Product.new(:sizes => sizes)
+    assert p.sizes.kind_of?(Hash)
+    p.save
 
-  p = Product.new(:date_released => Date.today)
+    p = Product[p.id]
+    assert_equal sizes, p.sizes
+    assert_equal %Q[{"XS":1,"S":2,"L":3}], p.key.hget(:sizes)
+    assert_equal %Q[{"XS":1,"S":2,"L":3}], p.sizes.to_s
+  end
 
-  assert p.date_released.kind_of?(Date)
+  test "Type::Array" do
+    stores = ["walmart", "marshalls", "jcpenny"]
+    p = Product.new(:stores => stores)
+    assert p.stores.kind_of?(Array)
 
-  p = Product.new(:date_released => "2011-11-22")
-  assert p.date_released.kind_of?(Date)
+    p.save
 
-  p.save
+    p = Product[p.id]
+    assert_equal stores, p.stores
+    assert_equal %Q(["walmart","marshalls","jcpenny"]), p.key.hget(:stores)
+    assert_equal %Q(["walmart","marshalls","jcpenny"]), p.stores.to_s
+  end
 
-  p = Product[p.id]
-  assert_equal Date.new(2011, 11, 22), p.date_released
+  test "Type::Decimal" do
+    p = Product.new(:price => 0.001)
 
-  sizes = { "XS" => 1, "S" => 2, "L" => 3 }
+    # This fails if 0.001 is a float.
+    x = 0
+    1000.times { x += p.price }
+    assert_equal 1, x
 
-  p = Product.new(:sizes => sizes)
-  assert p.sizes.kind_of?(Hash)
-  p.save
+    p.save
 
-  p = Product[p.id]
-  assert_equal sizes, p.sizes
+    p = Product[p.id]
+    assert_equal 0.001, p.price
+    assert_equal "0.1E-2", p.key.hget(:price)
+  end
 
-  stores = ["walmart", "marshalls", "jcpenny"]
-  p = Product.new(:stores => stores)
-  assert p.stores.kind_of?(Array)
+  test "Type::Float" do
+    p = Product.new(:rating => 4.5)
+    assert p.rating.kind_of?(Float)
 
-  p.save
+    p.save
+    p = Product[p.id]
+    assert_equal 4.5, p.rating
+    assert_equal "4.5", p.key.hget(:rating)
+  end
 
-  p = Product[p.id]
-  assert_equal stores, p.stores
+  test "Type::Boolean" do
+    p = Product.new(:published => 1)
+    assert_equal true, p.published
 
-  p = Product.new(:price => 0.001)
+    p.save
 
-  x = 0
-  1000.times { x += p.price }
-  assert_equal 1, x
+    p = Product[p.id]
+    assert_equal true, p.published
 
-  p.save
+    p.published = false
+    p.save
 
-  p = Product[p.id]
-  assert_equal 0.001, p.price
-
-  p = Product.new(:rating => 4.5)
-  assert p.rating.kind_of?(Float)
-
-  p.save
-  p = Product[p.id]
-  assert_equal 4.5, p.rating
-
-  p = Product.new(:published => 1)
-  assert_equal true, p.published
-
-  p.save
-
-  p = Product[p.id]
-  assert_equal true, p.published
+    p = Product[p.id]
+    assert_equal "false", p.key.hget(:published)
+    assert_equal false, p.published
+  end
 end
