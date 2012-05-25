@@ -33,57 +33,61 @@ The following lists the major changes:
 Example usage
 -------------
 
-    require 'ohm'
-    require 'ohm/contrib'
+```ruby
+require 'ohm'
+require 'ohm/contrib'
 
-    class Post < Ohm::Model
-      include Ohm::Timestamps
-      include Ohm::DataTypes
+class Post < Ohm::Model
+  include Ohm::Timestamps
+  include Ohm::DataTypes
 
-      attribute :amount, Type::Decimal
-      attribute :url
-      attribute :poster_email
-      attribute :slug
-    end
+  attribute :amount, Type::Decimal
+  attribute :url
+  attribute :poster_email
+  attribute :slug
+end
 
-    post = Post.create
+post = Post.create
 
-    post.created_at.kind_of?(Time)
-    # => true
+post.created_at.kind_of?(Time)
+# => true
 
-    post.update_at.kind_of?(Time)
-    # => true
+post.update_at.kind_of?(Time)
+# => true
+```
 
 It's important to note that `created_at` and `update_at` both store
 times as a unix timestamp for efficiency.
 
-    # Casting example
-    class Product
-      include Ohm::DataTypes
+```ruby
+# Casting example
+class Product
+  include Ohm::DataTypes
 
-      attribute :price, Type::Decimal
-      attribute :start_of_sale, Type::Time
-      attribute :end_of_sale, Type::Time
-      attribute :priority, Type::Integer
-      attribute :rating, Type::Float
-    end
+  attribute :price, Type::Decimal
+  attribute :start_of_sale, Type::Time
+  attribute :end_of_sale, Type::Time
+  attribute :priority, Type::Integer
+  attribute :rating, Type::Float
+end
 
-    product = Product.create(price: "127.99")
-    product.price.kind_of?(BigDecimal)
-    # => true
+product = Product.create(price: "127.99")
+product.price.kind_of?(BigDecimal)
+# => true
 
-    product = Product.create(start_of_sale: Time.now.rfc2822)
-    product.start_of_sale.kind_of?(Time)
-    # => true
+product = Product.create(start_of_sale: Time.now.rfc2822)
+product.start_of_sale.kind_of?(Time)
+# => true
 
-    product = Product.create(end_of_sale: Time.now.rfc2822)
-    product.end_of_sale.kind_of?(Time)
-    # => true
+product = Product.create(end_of_sale: Time.now.rfc2822)
+product.end_of_sale.kind_of?(Time)
+# => true
 
-    product = Product.create(priority: "100")
-    product.priority.kind_of?(Integer)
-    # => true
+product = Product.create(priority: "100")
+product.priority.kind_of?(Integer)
+# => true
 
-    product = Product.create(rating: "5.5")
-    product.rating.kind_of?(Float)
-    # => true
+product = Product.create(rating: "5.5")
+product.rating.kind_of?(Float)
+# => true
+```
