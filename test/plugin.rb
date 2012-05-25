@@ -58,8 +58,8 @@ scope do
   end
 
   test "slugging" do
-    post = Post.create(:title => "Foo Bar Baz")
-    assert_equal "1-foo-bar-baz", post.to_param
+    post = Post.create(:title => "Foo Bar Baz 1.0")
+    assert_equal "1-foo-bar-baz-1-0", post.to_param
 
     post = Post.create(:title => "Décor")
     assert_equal "2-decor", post.to_param
