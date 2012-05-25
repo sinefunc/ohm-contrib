@@ -28,6 +28,8 @@ The following lists the major changes:
    can `require ohm/datatypes` for example if you want to cherry
    pick your requires.
 
+[scrivener]: http://github.com/soveran/scrivener
+
 Example usage
 -------------
 
