@@ -34,8 +34,19 @@ times as a unix timestamp for efficiency.
 
 ## Ohm::Callbacks
 
-**Note:** Macro-style callbacks have been removed in version 1.0.x.
+**Note:** Macro-style callbacks have been removed since version 1.0.x.
 Please use instance style callbacks.
+
+### On the topic of callbacks
+
+Since I initially released ohm-contrib, a lot has changed. Initially, I
+had a bad habit of putting a lot of stuff in callbacks. Nowadays, I
+prefer having a workflow object or a service layer which coordinates
+code not really related to the model, a perfect example of which is
+photo manipulation.
+
+It's best to keep your models pure, and have domain specific code
+in a separate object.
 
 ```ruby
 class Order < Ohm::Model
@@ -101,6 +112,9 @@ product.rating.kind_of?(Float)
 ```
 
 ### DataTypes: Advanced example
+
+**IMPORTANT NOTE**: Mutating a Hash and/or Array doesn't work, so you have
+to re-assign them accordingly.
 
 ```ruby
 class Product < Ohm::Model
