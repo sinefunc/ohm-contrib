@@ -286,13 +286,12 @@ scope do
   test "Type::Set" do
     comments = ::Set.new(["Good product", "Awesome!", "Great."])
     p = Product.new(:comments => comments)
-    puts p.comments.class.superclass.name
-    puts p.comments.class.name
     assert p.comments.kind_of?(::Set)
 
     p.save
 
     p = Product[p.id]
+
     assert_equal comments, p.comments
     assert_equal %Q(["Awesome!","Good product","Great."]), p.key.hget(:comments)
     assert_equal %Q(["Awesome!","Good product","Great."]), p.comments.to_s
