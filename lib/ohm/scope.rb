@@ -14,16 +14,36 @@ module Ohm
         self::DefinedScopes.send(:include, scope) if scope
       end
     end
+  end
 
-    module OverloadedSet
-      def initialize(*args)
-        super
+  # In Ohm v1.2, the Set and MultiSet initialize methods
+  # are defined on themselves. Hence the trick of doing a
+  # module OverloadedSet with an initialize method doesn't
+  # work anymore.
+  #
+  # The simplest way to solve that as of now is to duplicate
+  # and extend the #initialize method for each of these.
+  #
+  # Granted it's not the _ideal_ way, the drawbacks are
+  # outweighed by the simplicity and performance of this
+  # approach versus other monkey-patching techniques.
+  class Set
+    def initialize(key, namespace, model)
+      @key = key
+      @namespace = namespace
+      @model = model
 
-        extend model::DefinedScopes if defined?(model::DefinedScopes)
-      end
+      extend model::DefinedScopes if defined?(model::DefinedScopes)
     end
   end
 
-  Set.send :include, Scope::OverloadedSet
-  MultiSet.send :include, Scope::OverloadedSet
+  class MultiSet
+    def initialize(namespace, model, command)
+      @namespace = namespace
+      @model = model
+      @command = command
+
+      extend model::DefinedScopes if defined?(model::DefinedScopes)
+    end
+  end
 end
