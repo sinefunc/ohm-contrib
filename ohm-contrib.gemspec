@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = "ohm-contrib"
-  s.version = "1.1.1"
+  s.version = "1.2"
   s.summary = %{A collection of decoupled drop-in modules for Ohm.}
   s.description = %{Includes a couple of core functions such as callbacks, timestamping, typecasting and lots of generic validation routines.}
   s.author = "Cyril David"
@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.rubyforge_project = "ohm-contrib"
 
-  s.add_dependency "ohm", "~> 1.1"
+  s.add_dependency "ohm", "~> 1.2"
 
   s.add_development_dependency "cutest"
   s.add_development_dependency "redis"
