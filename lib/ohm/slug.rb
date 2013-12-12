@@ -11,12 +11,13 @@ module Ohm
     end
 
     def slug(str = to_s)
-      ret = transcode(str)
+      ret = transcode(str.dup)
       ret.gsub!("'", "")
       ret.gsub!(/[^0-9A-Za-z]/u, " ")
       ret.strip!
       ret.gsub!(/\s+/, "-")
-      ret.downcase
+      ret.downcase!
+      return ret
     end
     module_function :slug
 
