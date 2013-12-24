@@ -6,20 +6,9 @@ Gem::Specification.new do |s|
   s.author = "Cyril David"
   s.email = "cyx.ucron@gmail.com"
   s.homepage = "http://github.com/cyx/ohm-contrib"
+  s.license = "MIT"
 
-  s.specification_version = 2 if s.respond_to? :specification_version=
-
-  s.files = Dir[
-    "LICENSE",
-    "README.markdown",
-    "rakefile",
-    "lib/**/*.rb",
-    "*.gemspec",
-    "test/*.*",
-  ]
-
-  s.require_paths = ["lib"]
-  s.rubyforge_project = "ohm-contrib"
+  s.files = `git ls-files`.split("\n")
 
   s.add_dependency "ohm", "~> 1.2"
 
