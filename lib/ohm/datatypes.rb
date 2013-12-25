@@ -22,8 +22,7 @@ module Ohm
 
     def self.bool(val)
       case val
-      when "false", "0" then false
-      when "true", "1"  then true
+      when "true", "1" then true
       else
         !! val
       end
