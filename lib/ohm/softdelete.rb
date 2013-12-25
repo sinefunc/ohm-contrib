@@ -1,16 +1,14 @@
 module Ohm
-  # Provides support for soft deletion
-  #
-  # @example
+  # Provides support for soft deletion.
   #
   #   class Post < Ohm::Model
-  #     plugin :softdelete
+  #     include Ohm::SoftDelete
   #
   #     attribute :title
   #     index :title
   #   end
   #
-  #   post = Post.create(:title => 'Title')
+  #   post = Post.create(title: 'Title')
   #
   #   post.deleted?
   #   # => false
@@ -23,7 +21,7 @@ module Ohm
   #   Post.all.empty?
   #   # => true
   #
-  #   Post.find(:title => 'Title').include?(post)
+  #   Post.find(title: 'Title').include?(post)
   #   # => true
   #
   #   Post.exists?(post.id)
@@ -33,6 +31,7 @@ module Ohm
   #
   #   post.deleted?
   #   # => true
+  #
   module SoftDelete
     DELETED_FLAG = "1"
 
