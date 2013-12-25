@@ -15,14 +15,6 @@ test "timestamps are added during creation" do
   assert e.updated_at
 end
 
-class Server < Ohm::Model
-  include Ohm::Locking
-end
-
-test "mutex method is added at instance and class level" do
-  assert Server.new.respond_to?(:mutex)
-end
-
 class Article < Ohm::Model
   include Ohm::Callbacks
 
