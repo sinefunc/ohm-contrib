@@ -10,7 +10,7 @@ module Ohm
       Integer   = lambda { |x| x.to_i }
       Decimal   = lambda { |x| BigDecimal(x.to_s) }
       Float     = lambda { |x| x.to_f }
-      Symbol    = lambda { |x| x.to_sym }
+      Symbol    = lambda { |x| x && x.to_sym }
       Boolean   = lambda { |x| Ohm::DataTypes.bool(x) }
       Time      = lambda { |t| t && (t.kind_of?(::Time) ? t : ::Time.parse(t)) }
       Date      = lambda { |d| d && (d.kind_of?(::Date) ? d : ::Date.parse(d)) }
