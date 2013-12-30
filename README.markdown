@@ -133,7 +133,7 @@ product.meta.kind_of?(Hash)
 product.meta == { resolution: '1280x768', battery: '8 hours' }
 # => true
 
-product.meta.kind_of?(Array)
+product.sizes.kind_of?(Array)
 # => true
 
 product.sizes == ['XS S M L XL']
