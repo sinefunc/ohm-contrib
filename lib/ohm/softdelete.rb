@@ -42,27 +42,27 @@ module Ohm
     end
 
     def delete
-      self.deleted = DELETED_FLAG
-
       redis.queue("MULTI")
       redis.queue("SREM", model.all.key, id)
       redis.queue("SADD", model.deleted.key, id)
-      redis.queue("HSET", key, :deleted, deleted)
+      redis.queue("HSET", key, :deleted, DELETED_FLAG)
       redis.queue("EXEC")
       redis.commit
+
+      self.deleted = DELETED_FLAG
 
       self
     end
 
     def restore
-      self.deleted = nil
-
       redis.queue("MULTI")
       redis.queue("SADD", model.all.key, id)
       redis.queue("SREM", model.deleted.key, id)
-      redis.queue("HSET", key, :deleted, deleted)
+      redis.queue("HDEL", key, :deleted)
       redis.queue("EXEC")
       redis.commit
+
+      self.deleted = nil
 
       self
     end
