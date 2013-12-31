@@ -11,21 +11,13 @@ module Ohm
       Decimal   = ->(x) { BigDecimal(x.to_s) }
       Float     = ->(x) { x.to_f }
       Symbol    = ->(x) { x && x.to_sym }
-      Boolean   = ->(x) { Ohm::DataTypes.bool(x) }
+      Boolean   = ->(x) { !!x }
       Time      = ->(t) { t && (t.kind_of?(::Time) ? t : ::Time.parse(t)) }
       Date      = ->(d) { d && (d.kind_of?(::Date) ? d : ::Date.parse(d)) }
       Timestamp = ->(t) { t && UnixTime.at(t.to_i) }
       Hash      = ->(h) { h && SerializedHash[h.kind_of?(::Hash) ? h : JSON(h)] }
       Array     = ->(a) { a && SerializedArray.new(a.kind_of?(::Array) ? a : JSON(a)) }
       Set       = ->(s) { s && SerializedSet.new(s.kind_of?(::Set) ? s : JSON(s)) }
-    end
-
-    def self.bool(val)
-      case val
-      when "true", "1" then true
-      else
-        !! val
-      end
     end
 
     class UnixTime < Time
