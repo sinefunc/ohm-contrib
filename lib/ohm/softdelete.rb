@@ -33,10 +33,8 @@ module Ohm
   #   # => true
   #
   module SoftDelete
-    DELETED_FLAG = "1"
-
     def self.included(model)
-      model.attribute :deleted
+      model.attribute :deleted, ->(x) { !!x }
 
       model.extend ClassMethods
     end
@@ -45,11 +43,11 @@ module Ohm
       redis.queue("MULTI")
       redis.queue("SREM", model.all.key, id)
       redis.queue("SADD", model.deleted.key, id)
-      redis.queue("HSET", key, :deleted, DELETED_FLAG)
+      redis.queue("HSET", key, :deleted, true)
       redis.queue("EXEC")
       redis.commit
 
-      self.deleted = DELETED_FLAG
+      self.deleted = true
 
       self
     end
@@ -68,7 +66,7 @@ module Ohm
     end
 
     def deleted?
-      deleted == DELETED_FLAG
+      deleted
     end
 
     module ClassMethods
