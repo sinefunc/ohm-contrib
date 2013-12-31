@@ -193,24 +193,3 @@ rescue Ohm::VersionConflict => ex
   # => true
 end
 ```
-
-<a name="upgrade" id="upgrade"></a>
-
-## Important Upgrade notes from 0.1.x
-
-The following lists the major changes:
-
-1. `Ohm::Typecast` has been removed in favor of `Ohm::DataTypes`.
-2. `Ohm::Timestamping` has been renamed to `Ohm::Timestamps`.
-3. `Ohm::Timestamps` now store times as a UNIX Timestamp.
-4. `All Ohm validation related plugins have been removed.
-    See [scrivener][scrivener] instead.
-5. `Ohm::Boundaries` has been removed.
-6. Ohm::Contrib no longer uses `autoload`. You can either
-   `require 'ohm/contrib'`, which requires everything, or you
-   can `require ohm/datatypes` for example if you want to cherry
-   pick your requires.
-7. `Ohm::Callbacks` no longer provides macro style callbacks, i.e.
-   `after :create, :do_something`. Use instance callbacks instead.
-
-[scrivener]: http://github.com/soveran/scrivener
