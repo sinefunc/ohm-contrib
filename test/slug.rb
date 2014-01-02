@@ -22,3 +22,9 @@ test "finding" do
 
   assert_equal 1, Article[article.to_param].id
 end
+
+test "transliterate non-ascii characters" do
+  article = Article.create(title: "Décor")
+
+  assert_equal article.to_param, "1-decor"
+end
