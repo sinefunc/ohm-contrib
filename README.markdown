@@ -159,7 +159,8 @@ post.to_param == "1-using-ohm-contrib-1.0"
 ```
 
 By default, `Ohm::Slug` tries to load iconv in order to transliterate
-non-ascii characters.
+non-ascii characters. For ruby 2 or later, you will need to `gem install iconv`
+to get transliteration.
 
 ```ruby
 post = Post.create(:title => "Décor")
