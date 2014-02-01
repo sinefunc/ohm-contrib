@@ -9,6 +9,5 @@ require_relative "versioned"
 
 module Ohm
   module Contrib
-    VERSION = "1.0.rc0"
   end
 end
