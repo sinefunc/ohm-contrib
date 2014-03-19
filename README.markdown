@@ -2,8 +2,6 @@
 
 A collection of drop-in modules for Ohm.
 
-If you're upgrading from 0.1.x, see [the changes below](#upgrade)
-
 ## Quick Overview
 
 ```ruby
