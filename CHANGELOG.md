@@ -1,3 +1,6 @@
+2.0.0
+=====
+
 * Support for Ohm 1.3.x has been removed. It only supports Ohm 2.x.
 
 1.2
