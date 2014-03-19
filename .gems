@@ -1,4 +1,4 @@
 cutest -v 1.2.1
 iconv -v 1.0.4
-ohm -v 2.0.0.rc2
+ohm -v 2.0.0
 override -v 0.0.10
