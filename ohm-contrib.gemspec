@@ -10,9 +10,9 @@ Gem::Specification.new do |s|
 
   s.files = `git ls-files`.split("\n")
 
-  s.add_dependency "ohm", "~> 2.0.0"
+  s.add_dependency "ohm", "~> 2.0"
 
-  s.add_development_dependency "cutest"
-  s.add_development_dependency "iconv"
-  s.add_development_dependency "override"
+  s.add_development_dependency "cutest", "~> 1.2"
+  s.add_development_dependency "iconv", "~> 1.0"
+  s.add_development_dependency "override", "~> 0.0"
 end
