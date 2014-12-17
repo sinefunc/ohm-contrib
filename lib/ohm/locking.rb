@@ -12,10 +12,9 @@ module Ohm
     #   post.mutex(0.01) do
     #     # this block is in a mutex!
     #   end
-    def mutex(wait = 0.1)
+    def spinlock(wait = 0.1)
       lock!(wait)
       yield
-      self
     ensure
       unlock!
     end
@@ -27,8 +26,8 @@ module Ohm
     #
     # @see Model#mutex
     def lock!(wait = 0.1)
-      until redis.call("SETNX", key[:_lock], lock_timeout)
-        next unless lock = redis.call("HGET", key[:_lock])
+      until redis.call("SETNX", key[:_lock], lock_timeout) == 1
+        next unless lock = redis.call("GET", key[:_lock])
         sleep(wait) and next unless lock_expired?(lock)
 
         break unless lock = redis.call("GETSET", key[:_lock], lock_timeout)
