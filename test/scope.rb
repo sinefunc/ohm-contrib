@@ -35,7 +35,7 @@ test "allows custom methods for the defined scopes" do
   comment = Comment.create(status: "approved")
   post.comments.add(comment)
 
-  assert post.comments.approved.is_a?(Ohm::MultiSet)
+  assert post.comments.approved.is_a?(Ohm::Set)
   assert post.comments.approved.include?(comment)
 end
 
@@ -44,7 +44,7 @@ test "allows custom methods to be included from a module" do
   comment = Comment.create(status: "rejected")
   post.comments.add(comment)
 
-  assert post.comments.rejected.is_a?(Ohm::MultiSet)
+  assert post.comments.rejected.is_a?(Ohm::Set)
   assert post.comments.rejected.include?(comment)
 end
 

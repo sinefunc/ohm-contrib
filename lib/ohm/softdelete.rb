@@ -71,7 +71,7 @@ module Ohm
 
     module ClassMethods
       def deleted
-        Set.new(key[:deleted], key, self)
+        Set.new(self, key, key[:deleted])
       end
 
       def exists?(id)
