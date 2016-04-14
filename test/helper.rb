@@ -1,16 +1,14 @@
-require 'rubygems'
-require 'test/unit'
-require 'contest'
-require 'redis'
-require 'ohm'
-require 'timecop'
-require 'mocha'
+require "cutest"
+require "ohm"
 
-Ohm.connect :host => "localhost", :port => "6379"
+prepare do
+  Ohm.flush
+end
 
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-$LOAD_PATH.unshift(File.dirname(__FILE__))
-require 'ohm/contrib'
-
-class Test::Unit::TestCase
+def assert_nothing_raised(*exceptions)
+  begin
+    yield
+  rescue *exceptions
+    flunk(caller[1])
+  end
 end

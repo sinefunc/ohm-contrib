@@ -1,201 +1,194 @@
-ohm-contrib
-===========
+# ohm-contrib
 
-A collection of drop-in modules for Ohm. Read the full documentation at
-[http://labs.sinefunc.com/ohm-contrib](http://labs.sinefunc.com/ohm-contrib).
+A collection of drop-in modules for Ohm.
 
-List of modules
----------------
-1. [`Ohm::Boundaries`](http://labs.sinefunc.com/ohm-contrib/doc/Ohm/Boundaries.html)
-2. [`Ohm::Callbacks`](http://labs.sinefunc.com/ohm-contrib/doc/Ohm/Callbacks.html)
-3. [`Ohm::Timestamping`](http://labs.sinefunc.com/ohm-contrib/doc/Ohm/Timestamping.html)
-4. [`Ohm::ToHash`](http://labs.sinefunc.com/ohm-contrib/doc/Ohm/ToHash.html)
-5. [`Ohm::WebValidations`](http://labs.sinefunc.com/ohm-contrib/doc/Ohm/WebValidations.html)
-6. [`Ohm::NumberValidations`](http://labs.sinefunc.com/ohm-contrib/doc/Ohm/NumberValidations.html)
-7. [`Ohm::ExtraValidations`](http://labs.sinefunc.com/ohm-contrib/doc/Ohm/ExtraValidations.html)
-8. [`Ohm::Typecast`](http://labs.sinefunc.com/ohm-contrib/doc/Ohm/Typecast.html)
-9. [`Ohm::Locking`](http://labs.sinefunc.com/ohm-contrib/doc/Ohm/Locking.html)
+## Quick Overview
 
-Example usage
--------------
+```ruby
+require 'ohm'
+require 'ohm/contrib'
 
-    require 'ohm'
-    require 'ohm/contrib'
+class Post < Ohm::Model
+  include Ohm::Timestamps
+  include Ohm::DataTypes
 
-    class Post < Ohm::Model
-      include Ohm::Timestamping
-      include Ohm::ToHash
-      include Ohm::Boundaries
-      include Ohm::WebValidations
-      include Ohm::NumberValidations
+  attribute :amount, Type::Decimal
+  attribute :url
+  attribute :poster_email
+  attribute :slug
+end
 
-      attribute :amount
-      attribute :url
-      attribute :poster_email
-      attribute :slug
+post = Post.create
 
-      def validate
-        # from NumberValidations
-        assert_decimal :amount
+post.created_at.kind_of?(Time)
+# => true
 
-        # or if you want it to be optional
-        assert_decimal :amount unless amount.to_s.empty?
+post.update_at.kind_of?(Time)
+# => true
+```
 
-        # from WebValidations
-        assert_slug  :slug
-        assert_url   :url
-        assert_email :poster_email
-      end
-    end
+It's important to note that `created_at` and `update_at` both store
+times as a unix timestamp for efficiency.
 
-    Post.first
-    Post.last
-    Post.new.to_hash
-    Post.create.to_hash
-    Post.create.created_at
-    Post.create.updated_at
+## Ohm::Callbacks
 
-    # Casting example
-    class Product
-      include Ohm::Typecast
+**Note:** Macro-style callbacks have been removed since version 1.0.x.
+Please use instance style callbacks.
 
-      attribute :price, Decimal
-      attribute :start_of_sale, Time
-      attribute :end_of_sale, Time
-      attribute :priority, Integer
-      attribute :rating, Float
-    end
+### On the topic of callbacks
 
-Typecasting explained
----------------------
+Since I initially released ohm-contrib, a lot has changed. Initially, I
+had a bad habit of putting a lot of stuff in callbacks. Nowadays, I
+prefer having a workflow object or a service layer which coordinates
+code not really related to the model, a perfect example of which is
+photo manipulation.
 
-I studied various typecasting behaviors implemented by a few ORMs in Ruby.
+It's best to keep your models pure, and have domain specific code
+in a separate object.
 
-### ActiveRecord
+```ruby
+class Order < Ohm::Model
+  attribute :status
 
-    class Post < ActiveRecord::Base
-      # say we have an integer column in the DB named votes
-    end
-    Post.new(:votes => "FooBar").votes == 0
-    # => true
+  def before_create
+    self.status = "pending"
+  end
 
-### DataMapper
-    class Post
-      include DataMapper::Resource
+  def after_save
+    # do something here
+  end
+end
+```
 
-      property :id, Serial
-      property :votes, Integer
-    end
+## Ohm::DataTypes
 
-    post = Post.new(:votes => "FooBar")
-    post.votes == "FooBar"
-    # => true
+If you don't already know, Ohm 1.0 already supports typecasting out of
+the box by taking a `lambda` parameter. An example best explains:
 
-    post.save
-    post.reload
+```ruby
+class Product < Ohm::Model
+  attribute :price, lambda { |x| x.to_f }
+end
+```
 
-    # Get ready!!!!
-    post.votes == 0
-    # => true
+What `Ohm::DataTypes` does is define all of these lambdas for you,
+so we don't have to manually define how to cast an Integer, Float,
+Decimal, Time, Date, etc.
 
-### Ohm::Typecast approach.
+### DataTypes: Basic example
 
-#### Mindset:
+```ruby
+class Product < Ohm::Model
+  include Ohm::DataTypes
 
-1. Explosion everytime is too cumbersome.
-2. Mutation of data is less than ideal (Also similar to MySQL silently allowing you
-   to store more than 255 chars in a VARCHAR and then truncating that data. Yes I know
-   you can configure it to be noisy but the defaults kill).
-3. We just want to operate on it like it should!
+  attribute :price, Type::Decimal
+  attribute :start_of_sale, Type::Time
+  attribute :end_of_sale, Type::Time
+  attribute :priority, Type::Integer
+  attribute :rating, Type::Float
+end
 
-#### Short Demo:
-    class Post < Ohm::Model
-      include Ohm::Typecast
-      attribute :votes
-    end
+product = Product.create(price: "127.99")
+product.price.kind_of?(BigDecimal)
+# => true
 
-    post = Post.new(:votes => "FooBar")
-    post.votes == "FooBar"
-    # => true
+product = Product.create(start_of_sale: Time.now.rfc2822)
+product.start_of_sale.kind_of?(Time)
+# => true
 
-    post.save
-    post = Post[post.id]
-    post.votes == "FooBar"
-    # => true
+product = Product.create(end_of_sale: Time.now.rfc2822)
+product.end_of_sale.kind_of?(Time)
+# => true
 
-    # Here comes the cool part...
-    post.votes * 1
-    # => ArgumentError: invalid value for Integer: "FooBar"
+product = Product.create(priority: "100")
+product.priority.kind_of?(Integer)
+# => true
 
-    post.votes = 50
-    post.votes * 2 == 100
-    # => true
+product = Product.create(rating: "5.5")
+product.rating.kind_of?(Float)
+# => true
+```
 
-    post.votes.class == Ohm::Types::Integer
-    # => true
-    post.votes.inspect == "50"
-    # => true
+### DataTypes: Advanced example
 
-#### More examples just to show the normal case.
+**IMPORTANT NOTE**: Mutating a Hash and/or Array doesn't work, so you have
+to re-assign them accordingly.
 
-    require 'ohm'
-    require 'ohm/contrib'
+```ruby
+class Product < Ohm::Model
+  include Ohm::DataTypes
 
-    class Post < Ohm::Model
-      include Ohm::Typecast
+  attribute :meta, Type::Hash
+  attribute :sizes, Type::Array
+end
 
-      attribute :price, Decimal
-      attribute :available_at, Time
-      attribute :stock, Integer
-      attribute :address, Hash
-      attribute :tags, Array
-    end
+product = Product.create(meta: { resolution: '1280x768', battery: '8 hours' },
+                         sizes: ['XS S M L XL'])
 
-    post = Post.create(:price => "10.20", :stock => "100",
-                       :address => { "city" => "Boston", "country" => "US" },
-                       :tags => ["redis", "ohm", "typecast"])
+product.meta.kind_of?(Hash)
+# => true
 
-    post.price.to_s == "10.20"
-    # => true
+product.meta == { resolution: '1280x768', battery: '8 hours' }
+# => true
 
-    post.price * 2 == 20.40
-    # => true
+product.sizes.kind_of?(Array)
+# => true
 
-    post.stock / 10 == 10
-    # => true
+product.sizes == ['XS S M L XL']
+# => true
+```
 
-    post.address["city"] == "Boston"
-    post.tags.map { |tag| tag.upcase }
+## Ohm::Slug
 
-    # of course mutation works for both cases
-    post.price += 5
-    post.stock -= 1
-    post.tags << "contrib"
-    post.address["state"] = "MA"
-    post.save
-    post = Post[post.id]
+```ruby
+class Post < Ohm::Model
+  include Ohm::Slug
 
-    post.address["state"] == "MA"
-    # => true
-    post.tags.include?("contrib")
-    # => true
+  attribute :title
 
+  def to_s
+    title
+  end
+end
 
-Credits
--------
-Thanks to github user gnrfan for the web validations.
+post = Post.create(title: "Using Ohm contrib 1.0")
+post.to_param == "1-using-ohm-contrib-1.0"
+# => true
+```
 
-Note on Patches/Pull Requests
------------------------------
-* Fork the project.
-* Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
-  future version unintentionally.
-* Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but bump version in a
-  commit by itself I can ignore when I pull)
-* Send me a pull request. Bonus points for topic branches.
+By default, `Ohm::Slug` tries to load iconv in order to transliterate
+non-ascii characters. For ruby 2 or later, you will need to `gem install iconv`
+to get transliteration.
 
-Copyright
----------
-Copyright (c) 2010 Cyril David. See LICENSE for details.
+```ruby
+post = Post.create(:title => "Décor")
+post.to_param == "2-decor"
+```
+
+## Ohm::Versioned
+
+For cases where you expect people to be editing long pieces of
+content concurrently (the most obvious example would be a CMS with multiple
+moderators), then you need to put some kind of versioning in place.
+
+```ruby
+class Article < Ohm::Model
+  include Ohm::Versioned
+
+  attribute :title
+  attribute :content
+end
+
+a1 = Article.create(:title => "Foo Bar", :content => "Lorem ipsum")
+a2 = Article[a1.id]
+
+# At this point, a2 will be stale.
+a1.update(title: "Foo Bar Baz")
+
+begin
+  a2.update(:title => "Bar Baz")
+rescue Ohm::VersionConflict => ex
+  ex.attributes == { :title => "Bar Baz", :_version => "1", :content => "Lorem ipsum" }
+  # => true
+end
+```

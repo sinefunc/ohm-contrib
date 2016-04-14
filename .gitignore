@@ -23,3 +23,7 @@ pkg
 /.yardoc
 /doc
 /tests
+
+## rbenv
+.rbenv-gemsets
+.rbenv-version
